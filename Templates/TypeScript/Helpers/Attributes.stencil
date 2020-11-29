@@ -1,0 +1,37 @@
+{% macro commentString string isDeprecated reason %}
+    
+  /**
+  {% for line in string|splitNewlines where line %}
+   * {{ line }}
+  {% endfor %}
+  {% if isDeprecated %}
+  {% for line in reason|splitNewlines where line %}
+  {% if forloop.first %}
+   *
+   * @deprecated {{ line }}
+  {% else %}
+   * {{ line }}
+  {% endif %}
+  {% endfor %}
+  {% endif %}
+   */
+{% endmacro %}
+
+{% macro deprecationString string %}
+    
+  /**
+  {% for line in string|splitNewlines where line %}
+  {% if forloop.first %}
+   * @deprecated {{ line }}
+  {% else %}
+   * {{ line }}
+  {% endif %}
+  {% endfor %}
+   */
+{% endmacro %}
+
+{% if attributes.description %}
+{% call commentString attributes.description attributes.isDeprecated attributes.deprecationReason %}
+{% elif attributes.isDeprecated %}
+{% call deprecationString attributes.deprecationReason %}
+{% endif %}

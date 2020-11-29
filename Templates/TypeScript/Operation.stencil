@@ -1,0 +1,31 @@
+{% if asFile %}
+import { ID, GraphSelection, {{ operation|renderOperationTypeName }} } from "../GraphApi"
+import { ScalarResolver } from "../ScalarResolver"
+import { {{ operation.name }}Response } from "../Responses/{{ operation.name }}Response"
+{{ header }}
+{% if importEnums %}import * as Enums from "../Enums"{% endif %}
+{% if importInputs %}import * as Inputs from "../Inputs"{% endif %}
+{% if importFragments %}import * as Fragments from "../Fragments"{% endif %}
+{% endif %}
+
+{% if operation.variables.count > 0 %}
+export interface {{ operation|renderClassName }}Arguments {
+  {{ operation.variables|renderTypeScriptArguments }}
+}
+{% endif %}
+
+export class {{ operation|renderClassName }} extends {{ operation|renderOperationTypeName }}<{{ operation.name }}Response> {
+    constructor({% if operation.variables.count > 0 %}operationVariables: {{ operation|renderClassName }}Arguments{% endif %}) {
+      super(
+        "{{ queryString|replace:"$","\$"|replaceQuotes }}",
+        {
+          {{ operation.variables|renderTypeScriptOperationVariables }}
+        },
+        {{ selections|renderTypeScriptSelections:null,operation.variables.count }}
+      )
+    }
+
+    decodeResponse(jsonObject: Object): {{ operation.name }}Response {
+      return {{ operation.name }}Response.fromJson(jsonObject)
+    }
+}

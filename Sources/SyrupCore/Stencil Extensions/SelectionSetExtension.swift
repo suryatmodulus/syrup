@@ -33,6 +33,7 @@ class SelectionSetExtension: Extension {
 		registerFilter("isArgumentValueType", filter: isArgumentValueType)
 		registerFilter("renderOperationType", filter: renderOperationType)
 		registerFilter("renderKotlinSelections", filter: renderKotlinSelections)
+		registerFilter("renderTypeScriptSelections", filter: renderTypeScriptSelections)
 	}
 	
 	func renderTypeCondition(_ value: Any?) throws -> String? {
@@ -140,6 +141,61 @@ class SelectionSetExtension: Extension {
 		}
 	}
 	
+	func renderTypeScriptArguments(_ arguments: [SelectionSetVisitor.Argument]) -> String {
+		var render: [String] = []
+		for arg in arguments {
+			let renderValue = renderTypeScriptArgumentValues(arguments: [arg.value])
+			render.append("\(arg.name): \(renderValue)")
+		}
+		if render.isEmpty {
+			return "{}"
+		} else {
+			return "{ \(render.joined(separator: ", ")) }"
+		}
+	}
+	
+	func renderTypeScriptArgumentValues(arguments: [ArgumentValueType]) -> String {
+		var renders: [String] = []
+		for arg in arguments {
+			switch arg {
+			case let arg as SelectionSetVisitor.ListValue:
+				renders.append("[\(renderArgumentValues(arguments: arg.values))]")
+			case let arg as SelectionSetVisitor.Variable:
+				renders.append("operationVariables[\"\(arg.name)\"]")
+			case let arg as SelectionSetVisitor.IntValue:
+				renders.append("\(arg.value)")
+			case let arg as SelectionSetVisitor.FloatValue:
+				renders.append("\(arg.value)")
+			case let arg as SelectionSetVisitor.BooleanValue:
+				renders.append("\(arg.value)")
+			case let arg as SelectionSetVisitor.EnumValue:
+				renders.append("\(arg.value)")
+			case let arg as SelectionSetVisitor.StringValue:
+				renders.append("\(arg.value)")
+			case let arg as SelectionSetVisitor.ObjectValue:
+				renders.append(renderObjectField(arg))
+			default:
+				renders.append("\(arg)")
+			}
+		}
+		return renders.joined(separator: ", ")
+	}
+
+	func renderTypeScriptTypeCondition(_ type: SelectionSetVisitor.TypeCondition?) -> String {
+		switch type {
+		case .object(let name)?:
+			return "{ name: \"\(name)\", definedType: \"Object\" }"
+		case .interface(let name)?:
+			return "{ name: \"\(name)\", definedType: \"Interface\" }"
+		case .union(let name)?:
+			return "{ name: \"\(name)\", definedType: \"Union\" }"
+		case .scalar(let name)?:
+			return "{ name: \"\(name)\", definedType: \"Scalar\" }"
+		default:
+			return "null"
+		}
+	}
+	
 	func renderSelectionArguments(_ selection: SelectionSetVisitor.Selection) -> String {
 		if let field = selection.field {
 			return renderArguments(field.arguments)
@@ -152,6 +208,24 @@ class SelectionSetExtension: Extension {
 			if argument.name == "id", let variable = argument.value as? SelectionSetVisitor.Variable {
 				return "\"${operationVariables[\"\(variable.name)\"]}\""
 			}
+		}
+		return "null"
+	}
+
+	func renderTypeScriptGIDPassed(_ field: SelectionSetVisitor.Field) -> String {
+		for argument in field.arguments {
+			if argument.name == "id", let variable = argument.value as? SelectionSetVisitor.Variable {
+				return "`${operationVariables[\"\(variable.name)\"]}`"
+			}
+		}
+		return "null"
+	}
+
+	func renderTypeScriptConditionalDirective(_ field: SelectionSetVisitor.Field) -> String {
+		if let skip = field.conditionalDirective?.skip as? SelectionSetVisitor.Variable {
+			return "{ type: \"skip\", value: Boolean(`${operationVariables[\"\(skip.name)\"]}`) }"
+		} else if let include = field.conditionalDirective?.include as? SelectionSetVisitor.Variable {
+			return "{ type: \"include\", value: Boolean(`${operationVariables[\"\(include.name)\"]}`) }"
 		}
 		return "null"
 	}
@@ -235,5 +309,63 @@ class SelectionSetExtension: Extension {
 			addFragmentSpreadRenders += " + \(fragmentSpread).getSelections(operationVariables)" + renderPassedTypeCondition
 		}
 		return "listOf<Selection>(\((fieldRenders).joined(separator: ", ")))" + addFragmentSpreadRenders
+	}
+
+	func renderTypeScriptSelections(_ value: Any?, args: [Any?]) -> String {
+		guard let selections = value as? [SelectionSetVisitor.Selection] else {
+				return ""
+		}
+		let typeCondition = args.first as? String
+		let variableCount = args.count >= 2 ? (args[1] as? Int ?? 0) : 0
+		
+		var fieldRenders: [String] = []
+		var fragmentSpreadRenders: [String] = []
+		
+		var combinedSelections: [SelectionSetVisitor.Selection] = []
+		
+		for selection in selections {
+			if selection.field != nil {
+				combinedSelections.append(selection)
+			} else if selection.inlineFragment != nil {
+				combinedSelections += selection.inlineFragment?.selectionSet ?? []
+			} else if selection.fragmentSpread != nil {
+				combinedSelections.append(selection)
+			}
+		}
+		
+		for selection in combinedSelections {
+			if let field = selection.field {
+				if field.name != "__typename" {
+					let name = field.alias ?? field.name
+					var render = "\nnew GraphSelection({"
+					render.append("\nname: \"\(name)\",")
+					render.append("\ntype: \(renderTypeScriptTypeCondition(field.type)),")
+					render.append("\narguments: \(renderTypeScriptArguments(field.arguments)),")
+					render.append("\npassedGID: \(renderTypeScriptGIDPassed(field)),")
+					render.append("\ntypeCondition: \(renderTypeScriptTypeCondition(field.parentType)),")
+					render.append("\ndirective: \(renderTypeScriptConditionalDirective(field)),")
+
+					var typeConditionArgs: [String] = []
+					if shouldPassTypeCondition(field.type) {
+						typeConditionArgs = [renderTypeScriptTypeCondition(field.type)]
+					}
+					render.append("\nselections: \(renderTypeScriptSelections(field.selectionSet, args: typeConditionArgs))")
+					render.append("})")
+					fieldRenders.append(render)
+				}
+			}
+			if let fragmentSpread = selection.fragmentSpread {
+				fragmentSpreadRenders.append(fragmentSpread.name)
+			}
+		}
+		var addFragmentSpreadRenders = ""
+		var renderPassedTypeCondition = ""
+		if let typeCondition = typeCondition {
+			renderPassedTypeCondition = ".map(x => x.copyWithTypeCondition(\"\(typeCondition)\"))"
+		}
+		for fragmentSpread in fragmentSpreadRenders {
+			addFragmentSpreadRenders += ".concat(Fragments.\(fragmentSpread).getSelections(\(variableCount > 0 ? "operationVariables" : "{}")))" + renderPassedTypeCondition
+		}
+		return "new Array<GraphSelection>(\((fieldRenders).joined(separator: ", ")))" + addFragmentSpreadRenders
 	}
 }

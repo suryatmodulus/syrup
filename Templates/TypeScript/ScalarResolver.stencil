@@ -1,0 +1,22 @@
+export type TypeAdapter<T> = {
+  serialize: (obj: T) => string
+  deserialize: (value: string) => T
+}
+
+export class ScalarResolver {
+  private static adapters: Map<string, TypeAdapter<any>> = new Map<string, TypeAdapter<any>>()
+
+  static registerTypeAdapter<T extends Object>(name: string, adapter: TypeAdapter<T>) {
+	  this.adapters.set(name, adapter)
+  }
+
+  static getTypeAdapter<T extends Object>(name: string): TypeAdapter<T> {
+	  const adapter = this.adapters.get(name)
+
+	  if (adapter == undefined) {
+	    throw Error("Type adapter does not exist!")
+	  }
+
+	  return adapter
+  }
+}

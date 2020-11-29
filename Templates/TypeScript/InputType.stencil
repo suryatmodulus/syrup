@@ -1,0 +1,37 @@
+import { ID } from "../GraphApi"
+import { ScalarResolver } from "../ScalarResolver"
+{{ header }}
+{% if importEnums %}import * as Enums from "../Enums"{% endif %}
+{% if inputType.inputFields.count > 0 %}import * as Inputs from "../Inputs"{% endif %}
+
+export interface {{ inputType.name }}_Arguments {
+  {{ inputType.inputFields|renderTypeScriptInputArguments }}
+}
+
+export class {{ inputType.name }} {
+  {{ inputType.inputFields|renderTypeScriptInputProperties }}
+
+  constructor(inputArguments: {{ inputType.name }}_Arguments = {}) {
+    {{ inputType.inputFields|renderTypeScriptInputInitializers }}
+  }
+
+  toJson(): Record<string, any> {
+    let json: Record<string, any> = {}
+
+{{ inputType.inputFields|renderTypeScriptJsonConverters }}
+    
+    return json
+  }
+  
+  toString() {
+    let input = "{{ inputType.name }}("
+    
+    {% for inputField in inputType.inputFields %}
+    if (this.{{ inputField.name }} != undefined) {
+	    input = input.concat(`{{ inputField.name }}=${this.{{ inputField.name }}}, `)
+    }
+    {% endfor %}
+    
+    return input.replace(/, $/, '').concat(")")
+  }
+}
