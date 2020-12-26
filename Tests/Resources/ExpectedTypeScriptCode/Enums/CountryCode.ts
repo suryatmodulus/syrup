@@ -1217,15 +1217,3 @@ export enum CountryCode {
    */
   UNKNOWN_SYRUP_ENUM = "UNKNOWN_SYRUP_ENUM"
 }
-
-export class CountryCodeUtil {
-  static safeValueOf(value: string): CountryCode {
-    const values = Object.keys(CountryCode).map(x => CountryCode[x])
-
-    if (values.some(x => x === value)) {
-      return <CountryCode> value
-    } else {
-      return CountryCode.UNKNOWN_SYRUP_ENUM
-    }
-  }
-}

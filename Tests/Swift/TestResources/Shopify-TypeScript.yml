@@ -5,14 +5,13 @@ customScalars:
 - graphType: Decimal
   nativeType: number
 - graphType: DateTime
-  nativeType: Date
+  nativeType: string
   rawValueType: string
 - graphType: URL
   nativeType: string
 - graphType: FormattedString
   nativeType: string
 - graphType: ID
-  nativeType: GID
-  rawValueType: string
+  nativeType: ID
 moduleName: ""
 filenameSuffix: ""

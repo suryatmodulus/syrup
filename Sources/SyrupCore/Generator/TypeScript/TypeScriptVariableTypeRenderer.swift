@@ -26,47 +26,39 @@ import Foundation
 
 enum TypeScriptVariableTypeRenderer: VariableTypeRenderer {
 	static func render(variableType: IntermediateRepresentation.Variable.VariableType) -> String {
-		render(variableType: variableType, nonNull: false, inputVariable: false)
+		render(variableType: variableType, nonNull: false)
 	}
 	
 	static func render(inputVariableType: IntermediateRepresentation.Variable.VariableType) -> String {
-		render(variableType: inputVariableType, nonNull: false, inputVariable: true)
+		render(variableType: inputVariableType, nonNull: false)
 	}
 	
-	private static func render(variableType: IntermediateRepresentation.Variable.VariableType, nonNull: Bool, inputVariable: Bool) -> String {
+	private static func render(variableType: IntermediateRepresentation.Variable.VariableType, nonNull: Bool) -> String {
 		switch variableType {
 		case .nonNull(let wrappedType):
-			return render(variableType: wrappedType, nonNull: true, inputVariable: inputVariable)
+			return render(variableType: wrappedType, nonNull: true)
 		case .list(let wrappedType):
-			let rendered = "Array<" + render(variableType: wrappedType, nonNull: false, inputVariable: inputVariable) + ">"
+			let rendered = "(" + render(variableType: wrappedType, nonNull: false) + ")[]"
 			if nonNull {
 				return rendered
-			} else if inputVariable {
-				return "Input<\(rendered)>"
 			} else {
 				return rendered + " | undefined"
 			}
 		case .enum(let name):
 			if nonNull {
 				return "Enums.\(name)"
-			} else if inputVariable {
-				return "Input<\(name)>"
 			} else {
 				return "Enums.\(name) | undefined"
 			}
 		case .input(let name):
 			if nonNull {
 				return "Inputs.\(name)"
-			} else if inputVariable {
-				return "Input<\(name)>"
 			} else {
 				return "Inputs.\(name) | undefined"
 			}
 		case .scalar(let scalarType):
 			if nonNull {
 				return scalarType.nativeType
-			} else if inputVariable {
-				return "Input<\(scalarType.nativeType)>"
 			} else {
 				return scalarType.nativeType + " | undefined"
 			}

@@ -47,15 +47,3 @@ export enum CollectionSortOrder {
    */
   UNKNOWN_SYRUP_ENUM = "UNKNOWN_SYRUP_ENUM"
 }
-
-export class CollectionSortOrderUtil {
-  static safeValueOf(value: string): CollectionSortOrder {
-    const values = Object.keys(CollectionSortOrder).map(x => CollectionSortOrder[x])
-
-    if (values.some(x => x === value)) {
-      return <CollectionSortOrder> value
-    } else {
-      return CollectionSortOrder.UNKNOWN_SYRUP_ENUM
-    }
-  }
-}

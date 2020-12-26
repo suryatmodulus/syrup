@@ -1,31 +1,45 @@
-{% if asFile %}
-import { ID, GraphSelection, {{ operation|renderOperationTypeName }} } from "../GraphApi"
-import { ScalarResolver } from "../ScalarResolver"
-import { {{ operation.name }}Response } from "../Responses/{{ operation.name }}Response"
+import { SimpleDocument } from "graphql-typed"
+import { ID, GraphSelection, SyrupOperation, copyWithTypeCondtion } from "../GraphApi"
 {{ header }}
 {% if importEnums %}import * as Enums from "../Enums"{% endif %}
 {% if importInputs %}import * as Inputs from "../Inputs"{% endif %}
 {% if importFragments %}import * as Fragments from "../Fragments"{% endif %}
-{% endif %}
 
-{% if operation.variables.count > 0 %}
-export interface {{ operation|renderClassName }}Arguments {
-  {{ operation.variables|renderTypeScriptArguments }}
+export namespace {{ name }} {
+  {% if operation.variables.count > 0 %}export interface Variables {
+    {{ operation.variables|renderTypeScriptArguments }}
+  }{% endif %}
+  
+  {% for field in fields %}
+  {{ field|internalTypeDefinition }}
+  {% endfor %}
+
+  {% for field in fields %}
+  {{ field|internalInterfaceWrapper }}
+  {% endfor %}
+
+  {% for field in fields %}
+  {{ field|internalUnionWrapper }}
+  {% endfor %}
 }
-{% endif %}
 
-export class {{ operation|renderClassName }} extends {{ operation|renderOperationTypeName }}<{{ operation.name }}Response> {
-    constructor({% if operation.variables.count > 0 %}operationVariables: {{ operation|renderClassName }}Arguments{% endif %}) {
-      super(
-        "{{ queryString|replace:"$","\$"|replaceQuotes }}",
-        {
-          {{ operation.variables|renderTypeScriptOperationVariables }}
-        },
-        {{ selections|renderTypeScriptSelections:null,operation.variables.count }}
-      )
-    }
-
-    decodeResponse(jsonObject: Object): {{ operation.name }}Response {
-      return {{ operation.name }}Response.fromJson(jsonObject)
-    }
+export interface {{ name }} {
+  {% for field in fields %}
+  {% with field.attributes as attributes %}{% include "Helpers/Attributes.stencil" %}{% endwith %}
+  {{ field|renderPropertyDeclaration:fieldPrefix }}{% if fragmentNames or not forloop.last %},{% endif %}
+  {% endfor %}
+  {% for fragmentName in fragmentNames %}
+  {{ fragmentName|lowercasedFirstLetter }}: Fragments.{{ fragmentName }}{% if not forloop.last %},{% endif %}
+  {% endfor %}
 }
+
+const document: SimpleDocument<SyrupOperation, {% if operation.variables.count > 0 %}{{ name }}.Variables{% else %}{}{% endif %}> = {
+  id: "{{ operation.name }}",
+  name: "{{ operation.name }}",
+  source: "{{ queryString|replace:"$","\$"|replaceQuotes }}",
+  __typeData: {
+    operationType: '{{ operation|renderOperationTypeName|lowercase } }}',
+    selections: {{ selections|renderTypeScriptSelections:null,operation.variables.count }}
+  }
+}
+export default document

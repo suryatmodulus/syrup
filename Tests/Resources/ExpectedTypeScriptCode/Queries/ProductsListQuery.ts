@@ -1,86 +1,119 @@
-
-import { ID, GraphSelection, Query } from "../GraphApi"
-import { ProductsListResponse } from "../Responses/ProductsListResponse"
+import { SimpleDocument } from "graphql-typed"
+import { ID, GraphSelection, SyrupOperation, copyWithTypeCondtion } from "../GraphApi"
 import * as Enums from "../Enums"
 import * as Inputs from "../Inputs"
 import * as Fragments from "../Fragments"
 
-export interface ProductsListQueryArguments {
-  first?: number | undefined,
-  before?: string | undefined,
-  after?: string | undefined
+export namespace ProductsListQueryData {
+  export interface Variables {
+    first?: number | undefined,
+    before?: string | undefined,
+    after?: string | undefined
+  }
+export interface Products {
+  /**
+   * A list of edges.
+   */
+  edges: ProductsEdges[]
+}
+export interface ProductsEdges {
+  /**
+   * The item at the end of ProductEdge.
+   */
+  node: ProductsEdgesNode,
+  /**
+   * A cursor for use in pagination.
+   */
+  cursor: string
+}
+export interface ProductsEdgesNode {
+  /**
+   * Globally unique identifier.
+   */
+  id: ID,
+  /**
+   * The title of the product.
+   */
+  title: string,
+  /**
+   * A stripped description of the product, single line with HTML tags removed.
+   */
+  description: string
 }
 
-export class ProductsListQuery extends Query<ProductsListResponse> {
-    constructor(operationVariables: ProductsListQueryArguments) {
-      super(
-        "query ProductsList(\$first: Int, \$before: String, \$after: String) { __typename products(first: \$first, reverse: true, before: \$before, after: \$after, sortKey: CREATED_AT) { __typename edges { __typename node { __typename id title description } cursor } } }",
-        {
-          "first": `${operationVariables.first}`,
-"before": `${operationVariables.before}`,
-"after": `${operationVariables.after}`
-        },
-        new Array<GraphSelection>(
-new GraphSelection({
+}
+
+export interface ProductsListQueryData {
+
+  /**
+   * List of products.
+   */
+  products: ProductsListQueryData.Products
+}
+
+const document: SimpleDocument<SyrupOperation, ProductsListQueryData.Variables> = {
+  id: "ProductsList",
+  name: "ProductsList",
+  source: "query ProductsList(\$first: Int, \$before: String, \$after: String) { __typename products(first: \$first, reverse: true, before: \$before, after: \$after, sortKey: CREATED_AT) { __typename edges { __typename node { __typename id title description } cursor } } }",
+  __typeData: {
+    operationType: 'query',
+    selections: [
+{
 name: "products",
-type: "ProductConnection",
-cacheKey: `products(first: ${operationVariables["first"]}, reverse: true, before: ${operationVariables["before"]}, after: ${operationVariables["after"]}, sortKey: CREATED_AT)`,
+type: { name: "ProductConnection", definedType: "Object" },
+arguments: { first: { isOperationVariable: true, key: "first" }, reverse: true, before: { isOperationVariable: true, key: "before" }, after: { isOperationVariable: true, key: "after" }, sortKey: CREATED_AT },
 passedGID: null,
-typeCondition: "QueryRoot",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "QueryRoot", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "edges",
-type: "ProductEdge",
-cacheKey: `edges`,
+type: { name: "ProductEdge", definedType: "Object" },
+arguments: {},
 passedGID: null,
-typeCondition: "ProductConnection",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "ProductConnection", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "node",
-type: "Product",
-cacheKey: `node`,
+type: { name: "Product", definedType: "Object" },
+arguments: {},
 passedGID: null,
-typeCondition: "ProductEdge",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "ProductEdge", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "id",
-type: "ID",
-cacheKey: `id`,
+type: { name: "ID", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "Product",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "Product", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "title",
-type: "String",
-cacheKey: `title`,
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "Product",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "Product", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "description",
-type: "String",
-cacheKey: `description`,
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "Product",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}))}), 
-new GraphSelection({
+typeCondition: { name: "Product", definedType: "Object" },
+directive: null,
+selections: []}]}, 
+{
 name: "cursor",
-type: "String",
-cacheKey: `cursor`,
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "ProductEdge",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}))}))}))
-      )
-    }
-
-    decodeResponse(jsonObject: Object): ProductsListResponse {
-      return ProductsListResponse.fromJson(jsonObject)
-    }
+typeCondition: { name: "ProductEdge", definedType: "Object" },
+directive: null,
+selections: []}]}]}]
+  }
 }
+export default document

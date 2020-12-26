@@ -36,34 +36,46 @@ final class TypeScriptInternalRendererExtension: Extension {
 			let parentTypeName = args.first as? String ?? ""
 			let fields = field.collectedFields.scopedTo(parentFragment: field.parentFragment?.name)
 			let fragmentSpreads = IntermediateRepresentation.fragments(from: field.fragmentSpreads, onConcreteType: field.type.graphQLName)
-			let name = field.name.capitalizedFirstLetter
-			let graphQLName = field.type.graphQLName
 			let renderer = TypeScriptRenderer(config: config)
 			if fields.isEmpty && fragmentSpreads.isEmpty { return nil }
-			return try! renderer.renderResponseType(name: "\(parentTypeName)_\(name)", graphQLName: graphQLName, fields: fields, fragmentNames: fragmentSpreads.map { $0.name })
+
+			return try! renderer.renderResponseType(
+				name: "\(parentTypeName)\(field.name.capitalizedFirstLetter)",
+				fields: fields,
+				fragmentNames: fragmentSpreads.map { $0.name }
+			)
 		}
 		
 		registerFilter("internalInterfaceWrapper") { (value, args) -> Any? in
 			guard let field = value as? IntermediateRepresentation.CollectedInterfaceField else { return nil }
 			let parentTypeName = args.first as? String ?? ""
 			let renderer = TypeScriptRenderer(config: config)
-			
 			let scopedFields = field.collectedFields.scopedTo(parentFragment: field.parentFragment?.name)
 			let groupedFragmentSpreads = IntermediateRepresentation.groupedFragmentSpreads(fragmentSpreads: field.fragmentSpreads, inheritedType: field.type.graphQLName)
 			
-			return try! renderer.renderInterfaceWrapper(name: "\(parentTypeName)_\(field.name.capitalizedFirstLetter)", scopedFields: scopedFields, collectedFields: field.collectedFields, interfaceTypeName: field.type.graphQLName, groupedFragmentSpreads: groupedFragmentSpreads)
+			return try! renderer.renderInterfaceWrapper(
+				name: "\(parentTypeName)\(field.name.capitalizedFirstLetter)",
+				scopedFields: scopedFields,
+				collectedFields: field.collectedFields,
+				interfaceTypeName: field.type.graphQLName,
+				groupedFragmentSpreads: groupedFragmentSpreads
+			)
 		}
 		
 		registerFilter("internalUnionWrapper") { (value, args) -> Any? in
 			guard let field = value as? IntermediateRepresentation.CollectedUnionField else { return nil }
 			let parentTypeName = args.first as? String ?? ""
 			let renderer = TypeScriptRenderer(config: config)
-			let name = field.name.capitalizedFirstLetter
 			let unionTypeName = field.type.graphQLName
 			let groupedFragmentSpreads = IntermediateRepresentation.groupedFragmentSpreads(fragmentSpreads: field.fragmentSpreads, inheritedType: unionTypeName)
 			let collectedFields = field.collectedFields.scopedTo(parentFragment: field.parentFragment?.name)
 			
-			return try! renderer.renderUnionWrapper(name: "\(parentTypeName)_\(name)", unionTypeName: unionTypeName, collectedFields: collectedFields, groupedFragmentSpreads: groupedFragmentSpreads)
+			return try! renderer.renderUnionWrapper(
+				name: "\(parentTypeName)\(field.name.capitalizedFirstLetter)",
+				unionTypeName: unionTypeName,
+				collectedFields: collectedFields,
+				groupedFragmentSpreads: groupedFragmentSpreads
+			)
 		}
 		
 		registerFilter("internalInterfaceTypeDefinitions") { (value, args) -> Any? in
@@ -77,7 +89,7 @@ final class TypeScriptInternalRendererExtension: Extension {
 				protocolConformances.append(contentsOf: groupedFragmentSpreads[interfaceTypeName] ?? [])
 				
 				let renderer = TypeScriptRenderer(config: config)
-				rendered += try! renderer.renderResponseType(name: "\(interfaceTypeName)_Realized_\(graphQLName)", graphQLName: graphQLName, fields: fields, fragmentNames: protocolConformances.unique.map { $0.name }, superclassOverride: "\(interfaceTypeName)_Realized")
+				rendered += try! renderer.renderResponseType(name: "\(interfaceTypeName)Realized\(graphQLName)", fields: fields, fragmentNames: protocolConformances.unique.map { $0.name })
 			}
 			return rendered
 		}
@@ -92,7 +104,7 @@ final class TypeScriptInternalRendererExtension: Extension {
 				let fields = groupedFields[concreteType] ?? []
 				let protocolConformances = groupedProtocolConformances[concreteType] ?? []
 				let renderer = TypeScriptRenderer(config: config)
-				rendered += try! renderer.renderResponseType(name: "\(unionTypeName)_Realized_\(graphQLName)", graphQLName: graphQLName, fields: fields, fragmentNames: protocolConformances.map { $0.name }, superclassOverride: "\(unionTypeName)_Realized")
+				rendered += try! renderer.renderResponseType(name: "\(unionTypeName)Realized\(graphQLName)", fields: fields, fragmentNames: protocolConformances.map { $0.name })
 			}
 			return rendered
 		}

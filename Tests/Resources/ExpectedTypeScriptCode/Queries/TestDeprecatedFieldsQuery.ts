@@ -1,82 +1,159 @@
-
-import { ID, GraphSelection, Query } from "../GraphApi"
-import { TestDeprecatedFieldsResponse } from "../Responses/TestDeprecatedFieldsResponse"
+import { SimpleDocument } from "graphql-typed"
+import { ID, GraphSelection, SyrupOperation, copyWithTypeCondtion } from "../GraphApi"
 import * as Enums from "../Enums"
 import * as Inputs from "../Inputs"
 import * as Fragments from "../Fragments"
 
-export interface TestDeprecatedFieldsQueryArguments {
-  first?: number | undefined
+export namespace TestDeprecatedFieldsQueryData {
+  export interface Variables {
+    first?: number | undefined
+  }
+export interface Channels {
+  /**
+   * A list of edges.
+   */
+  edges: ChannelsEdges[]
+}
+export interface ChannelsEdges {
+  /**
+   * The item at the end of ChannelEdge.
+   */
+  node: ChannelsEdgesNode
+}
+export interface ChannelsEdgesNode {
+  /**
+   * Underlying app used by the channel.
+   */
+  app: ChannelsEdgesNodeApp
+}
+export interface ChannelsEdgesNodeApp {
+  /**
+   * Globally unique identifier.
+   */
+  id: ID,
+  /**
+   * Icon that represents the app.
+   */
+  icon: ChannelsEdgesNodeAppIcon
+}
+export interface ChannelsEdgesNodeAppIcon {
+  /**
+   * The location of the image as a URL.
+   *
+   * @deprecated Previously an image had a single `src` field. This could either return the original image
+   * location or a URL that contained transformations such as sizing or scale.
+   * These transformations were specified by arguments on the parent field.
+   * Now an image has two distinct URL fields: `originalSrc` and `transformedSrc`.
+   * * `originalSrc` - the original unmodified image URL
+   * * `transformedSrc` - the image URL with the specified transformations included
+   * To migrate to the new fields, image transformations should be moved from the parent field to `transformedSrc`.
+   * Before:
+   * ```graphql
+   * {
+   *   shop {
+   *     productImages(maxWidth: 200, scale: 2) {
+   *       edges {
+   *         node {
+   *           src
+   *         }
+   *       }
+   *     }
+   *   }
+   * }
+   * ```
+   * After:
+   * ```graphql
+   * {
+   *   shop {
+   *     productImages {
+   *       edges {
+   *         node {
+   *           transformedSrc(maxWidth: 200, scale: 2)
+   *         }
+   *       }
+   *     }
+   *   }
+   * }
+   * ```
+   */
+  src: string
 }
 
-export class TestDeprecatedFieldsQuery extends Query<TestDeprecatedFieldsResponse> {
-    constructor(operationVariables: TestDeprecatedFieldsQueryArguments) {
-      super(
-        "query TestDeprecatedFields(\$first: Int) { __typename channels(first: \$first) { __typename edges { __typename node { __typename app { __typename id icon { __typename src } } } } } }",
-        {
-          "first": `${operationVariables.first}`
-        },
-        new Array<GraphSelection>(
-new GraphSelection({
+}
+
+export interface TestDeprecatedFieldsQueryData {
+
+  /**
+   * List of the active sales channels.
+   *
+   * @deprecated Use `publications` instead
+   */
+  channels: TestDeprecatedFieldsQueryData.Channels
+}
+
+const document: SimpleDocument<SyrupOperation, TestDeprecatedFieldsQueryData.Variables> = {
+  id: "TestDeprecatedFields",
+  name: "TestDeprecatedFields",
+  source: "query TestDeprecatedFields(\$first: Int) { __typename channels(first: \$first) { __typename edges { __typename node { __typename app { __typename id icon { __typename src } } } } } }",
+  __typeData: {
+    operationType: 'query',
+    selections: [
+{
 name: "channels",
-type: "ChannelConnection",
-cacheKey: `channels(first: ${operationVariables["first"]})`,
+type: { name: "ChannelConnection", definedType: "Object" },
+arguments: { first: { isOperationVariable: true, key: "first" } },
 passedGID: null,
-typeCondition: "QueryRoot",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "QueryRoot", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "edges",
-type: "ChannelEdge",
-cacheKey: `edges`,
+type: { name: "ChannelEdge", definedType: "Object" },
+arguments: {},
 passedGID: null,
-typeCondition: "ChannelConnection",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "ChannelConnection", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "node",
-type: "Channel",
-cacheKey: `node`,
+type: { name: "Channel", definedType: "Object" },
+arguments: {},
 passedGID: null,
-typeCondition: "ChannelEdge",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "ChannelEdge", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "app",
-type: "App",
-cacheKey: `app`,
+type: { name: "App", definedType: "Object" },
+arguments: {},
 passedGID: null,
-typeCondition: "Channel",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "Channel", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "id",
-type: "ID",
-cacheKey: `id`,
+type: { name: "ID", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "App",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "App", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "icon",
-type: "Image",
-cacheKey: `icon`,
+type: { name: "Image", definedType: "Object" },
+arguments: {},
 passedGID: null,
-typeCondition: "App",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "App", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "src",
-type: "URL",
-cacheKey: `src`,
+type: { name: "URL", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "Image",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}))}))}))}))}))}))
-      )
-    }
-
-    decodeResponse(jsonObject: Object): TestDeprecatedFieldsResponse {
-      return TestDeprecatedFieldsResponse.fromJson(jsonObject)
-    }
+typeCondition: { name: "Image", definedType: "Object" },
+directive: null,
+selections: []}]}]}]}]}]}]
+  }
 }
+export default document

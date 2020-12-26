@@ -27,15 +27,3 @@ export enum WeightUnit {
    */
   UNKNOWN_SYRUP_ENUM = "UNKNOWN_SYRUP_ENUM"
 }
-
-export class WeightUnitUtil {
-  static safeValueOf(value: string): WeightUnit {
-    const values = Object.keys(WeightUnit).map(x => WeightUnit[x])
-
-    if (values.some(x => x === value)) {
-      return <WeightUnit> value
-    } else {
-      return WeightUnit.UNKNOWN_SYRUP_ENUM
-    }
-  }
-}

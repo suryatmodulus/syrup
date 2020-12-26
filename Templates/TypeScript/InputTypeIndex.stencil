@@ -1,5 +1,4 @@
-{% if inputNames.count > 0 %}{% for inputName in inputNames %}export { {{ inputName }} } from "./{{ inputName }}"
-export type { {{ inputName }}_Arguments } from "./{{ inputName }}"
+{% if inputNames.count > 0 %}{% for inputName in inputNames %}export type { {{ inputName }} } from "./{{ inputName }}"
 {% endfor %}
 {% else %}export {}
 {% endif %}

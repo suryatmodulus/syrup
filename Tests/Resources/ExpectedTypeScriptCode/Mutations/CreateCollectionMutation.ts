@@ -1,98 +1,143 @@
-
-import { ID, GraphSelection, Mutation } from "../GraphApi"
-import { CreateCollectionResponse } from "../Responses/CreateCollectionResponse"
+import { SimpleDocument } from "graphql-typed"
+import { ID, GraphSelection, SyrupOperation, copyWithTypeCondtion } from "../GraphApi"
 import * as Enums from "../Enums"
 import * as Inputs from "../Inputs"
 import * as Fragments from "../Fragments"
 
-export interface CreateCollectionMutationArguments {
-  input: Inputs.CollectionInput
+export namespace CreateCollectionMutationData {
+  export interface Variables {
+    input: Inputs.CollectionInput
+  }
+export interface CollectionCreate {
+  /**
+   * List of errors that occurred executing the mutation.
+   */
+  userErrors: CollectionCreateUserErrors[],
+  /**
+   * The collection that has been created.
+   */
+  collection: CollectionCreateCollection | undefined
+}
+export interface CollectionCreateUserErrors {
+  /**
+   * Path to the input field which caused the error.
+   */
+  field: string[] | undefined,
+  /**
+   * The error message.
+   */
+  message: string
+}
+export interface CollectionCreateCollection {
+  /**
+   * The title of the collection.
+   */
+  title: string,
+  /**
+   * Globally unique identifier.
+   */
+  id: ID,
+  /**
+   * Information about the collection that's provided through resource feedback.
+   */
+  feedback: CollectionCreateCollectionFeedback | undefined
+}
+export interface CollectionCreateCollectionFeedback {
+  /**
+   * Summary of resource feedback pertaining to the resource.
+   */
+  summary: string
 }
 
-export class CreateCollectionMutation extends Mutation<CreateCollectionResponse> {
-    constructor(operationVariables: CreateCollectionMutationArguments) {
-      super(
-        "mutation CreateCollection(\$input: CollectionInput!) { __typename collectionCreate(input: \$input) { __typename userErrors { __typename field message } collection { __typename title id feedback { __typename summary } } } }",
-        {
-          "input": `${operationVariables.input}`
-        },
-        new Array<GraphSelection>(
-new GraphSelection({
+}
+
+export interface CreateCollectionMutationData {
+
+  /**
+   * Creates a collection.
+   */
+  collectionCreate: CreateCollectionMutationData.CollectionCreate | undefined
+}
+
+const document: SimpleDocument<SyrupOperation, CreateCollectionMutationData.Variables> = {
+  id: "CreateCollection",
+  name: "CreateCollection",
+  source: "mutation CreateCollection(\$input: CollectionInput!) { __typename collectionCreate(input: \$input) { __typename userErrors { __typename field message } collection { __typename title id feedback { __typename summary } } } }",
+  __typeData: {
+    operationType: 'mutation',
+    selections: [
+{
 name: "collectionCreate",
-type: "CollectionCreatePayload",
-cacheKey: `collectionCreate(input: ${operationVariables["input"]})`,
+type: { name: "CollectionCreatePayload", definedType: "Object" },
+arguments: { input: { isOperationVariable: true, key: "input" } },
 passedGID: null,
-typeCondition: "Mutation",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "Mutation", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "userErrors",
-type: "UserError",
-cacheKey: `userErrors`,
+type: { name: "UserError", definedType: "Object" },
+arguments: {},
 passedGID: null,
-typeCondition: "CollectionCreatePayload",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "CollectionCreatePayload", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "field",
-type: "String",
-cacheKey: `field`,
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "UserError",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "UserError", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "message",
-type: "String",
-cacheKey: `message`,
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "UserError",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}))}), 
-new GraphSelection({
+typeCondition: { name: "UserError", definedType: "Object" },
+directive: null,
+selections: []}]}, 
+{
 name: "collection",
-type: "Collection",
-cacheKey: `collection`,
+type: { name: "Collection", definedType: "Object" },
+arguments: {},
 passedGID: null,
-typeCondition: "CollectionCreatePayload",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "CollectionCreatePayload", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "title",
-type: "String",
-cacheKey: `title`,
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "Collection",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "Collection", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "id",
-type: "ID",
-cacheKey: `id`,
+type: { name: "ID", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "Collection",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "Collection", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "feedback",
-type: "ResourceFeedback",
-cacheKey: `feedback`,
+type: { name: "ResourceFeedback", definedType: "Object" },
+arguments: {},
 passedGID: null,
-typeCondition: "Collection",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "Collection", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "summary",
-type: "String",
-cacheKey: `summary`,
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "ResourceFeedback",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}))}))}))}))
-      )
-    }
-
-    decodeResponse(jsonObject: Object): CreateCollectionResponse {
-      return CreateCollectionResponse.fromJson(jsonObject)
-    }
+typeCondition: { name: "ResourceFeedback", definedType: "Object" },
+directive: null,
+selections: []}]}]}]}]
+  }
 }
+export default document

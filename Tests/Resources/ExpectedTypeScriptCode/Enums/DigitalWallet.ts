@@ -27,15 +27,3 @@ export enum DigitalWallet {
    */
   UNKNOWN_SYRUP_ENUM = "UNKNOWN_SYRUP_ENUM"
 }
-
-export class DigitalWalletUtil {
-  static safeValueOf(value: string): DigitalWallet {
-    const values = Object.keys(DigitalWallet).map(x => DigitalWallet[x])
-
-    if (values.some(x => x === value)) {
-      return <DigitalWallet> value
-    } else {
-      return DigitalWallet.UNKNOWN_SYRUP_ENUM
-    }
-  }
-}

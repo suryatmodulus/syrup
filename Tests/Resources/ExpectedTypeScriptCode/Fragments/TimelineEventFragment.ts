@@ -1,9 +1,8 @@
-
 import { ID, Response, GraphSelection } from "../GraphApi"
 import * as Enums from "../Enums"
 
-export interface TimelineEventFragment_Arguments {
-  realized: TimelineEventFragment_Realized,
+export interface TimelineEventFragment {
+  realized: TimelineEventFragmentRealizedCommentEvent | {},
 
   /**
    * Globally unique identifier.
@@ -13,7 +12,7 @@ export interface TimelineEventFragment_Arguments {
   /**
    * The date and time when the event was created.
    */
-  createdAt: Date,
+  createdAt: string,
 
   /**
    * Human readable text that describes the event.
@@ -36,192 +35,7 @@ export interface TimelineEventFragment_Arguments {
   criticalAlert: boolean
 }
 
-export class TimelineEventFragment implements Response {
-  readonly realized: TimelineEventFragment_Realized
-  readonly id: ID
-  readonly createdAt: Date
-  readonly message: string
-  readonly attributeToApp: boolean
-  readonly attributeToUser: boolean
-  readonly criticalAlert: boolean
-
-  constructor(responseArguments: TimelineEventFragment_Arguments) {
-    this.realized = responseArguments.realized
-    this.id = responseArguments.id
-    this.createdAt = responseArguments.createdAt
-    this.message = responseArguments.message
-    this.attributeToApp = responseArguments.attributeToApp
-    this.attributeToUser = responseArguments.attributeToUser
-    this.criticalAlert = responseArguments.criticalAlert
-  }
-
-  static fromJson(jsonObject: any) {
-    return new this({
-      realized: function(typename: string): TimelineEventFragment_Realized {
-        switch(typename) {
-          case "CommentEvent": 
-            TimelineEventFragment_Realized_CommentEvent.fromJson(jsonObject)
-          default:
-            return new TimelineEventFragment_Realized_Other()
-        }
-      }(jsonObject["__typename"]),
-      id: jsonObject["id"],
-      createdAt: Date.fromJson(jsonObject["createdAt"]),
-      message: jsonObject["message"],
-      attributeToApp: jsonObject["attributeToApp"],
-      attributeToUser: jsonObject["attributeToUser"],
-      criticalAlert: jsonObject["criticalAlert"]
-    })
-  }
-
-  static typeName(): string {
-    return "Event"
-  }
-
-  static getSelections(operationVariables: Record<string, any>): Array<GraphSelection> {
-    return new Array<GraphSelection>(
-new GraphSelection({
-name: "id",
-type: "ID",
-cacheKey: `id`,
-passedGID: null,
-typeCondition: "Event",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "createdAt",
-type: "DateTime",
-cacheKey: `createdAt`,
-passedGID: null,
-typeCondition: "Event",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "message",
-type: "FormattedString",
-cacheKey: `message`,
-passedGID: null,
-typeCondition: "Event",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "attributeToApp",
-type: "Boolean",
-cacheKey: `attributeToApp`,
-passedGID: null,
-typeCondition: "Event",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "attributeToUser",
-type: "Boolean",
-cacheKey: `attributeToUser`,
-passedGID: null,
-typeCondition: "Event",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "criticalAlert",
-type: "Boolean",
-cacheKey: `criticalAlert`,
-passedGID: null,
-typeCondition: "Event",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "edited",
-type: "Boolean",
-cacheKey: `edited`,
-passedGID: null,
-typeCondition: "CommentEvent",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "canEdit",
-type: "Boolean",
-cacheKey: `canEdit`,
-passedGID: null,
-typeCondition: "CommentEvent",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "canDelete",
-type: "Boolean",
-cacheKey: `canDelete`,
-passedGID: null,
-typeCondition: "CommentEvent",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "attachments",
-type: "CommentEventAttachment",
-cacheKey: `attachments`,
-passedGID: null,
-typeCondition: "CommentEvent",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
-name: "id",
-type: "ID",
-cacheKey: `id`,
-passedGID: null,
-typeCondition: "CommentEventAttachment",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "name",
-type: "String",
-cacheKey: `name`,
-passedGID: null,
-typeCondition: "CommentEventAttachment",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "size",
-type: "Int",
-cacheKey: `size`,
-passedGID: null,
-typeCondition: "CommentEventAttachment",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "fileExtension",
-type: "String",
-cacheKey: `fileExtension`,
-passedGID: null,
-typeCondition: "CommentEventAttachment",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "url",
-type: "URL",
-cacheKey: `url`,
-passedGID: null,
-typeCondition: "CommentEventAttachment",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "image",
-type: "Image",
-cacheKey: `image`,
-passedGID: null,
-typeCondition: "CommentEventAttachment",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
-name: "transformedSrc",
-type: "URL",
-cacheKey: `transformedSrc(maxWidth: ${operationVariables["maxImageWidth"]}, maxHeight: ${operationVariables["maxImageHeight"]})`,
-passedGID: null,
-typeCondition: "Image",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}))}))}))
-  }
-}
-
-export interface TimelineEventFragment_Realized {}
-
-export interface TimelineEventFragment_Realized_CommentEvent_Arguments {
+export interface TimelineEventFragmentRealizedCommentEvent {
   /**
    * Globally unique identifier.
    */
@@ -229,7 +43,7 @@ export interface TimelineEventFragment_Realized_CommentEvent_Arguments {
   /**
    * The date and time when the event was created.
    */
-  createdAt: Date,
+  createdAt: string,
   /**
    * Human readable text that describes the event.
    */
@@ -261,47 +75,9 @@ export interface TimelineEventFragment_Realized_CommentEvent_Arguments {
   /**
    * The attachments associated with the comment event.
    */
-  attachments: Array<TimelineEventFragment_Realized_CommentEvent_Attachments>
+  attachments: TimelineEventFragmentRealizedCommentEventAttachments[]
 }
-export class TimelineEventFragment_Realized_CommentEvent implements TimelineEventFragment_Realized {
-  readonly id: ID
-  readonly createdAt: Date
-  readonly message: string
-  readonly attributeToApp: boolean
-  readonly attributeToUser: boolean
-  readonly criticalAlert: boolean
-  readonly edited: boolean
-  readonly canEdit: boolean
-  readonly canDelete: boolean
-  readonly attachments: Array<TimelineEventFragment_Realized_CommentEvent_Attachments>
-  constructor(responseArguments: TimelineEventFragment_Realized_CommentEvent_Arguments) {
-    this.id = responseArguments.id
-    this.createdAt = responseArguments.createdAt
-    this.message = responseArguments.message
-    this.attributeToApp = responseArguments.attributeToApp
-    this.attributeToUser = responseArguments.attributeToUser
-    this.criticalAlert = responseArguments.criticalAlert
-    this.edited = responseArguments.edited
-    this.canEdit = responseArguments.canEdit
-    this.canDelete = responseArguments.canDelete
-    this.attachments = responseArguments.attachments
-  }
-  static fromJson(jsonObject: any): TimelineEventFragment_Realized_CommentEvent {
-    return new this({
-      id: jsonObject["id"],
-      createdAt: Date.fromJson(jsonObject["createdAt"]),
-      message: jsonObject["message"],
-      attributeToApp: jsonObject["attributeToApp"],
-      attributeToUser: jsonObject["attributeToUser"],
-      criticalAlert: jsonObject["criticalAlert"],
-      edited: jsonObject["edited"],
-      canEdit: jsonObject["canEdit"],
-      canDelete: jsonObject["canDelete"],
-      attachments: jsonObject["attachments"] == undefined || jsonObject["attachments"] == null ? Array<TimelineEventFragment_Realized_CommentEvent_Attachments>() : Array.from(jsonObject["attachments"], x => TimelineEventFragment_Realized_CommentEvent_Attachments.fromJson(x))
-    })
-  }
-}
-export interface TimelineEventFragment_Realized_CommentEvent_Attachments_Arguments {
+export interface TimelineEventFragmentRealizedCommentEventAttachments {
   /**
    * Globally unique identifier.
    */
@@ -325,35 +101,9 @@ export interface TimelineEventFragment_Realized_CommentEvent_Attachments_Argumen
   /**
    * The image attached to the comment event.
    */
-  image: TimelineEventFragment_Realized_CommentEvent_Attachments_Image | undefined
+  image: TimelineEventFragmentRealizedCommentEventAttachmentsImage | undefined
 }
-export class TimelineEventFragment_Realized_CommentEvent_Attachments implements Response {
-  readonly id: ID
-  readonly name: string
-  readonly size: number
-  readonly fileExtension: string | undefined
-  readonly url: string
-  readonly image: TimelineEventFragment_Realized_CommentEvent_Attachments_Image | undefined
-  constructor(responseArguments: TimelineEventFragment_Realized_CommentEvent_Attachments_Arguments) {
-    this.id = responseArguments.id
-    this.name = responseArguments.name
-    this.size = responseArguments.size
-    this.fileExtension = responseArguments.fileExtension
-    this.url = responseArguments.url
-    this.image = responseArguments.image
-  }
-  static fromJson(jsonObject: any): TimelineEventFragment_Realized_CommentEvent_Attachments {
-    return new this({
-      id: jsonObject["id"],
-      name: jsonObject["name"],
-      size: jsonObject["size"],
-      fileExtension: jsonObject["fileExtension"] != undefined && jsonObject["fileExtension"] != null ? jsonObject["fileExtension"] : undefined,
-      url: jsonObject["url"],
-      image: jsonObject["image"] != undefined && jsonObject["image"] != null ? TimelineEventFragment_Realized_CommentEvent_Attachments_Image.fromJson(jsonObject["image"]) : undefined
-    })
-  }
-}
-export interface TimelineEventFragment_Realized_CommentEvent_Attachments_Image_Arguments {
+export interface TimelineEventFragmentRealizedCommentEventAttachmentsImage {
   /**
    * The location of the transformed image as a URL.
    * All transformation arguments are considered "best-effort". If they can be applied to an image, they will be.
@@ -361,16 +111,141 @@ export interface TimelineEventFragment_Realized_CommentEvent_Attachments_Image_A
    */
   transformedSrc: string
 }
-export class TimelineEventFragment_Realized_CommentEvent_Attachments_Image implements Response {
-  readonly transformedSrc: string
-  constructor(responseArguments: TimelineEventFragment_Realized_CommentEvent_Attachments_Image_Arguments) {
-    this.transformedSrc = responseArguments.transformedSrc
-  }
-  static fromJson(jsonObject: any): TimelineEventFragment_Realized_CommentEvent_Attachments_Image {
-    return new this({
-      transformedSrc: jsonObject["transformedSrc"]
-    })
-  }
-}
-export class TimelineEventFragment_Realized_Other implements TimelineEventFragment_Realized {}
 
+export const timelineEventFragmentSelections = [
+{
+name: "id",
+type: { name: "ID", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "Event", definedType: "Interface" },
+directive: null,
+selections: []}, 
+{
+name: "createdAt",
+type: { name: "DateTime", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "Event", definedType: "Interface" },
+directive: null,
+selections: []}, 
+{
+name: "message",
+type: { name: "FormattedString", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "Event", definedType: "Interface" },
+directive: null,
+selections: []}, 
+{
+name: "attributeToApp",
+type: { name: "Boolean", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "Event", definedType: "Interface" },
+directive: null,
+selections: []}, 
+{
+name: "attributeToUser",
+type: { name: "Boolean", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "Event", definedType: "Interface" },
+directive: null,
+selections: []}, 
+{
+name: "criticalAlert",
+type: { name: "Boolean", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "Event", definedType: "Interface" },
+directive: null,
+selections: []}, 
+{
+name: "edited",
+type: { name: "Boolean", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "CommentEvent", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
+name: "canEdit",
+type: { name: "Boolean", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "CommentEvent", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
+name: "canDelete",
+type: { name: "Boolean", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "CommentEvent", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
+name: "attachments",
+type: { name: "CommentEventAttachment", definedType: "Object" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "CommentEvent", definedType: "Object" },
+directive: null,
+selections: [
+{
+name: "id",
+type: { name: "ID", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "CommentEventAttachment", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
+name: "name",
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "CommentEventAttachment", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
+name: "size",
+type: { name: "Int", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "CommentEventAttachment", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
+name: "fileExtension",
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "CommentEventAttachment", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
+name: "url",
+type: { name: "URL", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "CommentEventAttachment", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
+name: "image",
+type: { name: "Image", definedType: "Object" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "CommentEventAttachment", definedType: "Object" },
+directive: null,
+selections: [
+{
+name: "transformedSrc",
+type: { name: "URL", definedType: "Scalar" },
+arguments: { maxWidth: { isOperationVariable: true, key: "maxImageWidth" }, maxHeight: { isOperationVariable: true, key: "maxImageHeight" } },
+passedGID: null,
+typeCondition: { name: "Image", definedType: "Object" },
+directive: null,
+selections: []}]}]}]

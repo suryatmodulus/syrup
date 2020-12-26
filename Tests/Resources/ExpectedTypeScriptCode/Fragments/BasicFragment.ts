@@ -1,9 +1,7 @@
-
-import { ID, Response, GraphSelection } from "../GraphApi"
+import { ID, GraphSelection } from "../GraphApi"
 import * as Enums from "../Enums"
-import * as Fragments from "../Fragments"
 
-export interface BasicFragment_Arguments {
+export interface BasicFragment {
 
   /**
    * Globally unique identifier.
@@ -16,40 +14,20 @@ export interface BasicFragment_Arguments {
   lastName: string | undefined
 }
 
-export class BasicFragment implements Response {
-  readonly id: ID
-  readonly lastName: string | undefined
-
-  constructor(responseArguments: BasicFragment_Arguments) {
-    this.id = responseArguments.id
-    this.lastName = responseArguments.lastName
-  }
-
-  static fromJson(jsonObject: any): BasicFragment {
-    return new this({
-      id: jsonObject["id"],
-      lastName: jsonObject["lastName"] != undefined && jsonObject["lastName"] != null ? jsonObject["lastName"] : undefined
-    })
-  }
-
-  static getSelections(operationVariables: Record<string, any>): Array<GraphSelection> {
-      return new Array<GraphSelection>(
-new GraphSelection({
+export const basicFragmentSelections = [
+{
 name: "id",
-type: "ID",
-cacheKey: `id`,
+type: { name: "ID", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "Customer",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "Customer", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "lastName",
-type: "String",
-cacheKey: `lastName`,
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "Customer",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}))
-  }
-}
-
+typeCondition: { name: "Customer", definedType: "Object" },
+directive: null,
+selections: []}]

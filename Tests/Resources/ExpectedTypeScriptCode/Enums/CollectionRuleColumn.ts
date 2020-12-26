@@ -57,15 +57,3 @@ export enum CollectionRuleColumn {
    */
   UNKNOWN_SYRUP_ENUM = "UNKNOWN_SYRUP_ENUM"
 }
-
-export class CollectionRuleColumnUtil {
-  static safeValueOf(value: string): CollectionRuleColumn {
-    const values = Object.keys(CollectionRuleColumn).map(x => CollectionRuleColumn[x])
-
-    if (values.some(x => x === value)) {
-      return <CollectionRuleColumn> value
-    } else {
-      return CollectionRuleColumn.UNKNOWN_SYRUP_ENUM
-    }
-  }
-}

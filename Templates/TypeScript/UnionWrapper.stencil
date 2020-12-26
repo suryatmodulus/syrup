@@ -1,58 +1,14 @@
-{% if asFile %}
-import { ID, Response, GraphSelection } from "../GraphApi"
-import { ScalarResolver } from "../ScalarResolver"
+{% if asFile %}import { ID, GraphSelection } from "../GraphApi"
+{{ header }}
 {% if importEnums %}import * as Enums from "../Enums"{% endif %}
 {% if fragmentNames.count > 0 %}import * as Fragments from "../Fragments"{% endif %}
 {% endif %}
 
-export interface {{ name }}_Arguments {
-  realized: {{ name }}_Realized{% if baseFields or fragmentSpreads %},{% endif %}
+export interface {{ name }} {
+  realized: {% for concreteType in concreteTypeNames %}{{ name }}Realized{{ concreteType }} | {% endfor %}{}{% if baseFields or fragmentSpreads %},{% endif %}
   {% for fragment in fragmentSpreads %}
   {{ fragment.name|lowercasedFirstLetter }}: Fragments.{{ fragment.name }} {% if not forloop.last %},{% endif %}
   {% endfor %}
 }
 
-export class {{ name }} implements Response {
-  readonly realized: {{ name }}_Realized
-  {% for fragment in fragmentSpreads %}
-  readonly {{ fragment.name|lowercasedFirstLetter }}: Fragments.{{ fragment.name }}
-  {% endfor %}
-
-  constructor(responseArguments: {{ name }}_Arguments) {
-    this.realized = responseArguments.realized
-    {% for fragmentName in fragmentNames %}
-    this.{{ fragmentName|lowercasedFirstLetter }} = responseArguments.{{ fragmentName|lowercasedFirstLetter }}
-    {% endfor %}
-  }
-
-  static fromJson(jsonObject: any) {
-    return new this({
-      realized: function(typename: string): {{ name }}_Realized {
-        switch(typename) {
-          {% for concreteType in concreteTypeNames %}
-          case "{{ concreteType }}": 
-            {{ name }}_Realized_{{ concreteType }}.fromJson(jsonObject)
-          {% endfor %}
-          default:
-            return new {{ name }}_Realized_Other()
-        }
-      }(jsonObject["__typename"]){% if fragmentSpreads %},{% endif %}
-      {% for fragment in fragmentSpreads %}
-      {{ fragment.name|lowercasedFirstLetter }}: Fragments.{{ fragment.name }}.fromJson(jsonObject){% if not forloop.last %},{% endif %}
-      {% endfor %}
-    })
-  }
-
-  static typeName(): string {
-    return "{{ graphQLName }}"
-  } 
-
-  static getSelections(operationVariables: Record<string, any>): Array<GraphSelection> {
-    return {{ fragmentSelections|renderTypeScriptSelections }}
-  }
-}
-
-export interface {{ name }}_Realized {}
-
 {{ collectedFields|internalInterfaceTypeDefinitions:name,groupedFragmentSpreads,concreteTypeNames }}
-export class {{ name }}_Realized_Other implements {{ name }}_Realized {}

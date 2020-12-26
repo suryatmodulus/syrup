@@ -771,15 +771,3 @@ export enum CurrencyCode {
    */
   UNKNOWN_SYRUP_ENUM = "UNKNOWN_SYRUP_ENUM"
 }
-
-export class CurrencyCodeUtil {
-  static safeValueOf(value: string): CurrencyCode {
-    const values = Object.keys(CurrencyCode).map(x => CurrencyCode[x])
-
-    if (values.some(x => x === value)) {
-      return <CurrencyCode> value
-    } else {
-      return CurrencyCode.UNKNOWN_SYRUP_ENUM
-    }
-  }
-}

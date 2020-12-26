@@ -17,15 +17,3 @@ export enum ProductVariantInventoryPolicy {
    */
   UNKNOWN_SYRUP_ENUM = "UNKNOWN_SYRUP_ENUM"
 }
-
-export class ProductVariantInventoryPolicyUtil {
-  static safeValueOf(value: string): ProductVariantInventoryPolicy {
-    const values = Object.keys(ProductVariantInventoryPolicy).map(x => ProductVariantInventoryPolicy[x])
-
-    if (values.some(x => x === value)) {
-      return <ProductVariantInventoryPolicy> value
-    } else {
-      return ProductVariantInventoryPolicy.UNKNOWN_SYRUP_ENUM
-    }
-  }
-}

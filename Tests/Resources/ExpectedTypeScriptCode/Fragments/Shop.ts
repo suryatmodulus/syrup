@@ -1,140 +1,77 @@
-
-import { ID, Response, GraphSelection } from "../GraphApi"
+import { ID, GraphSelection } from "../GraphApi"
 import * as Enums from "../Enums"
-import * as Fragments from "../Fragments"
 
-export interface Shop_Arguments {
+export interface Shop {
 
   /**
    * Returns a Shop resource corresponding to access token used in request.
    */
-  shop: Shop_Shop
+  shop: ShopShop
 }
 
-export class Shop implements Response {
-  readonly shop: Shop_Shop
-
-  constructor(responseArguments: Shop_Arguments) {
-    this.shop = responseArguments.shop
-  }
-
-  static fromJson(jsonObject: any): Shop {
-    return new this({
-      shop: Shop_Shop.fromJson(jsonObject["shop"])
-    })
-  }
-
-  static getSelections(operationVariables: Record<string, any>): Array<GraphSelection> {
-      return new Array<GraphSelection>(
-new GraphSelection({
-name: "shop",
-type: "Shop",
-cacheKey: `shop`,
-passedGID: null,
-typeCondition: "QueryRoot",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
-name: "availableChannelApps",
-type: "AppConnection",
-cacheKey: `availableChannelApps(first: ${operationVariables["first"]})`,
-passedGID: null,
-typeCondition: "Shop",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
-name: "edges",
-type: "AppEdge",
-cacheKey: `edges`,
-passedGID: null,
-typeCondition: "AppConnection",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
-name: "node",
-type: "App",
-cacheKey: `node`,
-passedGID: null,
-typeCondition: "AppEdge",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
-name: "id",
-type: "ID",
-cacheKey: `id`,
-passedGID: null,
-typeCondition: "App",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}))}))}))}))}))
-  }
-}
-
-export interface Shop_Shop_Arguments {
+export interface ShopShop {
   /**
    * List of sales channels not currently installed on the shop.
    */
-  availableChannelApps: Shop_Shop_AvailableChannelApps
+  availableChannelApps: ShopShopAvailableChannelApps
 }
-export class Shop_Shop implements Response {
-  readonly availableChannelApps: Shop_Shop_AvailableChannelApps
-  constructor(responseArguments: Shop_Shop_Arguments) {
-    this.availableChannelApps = responseArguments.availableChannelApps
-  }
-  static fromJson(jsonObject: any): Shop_Shop {
-    return new this({
-      availableChannelApps: Shop_Shop_AvailableChannelApps.fromJson(jsonObject["availableChannelApps"])
-    })
-  }
-}
-export interface Shop_Shop_AvailableChannelApps_Arguments {
+export interface ShopShopAvailableChannelApps {
   /**
    * A list of edges.
    */
-  edges: Array<Shop_Shop_AvailableChannelApps_Edges>
+  edges: ShopShopAvailableChannelAppsEdges[]
 }
-export class Shop_Shop_AvailableChannelApps implements Response {
-  readonly edges: Array<Shop_Shop_AvailableChannelApps_Edges>
-  constructor(responseArguments: Shop_Shop_AvailableChannelApps_Arguments) {
-    this.edges = responseArguments.edges
-  }
-  static fromJson(jsonObject: any): Shop_Shop_AvailableChannelApps {
-    return new this({
-      edges: jsonObject["edges"] == undefined || jsonObject["edges"] == null ? Array<Shop_Shop_AvailableChannelApps_Edges>() : Array.from(jsonObject["edges"], x => Shop_Shop_AvailableChannelApps_Edges.fromJson(x))
-    })
-  }
-}
-export interface Shop_Shop_AvailableChannelApps_Edges_Arguments {
+export interface ShopShopAvailableChannelAppsEdges {
   /**
    * The item at the end of AppEdge.
    */
-  node: Shop_Shop_AvailableChannelApps_Edges_Node
+  node: ShopShopAvailableChannelAppsEdgesNode
 }
-export class Shop_Shop_AvailableChannelApps_Edges implements Response {
-  readonly node: Shop_Shop_AvailableChannelApps_Edges_Node
-  constructor(responseArguments: Shop_Shop_AvailableChannelApps_Edges_Arguments) {
-    this.node = responseArguments.node
-  }
-  static fromJson(jsonObject: any): Shop_Shop_AvailableChannelApps_Edges {
-    return new this({
-      node: Shop_Shop_AvailableChannelApps_Edges_Node.fromJson(jsonObject["node"])
-    })
-  }
-}
-export interface Shop_Shop_AvailableChannelApps_Edges_Node_Arguments {
+export interface ShopShopAvailableChannelAppsEdgesNode {
   /**
    * Globally unique identifier.
    */
   id: ID
 }
-export class Shop_Shop_AvailableChannelApps_Edges_Node implements Response {
-  readonly id: ID
-  constructor(responseArguments: Shop_Shop_AvailableChannelApps_Edges_Node_Arguments) {
-    this.id = responseArguments.id
-  }
-  static fromJson(jsonObject: any): Shop_Shop_AvailableChannelApps_Edges_Node {
-    return new this({
-      id: jsonObject["id"]
-    })
-  }
-}
 
+export const shopSelections = [
+{
+name: "shop",
+type: { name: "Shop", definedType: "Object" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "QueryRoot", definedType: "Object" },
+directive: null,
+selections: [
+{
+name: "availableChannelApps",
+type: { name: "AppConnection", definedType: "Object" },
+arguments: { first: { isOperationVariable: true, key: "first" } },
+passedGID: null,
+typeCondition: { name: "Shop", definedType: "Object" },
+directive: null,
+selections: [
+{
+name: "edges",
+type: { name: "AppEdge", definedType: "Object" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "AppConnection", definedType: "Object" },
+directive: null,
+selections: [
+{
+name: "node",
+type: { name: "App", definedType: "Object" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "AppEdge", definedType: "Object" },
+directive: null,
+selections: [
+{
+name: "id",
+type: { name: "ID", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "App", definedType: "Object" },
+directive: null,
+selections: []}]}]}]}]}]

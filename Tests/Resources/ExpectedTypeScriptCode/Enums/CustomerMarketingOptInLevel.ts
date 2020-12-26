@@ -24,15 +24,3 @@ export enum CustomerMarketingOptInLevel {
    */
   UNKNOWN_SYRUP_ENUM = "UNKNOWN_SYRUP_ENUM"
 }
-
-export class CustomerMarketingOptInLevelUtil {
-  static safeValueOf(value: string): CustomerMarketingOptInLevel {
-    const values = Object.keys(CustomerMarketingOptInLevel).map(x => CustomerMarketingOptInLevel[x])
-
-    if (values.some(x => x === value)) {
-      return <CustomerMarketingOptInLevel> value
-    } else {
-      return CustomerMarketingOptInLevel.UNKNOWN_SYRUP_ENUM
-    }
-  }
-}

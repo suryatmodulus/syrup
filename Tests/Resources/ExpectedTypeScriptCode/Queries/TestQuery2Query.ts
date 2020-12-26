@@ -1,93 +1,139 @@
-
-import { ID, GraphSelection, Query } from "../GraphApi"
-import { TestQuery2Response } from "../Responses/TestQuery2Response"
+import { SimpleDocument } from "graphql-typed"
+import { ID, GraphSelection, SyrupOperation, copyWithTypeCondtion } from "../GraphApi"
 import * as Enums from "../Enums"
 import * as Inputs from "../Inputs"
 import * as Fragments from "../Fragments"
 
-export class TestQuery2Query extends Query<TestQuery2Response> {
-    constructor() {
-      super(
-        "query TestQuery2 { __typename shop { __typename name id email alerts { __typename action { __typename title url } description } } }",
-        {
-        },
-        new Array<GraphSelection>(
-new GraphSelection({
-name: "shop",
-type: "Shop",
-cacheKey: `shop`,
-passedGID: null,
-typeCondition: "QueryRoot",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
-name: "name",
-type: "String",
-cacheKey: `name`,
-passedGID: null,
-typeCondition: "Shop",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "id",
-type: "ID",
-cacheKey: `id`,
-passedGID: null,
-typeCondition: "Shop",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "email",
-type: "String",
-cacheKey: `email`,
-passedGID: null,
-typeCondition: "Shop",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "alerts",
-type: "ShopAlert",
-cacheKey: `alerts`,
-passedGID: null,
-typeCondition: "Shop",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
-name: "action",
-type: "ShopAlertAction",
-cacheKey: `action`,
-passedGID: null,
-typeCondition: "ShopAlert",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
-name: "title",
-type: "String",
-cacheKey: `title`,
-passedGID: null,
-typeCondition: "ShopAlertAction",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "url",
-type: "URL",
-cacheKey: `url`,
-passedGID: null,
-typeCondition: "ShopAlertAction",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}))}), 
-new GraphSelection({
-name: "description",
-type: "String",
-cacheKey: `description`,
-passedGID: null,
-typeCondition: "ShopAlert",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}))}))}))
-      )
-    }
-
-    decodeResponse(jsonObject: Object): TestQuery2Response {
-      return TestQuery2Response.fromJson(jsonObject)
-    }
+export namespace TestQuery2QueryData {
+export interface Shop {
+  /**
+   * The shop's name.
+   */
+  name: string,
+  /**
+   * Globally unique identifier.
+   */
+  id: ID,
+  /**
+   * The shop owner's email address.
+   * Shopify will use this email address to communicate with the shop owner.
+   */
+  email: string,
+  /**
+   * Alert message that appears in the Shopify admin.
+   */
+  alerts: ShopAlerts[]
 }
+export interface ShopAlerts {
+  /**
+   * Button in the alert that links to related information.
+   */
+  action: ShopAlertsAction,
+  /**
+   * Description of the alert.
+   */
+  description: string
+}
+export interface ShopAlertsAction {
+  /**
+   * Action title.
+   */
+  title: string,
+  /**
+   * Action target URL.
+   */
+  url: string
+}
+
+}
+
+export interface TestQuery2QueryData {
+
+  /**
+   * Returns a Shop resource corresponding to access token used in request.
+   */
+  shop: TestQuery2QueryData.Shop
+}
+
+const document: SimpleDocument<SyrupOperation, {}> = {
+  id: "TestQuery2",
+  name: "TestQuery2",
+  source: "query TestQuery2 { __typename shop { __typename name id email alerts { __typename action { __typename title url } description } } }",
+  __typeData: {
+    operationType: 'query',
+    selections: [
+{
+name: "shop",
+type: { name: "Shop", definedType: "Object" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "QueryRoot", definedType: "Object" },
+directive: null,
+selections: [
+{
+name: "name",
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "Shop", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
+name: "id",
+type: { name: "ID", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "Shop", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
+name: "email",
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "Shop", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
+name: "alerts",
+type: { name: "ShopAlert", definedType: "Object" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "Shop", definedType: "Object" },
+directive: null,
+selections: [
+{
+name: "action",
+type: { name: "ShopAlertAction", definedType: "Object" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "ShopAlert", definedType: "Object" },
+directive: null,
+selections: [
+{
+name: "title",
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "ShopAlertAction", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
+name: "url",
+type: { name: "URL", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "ShopAlertAction", definedType: "Object" },
+directive: null,
+selections: []}]}, 
+{
+name: "description",
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "ShopAlert", definedType: "Object" },
+directive: null,
+selections: []}]}]}]
+  }
+}
+export default document

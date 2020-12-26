@@ -82,15 +82,3 @@ export enum FulfillmentDisplayStatus {
    */
   UNKNOWN_SYRUP_ENUM = "UNKNOWN_SYRUP_ENUM"
 }
-
-export class FulfillmentDisplayStatusUtil {
-  static safeValueOf(value: string): FulfillmentDisplayStatus {
-    const values = Object.keys(FulfillmentDisplayStatus).map(x => FulfillmentDisplayStatus[x])
-
-    if (values.some(x => x === value)) {
-      return <FulfillmentDisplayStatus> value
-    } else {
-      return FulfillmentDisplayStatus.UNKNOWN_SYRUP_ENUM
-    }
-  }
-}

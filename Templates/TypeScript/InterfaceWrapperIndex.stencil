@@ -1,5 +1,5 @@
-{% if fragmentNames.count > 0 %}{% for fragmentName in fragmentNames %}export { {{ fragmentName }} } from "./{{ fragmentName }}"
-export type { {{ fragmentName }}_Arguments } from "./{{ fragmentName }}"
+{% if fragmentNames.count > 0 %}{% for fragmentName in fragmentNames %}export type { {{ fragmentName }} } from "./{{ fragmentName }}"
+export { {{ fragmentName|lowercasedFirstLetter }}Selections } from "./{{ fragmentName }}"
 {% endfor %}
 {% else %}export {}
 {% endif %}

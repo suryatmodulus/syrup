@@ -1,90 +1,135 @@
-
-import { ID, GraphSelection, Query } from "../GraphApi"
-import { TestQuery11Response } from "../Responses/TestQuery11Response"
+import { SimpleDocument } from "graphql-typed"
+import { ID, GraphSelection, SyrupOperation, copyWithTypeCondtion } from "../GraphApi"
 import * as Enums from "../Enums"
 import * as Inputs from "../Inputs"
 import * as Fragments from "../Fragments"
 
-export interface TestQuery11QueryArguments {
-  productId: ID
+export namespace TestQuery11QueryData {
+  export interface Variables {
+    productId: ID
+  }
+  export interface Node {
+    realized: NodeRealizedProduct | NodeRealizedProductOption | {}
+  }
+  export interface NodeRealizedProduct {
+    /**
+     * Globally unique identifier.
+     */
+    id: ID,
+    /**
+     * A list of the collections that include the product.
+     */
+    collections: NodeRealizedProductCollections
+  }
+  export interface NodeRealizedProductCollections {
+    /**
+     * A list of edges.
+     */
+    edges: NodeRealizedProductCollectionsEdges[]
+  }
+  export interface NodeRealizedProductCollectionsEdges {
+    /**
+     * The item at the end of CollectionEdge.
+     */
+    node: NodeRealizedProductCollectionsEdgesNode
+  }
+  export interface NodeRealizedProductCollectionsEdgesNode {
+    /**
+     * Globally unique identifier.
+     */
+    id: ID,
+    /**
+     * The title of the collection.
+     */
+    title: string
+  }
+  export interface NodeRealizedProductOption {
+    /**
+     * Globally unique identifier.
+     */
+    id: ID
+  }
 }
 
-export class TestQuery11Query extends Query<TestQuery11Response> {
-    constructor(operationVariables: TestQuery11QueryArguments) {
-      super(
-        "query TestQuery11(\$productId: ID!) { __typename node(id: \$productId) { __typename ... on Product { __typename id collections(first: 100) { __typename edges { __typename node { __typename id title } } } }... on ProductOption { __typename id } } }",
-        {
-          "productId": `${operationVariables.productId}`
-        },
-        new Array<GraphSelection>(
-new GraphSelection({
+export interface TestQuery11QueryData {
+
+  /**
+   * Returns a specific node by ID.
+   */
+  node: TestQuery11QueryData.Node | undefined
+}
+
+const document: SimpleDocument<SyrupOperation, TestQuery11QueryData.Variables> = {
+  id: "TestQuery11",
+  name: "TestQuery11",
+  source: "query TestQuery11(\$productId: ID!) { __typename node(id: \$productId) { __typename ... on Product { __typename id collections(first: 100) { __typename edges { __typename node { __typename id title } } } }... on ProductOption { __typename id } } }",
+  __typeData: {
+    operationType: 'query',
+    selections: [
+{
 name: "node",
-type: "Node",
-cacheKey: `node(id: ${operationVariables["productId"]})`,
-passedGID: `${operationVariables["productId"]}`,
-typeCondition: "QueryRoot",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+type: { name: "Node", definedType: "Interface" },
+arguments: { id: { isOperationVariable: true, key: "productId" } },
+passedGID: "productId",
+typeCondition: { name: "QueryRoot", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "id",
-type: "ID",
-cacheKey: `id`,
+type: { name: "ID", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "Product",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "Product", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "collections",
-type: "CollectionConnection",
-cacheKey: `collections(first: 100)`,
+type: { name: "CollectionConnection", definedType: "Object" },
+arguments: { first: 100 },
 passedGID: null,
-typeCondition: "Product",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "Product", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "edges",
-type: "CollectionEdge",
-cacheKey: `edges`,
+type: { name: "CollectionEdge", definedType: "Object" },
+arguments: {},
 passedGID: null,
-typeCondition: "CollectionConnection",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "CollectionConnection", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "node",
-type: "Collection",
-cacheKey: `node`,
+type: { name: "Collection", definedType: "Object" },
+arguments: {},
 passedGID: null,
-typeCondition: "CollectionEdge",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "CollectionEdge", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "id",
-type: "ID",
-cacheKey: `id`,
+type: { name: "ID", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "Collection",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "Collection", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "title",
-type: "String",
-cacheKey: `title`,
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "Collection",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}))}))}))}), 
-new GraphSelection({
+typeCondition: { name: "Collection", definedType: "Object" },
+directive: null,
+selections: []}]}]}]}, 
+{
 name: "id",
-type: "ID",
-cacheKey: `id`,
+type: { name: "ID", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "ProductOption",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}))}))
-      )
-    }
-
-    decodeResponse(jsonObject: Object): TestQuery11Response {
-      return TestQuery11Response.fromJson(jsonObject)
-    }
+typeCondition: { name: "ProductOption", definedType: "Object" },
+directive: null,
+selections: []}]}]
+  }
 }
+export default document

@@ -1,117 +1,186 @@
-
-import { ID, GraphSelection, Query } from "../GraphApi"
-import { TestQuery8Response } from "../Responses/TestQuery8Response"
+import { SimpleDocument } from "graphql-typed"
+import { ID, GraphSelection, SyrupOperation, copyWithTypeCondtion } from "../GraphApi"
 import * as Enums from "../Enums"
 import * as Inputs from "../Inputs"
 import * as Fragments from "../Fragments"
 
-export class TestQuery8Query extends Query<TestQuery8Response> {
-    constructor() {
-      super(
-        "query TestQuery8 { __typename shop { __typename id firstProduct: products(first: 1) { __typename edges { __typename cursor node { __typename title } } } lastProduct: products(first: 1, reverse: true) { __typename edges { __typename cursor node { __typename title } } } } }",
-        {
-        },
-        new Array<GraphSelection>(
-new GraphSelection({
-name: "shop",
-type: "Shop",
-cacheKey: `shop`,
-passedGID: null,
-typeCondition: "QueryRoot",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
-name: "id",
-type: "ID",
-cacheKey: `id`,
-passedGID: null,
-typeCondition: "Shop",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "firstProduct",
-type: "ProductConnection",
-cacheKey: `firstProduct(first: 1)`,
-passedGID: null,
-typeCondition: "Shop",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
-name: "edges",
-type: "ProductEdge",
-cacheKey: `edges`,
-passedGID: null,
-typeCondition: "ProductConnection",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
-name: "cursor",
-type: "String",
-cacheKey: `cursor`,
-passedGID: null,
-typeCondition: "ProductEdge",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "node",
-type: "Product",
-cacheKey: `node`,
-passedGID: null,
-typeCondition: "ProductEdge",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
-name: "title",
-type: "String",
-cacheKey: `title`,
-passedGID: null,
-typeCondition: "Product",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}))}))}))}), 
-new GraphSelection({
-name: "lastProduct",
-type: "ProductConnection",
-cacheKey: `lastProduct(first: 1, reverse: true)`,
-passedGID: null,
-typeCondition: "Shop",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
-name: "edges",
-type: "ProductEdge",
-cacheKey: `edges`,
-passedGID: null,
-typeCondition: "ProductConnection",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
-name: "cursor",
-type: "String",
-cacheKey: `cursor`,
-passedGID: null,
-typeCondition: "ProductEdge",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "node",
-type: "Product",
-cacheKey: `node`,
-passedGID: null,
-typeCondition: "ProductEdge",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
-name: "title",
-type: "String",
-cacheKey: `title`,
-passedGID: null,
-typeCondition: "Product",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}))}))}))}))}))
-      )
-    }
-
-    decodeResponse(jsonObject: Object): TestQuery8Response {
-      return TestQuery8Response.fromJson(jsonObject)
-    }
+export namespace TestQuery8QueryData {
+export interface Shop {
+  /**
+   * Globally unique identifier.
+   */
+  id: ID,
+  /**
+   * List of the shop's products.
+   *
+   * @deprecated Use `QueryRoot.products`.
+   */
+  firstProduct: ShopFirstProduct,
+  /**
+   * List of the shop's products.
+   *
+   * @deprecated Use `QueryRoot.products`.
+   */
+  lastProduct: ShopLastProduct
 }
+export interface ShopFirstProduct {
+  /**
+   * A list of edges.
+   */
+  edges: ShopFirstProductEdges[]
+}
+export interface ShopFirstProductEdges {
+  /**
+   * A cursor for use in pagination.
+   */
+  cursor: string,
+  /**
+   * The item at the end of ProductEdge.
+   */
+  node: ShopFirstProductEdgesNode
+}
+export interface ShopFirstProductEdgesNode {
+  /**
+   * The title of the product.
+   */
+  title: string
+}
+export interface ShopLastProduct {
+  /**
+   * A list of edges.
+   */
+  edges: ShopLastProductEdges[]
+}
+export interface ShopLastProductEdges {
+  /**
+   * A cursor for use in pagination.
+   */
+  cursor: string,
+  /**
+   * The item at the end of ProductEdge.
+   */
+  node: ShopLastProductEdgesNode
+}
+export interface ShopLastProductEdgesNode {
+  /**
+   * The title of the product.
+   */
+  title: string
+}
+
+}
+
+export interface TestQuery8QueryData {
+
+  /**
+   * Returns a Shop resource corresponding to access token used in request.
+   */
+  shop: TestQuery8QueryData.Shop
+}
+
+const document: SimpleDocument<SyrupOperation, {}> = {
+  id: "TestQuery8",
+  name: "TestQuery8",
+  source: "query TestQuery8 { __typename shop { __typename id firstProduct: products(first: 1) { __typename edges { __typename cursor node { __typename title } } } lastProduct: products(first: 1, reverse: true) { __typename edges { __typename cursor node { __typename title } } } } }",
+  __typeData: {
+    operationType: 'query',
+    selections: [
+{
+name: "shop",
+type: { name: "Shop", definedType: "Object" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "QueryRoot", definedType: "Object" },
+directive: null,
+selections: [
+{
+name: "id",
+type: { name: "ID", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "Shop", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
+name: "firstProduct",
+type: { name: "ProductConnection", definedType: "Object" },
+arguments: { first: 1 },
+passedGID: null,
+typeCondition: { name: "Shop", definedType: "Object" },
+directive: null,
+selections: [
+{
+name: "edges",
+type: { name: "ProductEdge", definedType: "Object" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "ProductConnection", definedType: "Object" },
+directive: null,
+selections: [
+{
+name: "cursor",
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "ProductEdge", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
+name: "node",
+type: { name: "Product", definedType: "Object" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "ProductEdge", definedType: "Object" },
+directive: null,
+selections: [
+{
+name: "title",
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "Product", definedType: "Object" },
+directive: null,
+selections: []}]}]}]}, 
+{
+name: "lastProduct",
+type: { name: "ProductConnection", definedType: "Object" },
+arguments: { first: 1, reverse: true },
+passedGID: null,
+typeCondition: { name: "Shop", definedType: "Object" },
+directive: null,
+selections: [
+{
+name: "edges",
+type: { name: "ProductEdge", definedType: "Object" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "ProductConnection", definedType: "Object" },
+directive: null,
+selections: [
+{
+name: "cursor",
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "ProductEdge", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
+name: "node",
+type: { name: "Product", definedType: "Object" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "ProductEdge", definedType: "Object" },
+directive: null,
+selections: [
+{
+name: "title",
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "Product", definedType: "Object" },
+directive: null,
+selections: []}]}]}]}]}]
+  }
+}
+export default document

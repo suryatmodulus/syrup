@@ -1,117 +1,174 @@
-
-import { ID, GraphSelection, Query } from "../GraphApi"
-import { TestQuery5Response } from "../Responses/TestQuery5Response"
+import { SimpleDocument } from "graphql-typed"
+import { ID, GraphSelection, SyrupOperation, copyWithTypeCondtion } from "../GraphApi"
 import * as Enums from "../Enums"
 import * as Inputs from "../Inputs"
 import * as Fragments from "../Fragments"
 
-export class TestQuery5Query extends Query<TestQuery5Response> {
-    constructor() {
-      super(
-        "query TestQuery5 { __typename shop { __typename name currencyCode weightUnit billingAddress { __typename city company latitude longitude } fulfillmentServices { __typename serviceName handle } } }",
-        {
-        },
-        new Array<GraphSelection>(
-new GraphSelection({
-name: "shop",
-type: "Shop",
-cacheKey: `shop`,
-passedGID: null,
-typeCondition: "QueryRoot",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
-name: "name",
-type: "String",
-cacheKey: `name`,
-passedGID: null,
-typeCondition: "Shop",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "currencyCode",
-type: "CurrencyCode",
-cacheKey: `currencyCode`,
-passedGID: null,
-typeCondition: "Shop",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "weightUnit",
-type: "WeightUnit",
-cacheKey: `weightUnit`,
-passedGID: null,
-typeCondition: "Shop",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "billingAddress",
-type: "MailingAddress",
-cacheKey: `billingAddress`,
-passedGID: null,
-typeCondition: "Shop",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
-name: "city",
-type: "String",
-cacheKey: `city`,
-passedGID: null,
-typeCondition: "MailingAddress",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "company",
-type: "String",
-cacheKey: `company`,
-passedGID: null,
-typeCondition: "MailingAddress",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "latitude",
-type: "Float",
-cacheKey: `latitude`,
-passedGID: null,
-typeCondition: "MailingAddress",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "longitude",
-type: "Float",
-cacheKey: `longitude`,
-passedGID: null,
-typeCondition: "MailingAddress",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}))}), 
-new GraphSelection({
-name: "fulfillmentServices",
-type: "FulfillmentService",
-cacheKey: `fulfillmentServices`,
-passedGID: null,
-typeCondition: "Shop",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
-name: "serviceName",
-type: "String",
-cacheKey: `serviceName`,
-passedGID: null,
-typeCondition: "FulfillmentService",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
-name: "handle",
-type: "String",
-cacheKey: `handle`,
-passedGID: null,
-typeCondition: "FulfillmentService",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}))}))}))
-      )
-    }
-
-    decodeResponse(jsonObject: Object): TestQuery5Response {
-      return TestQuery5Response.fromJson(jsonObject)
-    }
+export namespace TestQuery5QueryData {
+export interface Shop {
+  /**
+   * The shop's name.
+   */
+  name: string,
+  /**
+   * The three letter code for the shop's currency.
+   */
+  currencyCode: Enums.CurrencyCode,
+  /**
+   * The shop's primary unit of weight for products and shipping.
+   */
+  weightUnit: Enums.WeightUnit,
+  /**
+   * The shop's billing address information.
+   */
+  billingAddress: ShopBillingAddress,
+  /**
+   * List of the shop's installed fulfillment services.
+   */
+  fulfillmentServices: ShopFulfillmentServices[]
 }
+export interface ShopBillingAddress {
+  /**
+   * The name of the city, district, village, or town.
+   */
+  city: string | undefined,
+  /**
+   * The name of the customer's company or organization.
+   */
+  company: string | undefined,
+  /**
+   * The latitude coordinate of the customer address.
+   */
+  latitude: number | undefined,
+  /**
+   * The longitude coordinate of the customer address.
+   */
+  longitude: number | undefined
+}
+export interface ShopFulfillmentServices {
+  /**
+   * The name of the fulfillment service as seen by merchants.
+   */
+  serviceName: string,
+  /**
+   * Human-readable unique identifier for this fulfillment service.
+   */
+  handle: string
+}
+
+}
+
+export interface TestQuery5QueryData {
+
+  /**
+   * Returns a Shop resource corresponding to access token used in request.
+   */
+  shop: TestQuery5QueryData.Shop
+}
+
+const document: SimpleDocument<SyrupOperation, {}> = {
+  id: "TestQuery5",
+  name: "TestQuery5",
+  source: "query TestQuery5 { __typename shop { __typename name currencyCode weightUnit billingAddress { __typename city company latitude longitude } fulfillmentServices { __typename serviceName handle } } }",
+  __typeData: {
+    operationType: 'query',
+    selections: [
+{
+name: "shop",
+type: { name: "Shop", definedType: "Object" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "QueryRoot", definedType: "Object" },
+directive: null,
+selections: [
+{
+name: "name",
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "Shop", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
+name: "currencyCode",
+type: { name: "CurrencyCode", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "Shop", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
+name: "weightUnit",
+type: { name: "WeightUnit", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "Shop", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
+name: "billingAddress",
+type: { name: "MailingAddress", definedType: "Object" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "Shop", definedType: "Object" },
+directive: null,
+selections: [
+{
+name: "city",
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "MailingAddress", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
+name: "company",
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "MailingAddress", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
+name: "latitude",
+type: { name: "Float", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "MailingAddress", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
+name: "longitude",
+type: { name: "Float", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "MailingAddress", definedType: "Object" },
+directive: null,
+selections: []}]}, 
+{
+name: "fulfillmentServices",
+type: { name: "FulfillmentService", definedType: "Object" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "Shop", definedType: "Object" },
+directive: null,
+selections: [
+{
+name: "serviceName",
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "FulfillmentService", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
+name: "handle",
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
+passedGID: null,
+typeCondition: { name: "FulfillmentService", definedType: "Object" },
+directive: null,
+selections: []}]}]}]
+  }
+}
+export default document

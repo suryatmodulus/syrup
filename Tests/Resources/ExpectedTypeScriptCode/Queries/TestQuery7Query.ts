@@ -1,242 +1,376 @@
-
-import { ID, GraphSelection, Query } from "../GraphApi"
-import { TestQuery7Response } from "../Responses/TestQuery7Response"
+import { SimpleDocument } from "graphql-typed"
+import { ID, GraphSelection, SyrupOperation, copyWithTypeCondtion } from "../GraphApi"
 import * as Enums from "../Enums"
 import * as Inputs from "../Inputs"
 import * as Fragments from "../Fragments"
 
-export interface TestQuery7QueryArguments {
-  first?: number | undefined
+export namespace TestQuery7QueryData {
+  export interface Variables {
+    first?: number | undefined
+  }
+export interface Shop {
+  /**
+   * The shop's name.
+   */
+  name: string,
+  /**
+   * The three letter code for the shop's currency.
+   */
+  currencyCode: Enums.CurrencyCode,
+  /**
+   * The shop's primary unit of weight for products and shipping.
+   */
+  weightUnit: Enums.WeightUnit,
+  /**
+   * The shop's billing address information.
+   */
+  billingAddress: ShopBillingAddress,
+  /**
+   * List of the shop's installed fulfillment services.
+   */
+  fulfillmentServices: ShopFulfillmentServices[],
+  /**
+   * List of orders placed on the shop.
+   *
+   * @deprecated Use `QueryRoot.orders` instead.
+   */
+  orders: ShopOrders
+}
+export interface ShopBillingAddress {
+  /**
+   * The name of the city, district, village, or town.
+   */
+  city: string | undefined,
+  /**
+   * The name of the customer's company or organization.
+   */
+  company: string | undefined,
+  /**
+   * The latitude coordinate of the customer address.
+   */
+  latitude: number | undefined,
+  /**
+   * The longitude coordinate of the customer address.
+   */
+  longitude: number | undefined
+}
+export interface ShopFulfillmentServices {
+  /**
+   * The name of the fulfillment service as seen by merchants.
+   */
+  serviceName: string,
+  /**
+   * Human-readable unique identifier for this fulfillment service.
+   */
+  handle: string
+}
+export interface ShopOrders {
+  /**
+   * A list of edges.
+   */
+  edges: ShopOrdersEdges[]
+}
+export interface ShopOrdersEdges {
+  /**
+   * The item at the end of OrderEdge.
+   */
+  node: ShopOrdersEdgesNode
+}
+export interface ShopOrdersEdgesNode {
+  /**
+   * Unique identifier for the order that appears on the order.
+   * For example, _#1000_ or _Store1001.
+   * This value is not unique across multiple stores.
+   */
+  name: string,
+  /**
+   * Fulfillment status for the order that can be shown to the merchant.
+   * This field does not capture all the possible details of an order's fulfillment state. It should only be used for display summary purposes.
+   */
+  displayFulfillmentStatus: Enums.OrderDisplayFulfillmentStatus,
+  /**
+   * List of shipments for the order.
+   */
+  fulfillments: ShopOrdersEdgesNodeFulfillments[]
+}
+export interface ShopOrdersEdgesNodeFulfillments {
+  /**
+   * Human readable reference identifier for this fulfillment.
+   */
+  name: string,
+  /**
+   * The date and time when the fulfillment was created.
+   */
+  createdAt: string,
+  /**
+   * The date and time when the fulfillment went into transit.
+   */
+  inTransitAt: string | undefined,
+  /**
+   * The date that this fulfillment was delivered.
+   */
+  deliveredAt: string | undefined,
+  /**
+   * Human readable display status for this fulfillment.
+   */
+  displayStatus: Enums.FulfillmentDisplayStatus | undefined,
+  /**
+   * The history of events associated with this fulfillment.
+   */
+  events: ShopOrdersEdgesNodeFulfillmentsEvents
+}
+export interface ShopOrdersEdgesNodeFulfillmentsEvents {
+  /**
+   * A list of edges.
+   */
+  edges: ShopOrdersEdgesNodeFulfillmentsEventsEdges[]
+}
+export interface ShopOrdersEdgesNodeFulfillmentsEventsEdges {
+  /**
+   * The item at the end of FulfillmentEventEdge.
+   */
+  node: ShopOrdersEdgesNodeFulfillmentsEventsEdgesNode
+}
+export interface ShopOrdersEdgesNodeFulfillmentsEventsEdgesNode {
+  /**
+   * The status of this fulfillment event.
+   */
+  status: Enums.FulfillmentEventStatus
 }
 
-export class TestQuery7Query extends Query<TestQuery7Response> {
-    constructor(operationVariables: TestQuery7QueryArguments) {
-      super(
-        "query TestQuery7(\$first: Int) { __typename shop { __typename name currencyCode weightUnit billingAddress { __typename city company latitude longitude } fulfillmentServices { __typename serviceName handle } orders(first: \$first) { __typename edges { __typename node { __typename name displayFulfillmentStatus fulfillments { __typename name createdAt inTransitAt deliveredAt displayStatus events(first: 10) { __typename edges { __typename node { __typename status } } } } } } } } }",
-        {
-          "first": `${operationVariables.first}`
-        },
-        new Array<GraphSelection>(
-new GraphSelection({
+}
+
+export interface TestQuery7QueryData {
+
+  /**
+   * Returns a Shop resource corresponding to access token used in request.
+   */
+  shop: TestQuery7QueryData.Shop
+}
+
+const document: SimpleDocument<SyrupOperation, TestQuery7QueryData.Variables> = {
+  id: "TestQuery7",
+  name: "TestQuery7",
+  source: "query TestQuery7(\$first: Int) { __typename shop { __typename name currencyCode weightUnit billingAddress { __typename city company latitude longitude } fulfillmentServices { __typename serviceName handle } orders(first: \$first) { __typename edges { __typename node { __typename name displayFulfillmentStatus fulfillments { __typename name createdAt inTransitAt deliveredAt displayStatus events(first: 10) { __typename edges { __typename node { __typename status } } } } } } } } }",
+  __typeData: {
+    operationType: 'query',
+    selections: [
+{
 name: "shop",
-type: "Shop",
-cacheKey: `shop`,
+type: { name: "Shop", definedType: "Object" },
+arguments: {},
 passedGID: null,
-typeCondition: "QueryRoot",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "QueryRoot", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "name",
-type: "String",
-cacheKey: `name`,
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "Shop",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "Shop", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "currencyCode",
-type: "CurrencyCode",
-cacheKey: `currencyCode`,
+type: { name: "CurrencyCode", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "Shop",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "Shop", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "weightUnit",
-type: "WeightUnit",
-cacheKey: `weightUnit`,
+type: { name: "WeightUnit", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "Shop",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "Shop", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "billingAddress",
-type: "MailingAddress",
-cacheKey: `billingAddress`,
+type: { name: "MailingAddress", definedType: "Object" },
+arguments: {},
 passedGID: null,
-typeCondition: "Shop",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "Shop", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "city",
-type: "String",
-cacheKey: `city`,
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "MailingAddress",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "MailingAddress", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "company",
-type: "String",
-cacheKey: `company`,
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "MailingAddress",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "MailingAddress", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "latitude",
-type: "Float",
-cacheKey: `latitude`,
+type: { name: "Float", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "MailingAddress",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "MailingAddress", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "longitude",
-type: "Float",
-cacheKey: `longitude`,
+type: { name: "Float", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "MailingAddress",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}))}), 
-new GraphSelection({
+typeCondition: { name: "MailingAddress", definedType: "Object" },
+directive: null,
+selections: []}]}, 
+{
 name: "fulfillmentServices",
-type: "FulfillmentService",
-cacheKey: `fulfillmentServices`,
+type: { name: "FulfillmentService", definedType: "Object" },
+arguments: {},
 passedGID: null,
-typeCondition: "Shop",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "Shop", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "serviceName",
-type: "String",
-cacheKey: `serviceName`,
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "FulfillmentService",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "FulfillmentService", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "handle",
-type: "String",
-cacheKey: `handle`,
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "FulfillmentService",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}))}), 
-new GraphSelection({
+typeCondition: { name: "FulfillmentService", definedType: "Object" },
+directive: null,
+selections: []}]}, 
+{
 name: "orders",
-type: "OrderConnection",
-cacheKey: `orders(first: ${operationVariables["first"]})`,
+type: { name: "OrderConnection", definedType: "Object" },
+arguments: { first: { isOperationVariable: true, key: "first" } },
 passedGID: null,
-typeCondition: "Shop",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "Shop", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "edges",
-type: "OrderEdge",
-cacheKey: `edges`,
+type: { name: "OrderEdge", definedType: "Object" },
+arguments: {},
 passedGID: null,
-typeCondition: "OrderConnection",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "OrderConnection", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "node",
-type: "Order",
-cacheKey: `node`,
+type: { name: "Order", definedType: "Object" },
+arguments: {},
 passedGID: null,
-typeCondition: "OrderEdge",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "OrderEdge", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "name",
-type: "String",
-cacheKey: `name`,
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "Order",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "Order", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "displayFulfillmentStatus",
-type: "OrderDisplayFulfillmentStatus",
-cacheKey: `displayFulfillmentStatus`,
+type: { name: "OrderDisplayFulfillmentStatus", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "Order",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "Order", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "fulfillments",
-type: "Fulfillment",
-cacheKey: `fulfillments`,
+type: { name: "Fulfillment", definedType: "Object" },
+arguments: {},
 passedGID: null,
-typeCondition: "Order",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "Order", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "name",
-type: "String",
-cacheKey: `name`,
+type: { name: "String", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "Fulfillment",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "Fulfillment", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "createdAt",
-type: "DateTime",
-cacheKey: `createdAt`,
+type: { name: "DateTime", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "Fulfillment",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "Fulfillment", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "inTransitAt",
-type: "DateTime",
-cacheKey: `inTransitAt`,
+type: { name: "DateTime", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "Fulfillment",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "Fulfillment", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "deliveredAt",
-type: "DateTime",
-cacheKey: `deliveredAt`,
+type: { name: "DateTime", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "Fulfillment",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "Fulfillment", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "displayStatus",
-type: "FulfillmentDisplayStatus",
-cacheKey: `displayStatus`,
+type: { name: "FulfillmentDisplayStatus", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "Fulfillment",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "Fulfillment", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "events",
-type: "FulfillmentEventConnection",
-cacheKey: `events(first: 10)`,
+type: { name: "FulfillmentEventConnection", definedType: "Object" },
+arguments: { first: 10 },
 passedGID: null,
-typeCondition: "Fulfillment",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "Fulfillment", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "edges",
-type: "FulfillmentEventEdge",
-cacheKey: `edges`,
+type: { name: "FulfillmentEventEdge", definedType: "Object" },
+arguments: {},
 passedGID: null,
-typeCondition: "FulfillmentEventConnection",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "FulfillmentEventConnection", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "node",
-type: "FulfillmentEvent",
-cacheKey: `node`,
+type: { name: "FulfillmentEvent", definedType: "Object" },
+arguments: {},
 passedGID: null,
-typeCondition: "FulfillmentEventEdge",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "FulfillmentEventEdge", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "status",
-type: "FulfillmentEventStatus",
-cacheKey: `status`,
+type: { name: "FulfillmentEventStatus", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "FulfillmentEvent",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}))}))}))}))}))}))}))}))}))
-      )
-    }
-
-    decodeResponse(jsonObject: Object): TestQuery7Response {
-      return TestQuery7Response.fromJson(jsonObject)
-    }
+typeCondition: { name: "FulfillmentEvent", definedType: "Object" },
+directive: null,
+selections: []}]}]}]}]}]}]}]}]}]
+  }
 }
+export default document

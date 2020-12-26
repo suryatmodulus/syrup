@@ -1,50 +1,67 @@
-
-import { ID, GraphSelection, Mutation } from "../GraphApi"
-import { TestMutation0Response } from "../Responses/TestMutation0Response"
+import { SimpleDocument } from "graphql-typed"
+import { ID, GraphSelection, SyrupOperation, copyWithTypeCondtion } from "../GraphApi"
 import * as Enums from "../Enums"
 import * as Inputs from "../Inputs"
 import * as Fragments from "../Fragments"
 
-export interface TestMutation0MutationArguments {
-  input: Inputs.CustomerInput
+export namespace TestMutation0MutationData {
+  export interface Variables {
+    input: Inputs.CustomerInput
+  }
+export interface CustomerUpdate {
+  /**
+   * The updated customer.
+   */
+  customer: CustomerUpdateCustomer | undefined
+}
+export interface CustomerUpdateCustomer {
+  /**
+   * Globally unique identifier.
+   */
+  id: ID
 }
 
-export class TestMutation0Mutation extends Mutation<TestMutation0Response> {
-    constructor(operationVariables: TestMutation0MutationArguments) {
-      super(
-        "mutation TestMutation0(\$input: CustomerInput!) { __typename customerUpdate(input: \$input) { __typename customer { __typename id } } }",
-        {
-          "input": `${operationVariables.input}`
-        },
-        new Array<GraphSelection>(
-new GraphSelection({
+}
+
+export interface TestMutation0MutationData {
+
+  /**
+   * Updates a customer's attributes.
+   */
+  customerUpdate: TestMutation0MutationData.CustomerUpdate | undefined
+}
+
+const document: SimpleDocument<SyrupOperation, TestMutation0MutationData.Variables> = {
+  id: "TestMutation0",
+  name: "TestMutation0",
+  source: "mutation TestMutation0(\$input: CustomerInput!) { __typename customerUpdate(input: \$input) { __typename customer { __typename id } } }",
+  __typeData: {
+    operationType: 'mutation',
+    selections: [
+{
 name: "customerUpdate",
-type: "CustomerUpdatePayload",
-cacheKey: `customerUpdate(input: ${operationVariables["input"]})`,
+type: { name: "CustomerUpdatePayload", definedType: "Object" },
+arguments: { input: { isOperationVariable: true, key: "input" } },
 passedGID: null,
-typeCondition: "Mutation",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "Mutation", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "customer",
-type: "Customer",
-cacheKey: `customer`,
+type: { name: "Customer", definedType: "Object" },
+arguments: {},
 passedGID: null,
-typeCondition: "CustomerUpdatePayload",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "CustomerUpdatePayload", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "id",
-type: "ID",
-cacheKey: `id`,
+type: { name: "ID", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "Customer",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}))}))}))
-      )
-    }
-
-    decodeResponse(jsonObject: Object): TestMutation0Response {
-      return TestMutation0Response.fromJson(jsonObject)
-    }
+typeCondition: { name: "Customer", definedType: "Object" },
+directive: null,
+selections: []}]}]}]
+  }
 }
+export default document

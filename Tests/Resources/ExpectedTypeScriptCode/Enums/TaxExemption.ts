@@ -107,15 +107,3 @@ export enum TaxExemption {
    */
   UNKNOWN_SYRUP_ENUM = "UNKNOWN_SYRUP_ENUM"
 }
-
-export class TaxExemptionUtil {
-  static safeValueOf(value: string): TaxExemption {
-    const values = Object.keys(TaxExemption).map(x => TaxExemption[x])
-
-    if (values.some(x => x === value)) {
-      return <TaxExemption> value
-    } else {
-      return TaxExemption.UNKNOWN_SYRUP_ENUM
-    }
-  }
-}

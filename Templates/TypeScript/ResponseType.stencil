@@ -1,12 +1,10 @@
-{% if asFile %}
+{% if asFile %}import { ID, GraphSelection } from "../GraphApi"
 {{ header }}
-import { ID, Response, GraphSelection } from "../GraphApi"
-import { ScalarResolver } from "../ScalarResolver"
 {% if importEnums %}import * as Enums from "../Enums"{% endif %}
-import * as Fragments from "../Fragments"
+{% if fragmentNames.count > 0 %}import * as Fragments from "../Fragments"{% endif %}
 {% endif %}
 
-export interface {{ name }}_Arguments {
+export interface {{ name }} {
   {% for field in fields %}
   {% with field.attributes as attributes %}{% include "Helpers/Attributes.stencil" %}{% endwith %}
   {{ field|renderPropertyDeclaration:name }}{% if fragmentNames or not forloop.last %},{% endif %}
@@ -14,41 +12,6 @@ export interface {{ name }}_Arguments {
   {% for fragmentName in fragmentNames %}
   {{ fragmentName|lowercasedFirstLetter }}: Fragments.{{ fragmentName }}{% if not forloop.last %},{% endif %}
   {% endfor %}
-}
-
-export class {{ name }} implements {% if superclassOverride %}{{ superclassOverride }}{% else %}Response{% endif %} {
-  {% for field in fields %}
-  readonly {{ field|renderPropertyDeclaration:name }}
-  {% endfor %}
-  {% for fragmentName in fragmentNames %}
-  readonly {{ fragmentName|lowercasedFirstLetter }}: Fragments.{{ fragmentName }}
-  {% endfor %}
-
-  constructor(responseArguments: {{ name }}_Arguments) {
-    {% for field in fields %}
-    this.{{ field.name }} = responseArguments.{{ field.name }}
-    {% endfor %}
-    {% for fragmentName in fragmentNames %}
-    this.{{ fragmentName|lowercasedFirstLetter }} = responseArguments.{{ fragmentName|lowercasedFirstLetter }}
-    {% endfor %}
-  }
-
-  static fromJson(jsonObject: any): {{ name }} {
-    return new this({
-      {% for field in fields %}
-      {{ field|decodeField:name }}{% if fragmentNames or not forloop.last %},{% endif %}
-      {% endfor %}
-      {% for fragmentName in fragmentNames %}
-      {{ fragmentName|lowercasedFirstLetter }}: Fragments.{{ fragmentName }}.fromJson(jsonObject){% if not forloop.last %},{% endif %}
-      {% endfor %}
-    })
-  }
-
-  {% if fragmentSelections %}
-  static getSelections(operationVariables: Record<string, any>): Array<GraphSelection> {
-      return {{ fragmentSelections|renderTypeScriptSelections:graphQLName }}
-  }
-  {% endif %}
 }
 
 {% for field in fields %}
@@ -62,3 +25,7 @@ export class {{ name }} implements {% if superclassOverride %}{{ superclassOverr
 {% for field in fields %}
 {{ field|internalUnionWrapper:name }}
 {% endfor %}
+
+{% if asFile and fragmentSelections %}
+export const {{ name|lowercasedFirstLetter }}Selections = {{ fragmentSelections|renderTypeScriptSelections }}
+{% endif %}

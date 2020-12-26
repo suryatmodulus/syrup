@@ -409,12 +409,6 @@ public final class Generator {
 		concurrentPerform {
 			let renderer = TypeScriptRenderer(config: self.config)
 			
-			return try self.render(intermediateRepresentation: intermediateRepresentation, namesClosure: { $0.operations }, fileType: .response, renderer: renderer.renderResponseTypes)
-		}
-
-		concurrentPerform {
-			let renderer = TypeScriptRenderer(config: self.config)
-			
 			return try self.render(intermediateRepresentation: intermediateRepresentation, namesClosure: { $0.operations.queries }, fileType: .query, renderer: { (ir) -> [String] in
 				try renderer.renderOperations(intermediateRepresentation: ir, selectionSets: selectionSets, operations: ir.operations.queries)
 			})
@@ -440,7 +434,7 @@ public final class Generator {
 
 		concurrentPerform {
 			let renderer = TypeScriptRenderer(config: self.config)
-			let generatedInputTypes = try self.render(intermediateRepresentation: intermediateRepresentation, namesClosure: { $0.referencedInputTypes }, fileType: .input, renderer: renderer.renderTypeScriptInputTypes)
+			let generatedInputTypes = try self.render(intermediateRepresentation: intermediateRepresentation, namesClosure: { $0.referencedInputTypes }, fileType: .input, renderer: renderer.renderInputTypes)
 			let generatedExportFile = try self.renderTypeScriptExportFile(fileType: .input, renderer: { () throws -> String in
 				try renderer.renderInputTypeEntryPoint(intermediateRepresentation: intermediateRepresentation)
 			})
@@ -471,12 +465,8 @@ public final class Generator {
 		let renderer = TypeScriptRenderer(config: config)
 		let supportFilesFolder = try Folder.root.createSubfolderIfNeeded(at: config.supportFilesDestination)
 		
-		var file = try supportFilesFolder.createFile(named: "GraphApi.\(config.template.specification.extension)")
-		var rendered = try renderer.renderGraphApi()
-		try file.write(rendered)
-		
-		file = try supportFilesFolder.createFile(named: "ScalarResolver.\(config.template.specification.extension)")
-		rendered = try renderer.renderScalarResolver()
+		let file = try supportFilesFolder.createFile(named: "GraphApi.\(config.template.specification.extension)")
+		let rendered = try renderer.renderGraphApi()
 		try file.write(rendered)
 	}
 

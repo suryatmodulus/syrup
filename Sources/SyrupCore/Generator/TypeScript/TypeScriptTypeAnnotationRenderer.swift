@@ -39,7 +39,7 @@ enum TypeScriptTypeAnnotationRenderer {
 		case let scalarType as IntermediateRepresentation.ScalarFieldType:
 			rendered = scalarType.scalar.nativeType
 		case let listType as IntermediateRepresentation.ListFieldType:
-			rendered = "Array<\(render(scalarType: listType.elementType, nonNull: false, moduleName: moduleName))>"
+			rendered = "\(render(scalarType: listType.elementType, nonNull: false, moduleName: moduleName))[]"
 		case let nonNullType as IntermediateRepresentation.NonNullFieldType:
 			return render(scalarType: nonNullType.nestedType, nonNull: true, moduleName: moduleName)
 		default:
@@ -55,7 +55,7 @@ enum TypeScriptTypeAnnotationRenderer {
 	static func render(interfaceWrapper: IntermediateRepresentation.CollectedInterfaceField, prefix: String? = nil) -> String {
 		var name = interfaceWrapper.name.capitalizedFirstLetter
 		if let prefix = prefix {
-			name = "\(prefix)_\(name)"
+			name = "\(prefix)\(name)"
 		}
 		return render(objectType: interfaceWrapper.type, nonNull: false, name: name)
 	}
@@ -63,7 +63,7 @@ enum TypeScriptTypeAnnotationRenderer {
 	static func render(unionWrapper: IntermediateRepresentation.CollectedUnionField, prefix: String? = nil) -> String {
 		var name = unionWrapper.name.capitalizedFirstLetter
 		if let prefix = prefix {
-			name = "\(prefix)_\(name)"
+			name = "\(prefix)\(name)"
 		}
 		return render(objectType: unionWrapper.type, nonNull: false, name: name)
 	}
@@ -71,7 +71,7 @@ enum TypeScriptTypeAnnotationRenderer {
 	static func render(objectField: IntermediateRepresentation.CollectedObjectField, prefix: String? = nil) -> String {
 		var name = objectField.name.capitalizedFirstLetter
 		if let prefix = prefix {
-			name = "\(prefix)_\(name)"
+			name = "\(prefix)\(name)"
 		}
 		return render(objectType: objectField.type, nonNull: false, name: name)
 	}
@@ -82,7 +82,7 @@ enum TypeScriptTypeAnnotationRenderer {
 		case is IntermediateRepresentation.ObjectFieldType, is IntermediateRepresentation.InterfaceFieldType, is IntermediateRepresentation.UnionFieldType:
 			rendered = name.capitalizedFirstLetter
 		case let listType as IntermediateRepresentation.ListFieldType:
-			rendered = "Array<\(render(objectType: listType.elementType, nonNull: false, name: name.capitalizedFirstLetter))>"
+			rendered = "\(render(objectType: listType.elementType, nonNull: false, name: name.capitalizedFirstLetter))[]"
 		case let nonNullType as IntermediateRepresentation.NonNullFieldType:
 			return render(objectType: nonNullType.nestedType, nonNull: true, name: name)
 		default:

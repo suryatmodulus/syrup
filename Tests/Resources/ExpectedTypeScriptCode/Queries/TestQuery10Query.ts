@@ -1,90 +1,141 @@
-
-import { ID, GraphSelection, Query } from "../GraphApi"
-import { TestQuery10Response } from "../Responses/TestQuery10Response"
+import { SimpleDocument } from "graphql-typed"
+import { ID, GraphSelection, SyrupOperation, copyWithTypeCondtion } from "../GraphApi"
 import * as Enums from "../Enums"
 import * as Inputs from "../Inputs"
 import * as Fragments from "../Fragments"
 
-export interface TestQuery10QueryArguments {
-  priceRuleId: ID
+export namespace TestQuery10QueryData {
+  export interface Variables {
+    priceRuleId: ID
+  }
+export interface PriceRule {
+  /**
+   * Globally unique identifier.
+   */
+  id: ID,
+  /**
+   * The value of the price rule.
+   *
+   * @deprecated Use `valueV2` instead
+   */
+  value: PriceRuleValue,
+  /**
+   * The value of the price rule.
+   */
+  valueV2: PriceRuleValueV2
+}
+export interface PriceRuleValue {
+  realized: PriceRuleValueRealizedPriceRuleFixedAmountValue | PriceRuleValueRealizedPriceRulePercentValue | {}
+}
+export interface PriceRuleValueRealizedPriceRuleFixedAmountValue {
+  /**
+   * The monetary value of the price rule.
+   */
+  amount: number
+}
+export interface PriceRuleValueRealizedPriceRulePercentValue {
+  /**
+   * The percent value of the price rule.
+   */
+  percentage: number
+}
+export interface PriceRuleValueV2 {
+  realized: PriceRuleValueV2RealizedMoneyV2 | PriceRuleValueV2RealizedPricingPercentageValue | {}
+}
+export interface PriceRuleValueV2RealizedMoneyV2 {
+  /**
+   * Decimal money amount.
+   */
+  amount: number
+}
+export interface PriceRuleValueV2RealizedPricingPercentageValue {
+  /**
+   * The percentage value of the object.
+   */
+  percentage: number
 }
 
-export class TestQuery10Query extends Query<TestQuery10Response> {
-    constructor(operationVariables: TestQuery10QueryArguments) {
-      super(
-        "query TestQuery10(\$priceRuleId: ID!) { __typename priceRule(id: \$priceRuleId) { __typename id value { __typename ... on PriceRulePercentValue { __typename percentage }... on PriceRuleFixedAmountValue { __typename amount } } valueV2 { __typename ... on MoneyV2 { __typename amount }... on PricingPercentageValue { __typename percentage } } } }",
-        {
-          "priceRuleId": `${operationVariables.priceRuleId}`
-        },
-        new Array<GraphSelection>(
-new GraphSelection({
+}
+
+export interface TestQuery10QueryData {
+
+  /**
+   * Lookup a price rule by ID.
+   */
+  priceRule: TestQuery10QueryData.PriceRule | undefined
+}
+
+const document: SimpleDocument<SyrupOperation, TestQuery10QueryData.Variables> = {
+  id: "TestQuery10",
+  name: "TestQuery10",
+  source: "query TestQuery10(\$priceRuleId: ID!) { __typename priceRule(id: \$priceRuleId) { __typename id value { __typename ... on PriceRulePercentValue { __typename percentage }... on PriceRuleFixedAmountValue { __typename amount } } valueV2 { __typename ... on MoneyV2 { __typename amount }... on PricingPercentageValue { __typename percentage } } } }",
+  __typeData: {
+    operationType: 'query',
+    selections: [
+{
 name: "priceRule",
-type: "PriceRule",
-cacheKey: `priceRule(id: ${operationVariables["priceRuleId"]})`,
-passedGID: `${operationVariables["priceRuleId"]}`,
-typeCondition: "QueryRoot",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+type: { name: "PriceRule", definedType: "Object" },
+arguments: { id: { isOperationVariable: true, key: "priceRuleId" } },
+passedGID: "priceRuleId",
+typeCondition: { name: "QueryRoot", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "id",
-type: "ID",
-cacheKey: `id`,
+type: { name: "ID", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "PriceRule",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "PriceRule", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "value",
-type: "PriceRuleValue",
-cacheKey: `value`,
+type: { name: "PriceRuleValue", definedType: "Union" },
+arguments: {},
 passedGID: null,
-typeCondition: "PriceRule",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "PriceRule", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "percentage",
-type: "Float",
-cacheKey: `percentage`,
+type: { name: "Float", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "PriceRulePercentValue",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "PriceRulePercentValue", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "amount",
-type: "Money",
-cacheKey: `amount`,
+type: { name: "Money", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "PriceRuleFixedAmountValue",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}))}), 
-new GraphSelection({
+typeCondition: { name: "PriceRuleFixedAmountValue", definedType: "Object" },
+directive: null,
+selections: []}]}, 
+{
 name: "valueV2",
-type: "PricingValue",
-cacheKey: `valueV2`,
+type: { name: "PricingValue", definedType: "Union" },
+arguments: {},
 passedGID: null,
-typeCondition: "PriceRule",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>(
-new GraphSelection({
+typeCondition: { name: "PriceRule", definedType: "Object" },
+directive: null,
+selections: [
+{
 name: "amount",
-type: "Decimal",
-cacheKey: `amount`,
+type: { name: "Decimal", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "MoneyV2",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}), 
-new GraphSelection({
+typeCondition: { name: "MoneyV2", definedType: "Object" },
+directive: null,
+selections: []}, 
+{
 name: "percentage",
-type: "Float",
-cacheKey: `percentage`,
+type: { name: "Float", definedType: "Scalar" },
+arguments: {},
 passedGID: null,
-typeCondition: "PricingPercentageValue",
-shouldSkipBasedOnConditionalDirective: false,
-selections: new Array<GraphSelection>()}))}))}))
-      )
-    }
-
-    decodeResponse(jsonObject: Object): TestQuery10Response {
-      return TestQuery10Response.fromJson(jsonObject)
-    }
+typeCondition: { name: "PricingPercentageValue", definedType: "Object" },
+directive: null,
+selections: []}]}]}]
+  }
 }
+export default document

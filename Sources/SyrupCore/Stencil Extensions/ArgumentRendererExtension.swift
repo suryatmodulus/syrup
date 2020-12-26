@@ -106,21 +106,13 @@ final class ArgumentRendererExtension<V: VariableTypeRenderer>: Extension {
 				}
 				return rendered + ": \(V.render(variableType: variable.type))"
 			}
-			return result.joined(separator: ",\n  ")
-		}
-
-		registerFilter("renderTypeScriptOperationVariables") { (value) -> Any? in
-			guard let variables = value as? [IntermediateRepresentation.Variable] else { return nil }
-			let result: [String] = variables.map { variable in
-				return "\"\(TypeScriptReservedWordsExtension.escape(word: variable.name, reservedWords: reservedWords))\": " + self.getJsonType(start: "operationVariables.\(ReservedWordsExtension.escape(word: variable.name, reservedWords: reservedWords))", variableType: variable.type)
-			}
-			return result.joined(separator: ",\n")
+			return result.joined(separator: ",\n    ")
 		}
 
 		registerFilter("renderTypeScriptInputArguments") { (value) -> Any? in
 			guard let variables = value as? [IntermediateRepresentation.Variable] else { return nil }
 			let result: [String] = variables.map { variable in
-				var rendered = "\(TypeScriptReservedWordsExtension.escape(word: variable.name, reservedWords: reservedWords))?: \(V.render(variableType: variable.type))"
+				var rendered = "\(TypeScriptReservedWordsExtension.escape(word: variable.name, reservedWords: reservedWords))?: \(V.render(variableType: IntermediateRepresentation.Variable.VariableType.nonNull(variable.type)))"
 				switch variable.type {
 				case .nonNull:
 					break
@@ -132,40 +124,6 @@ final class ArgumentRendererExtension<V: VariableTypeRenderer>: Extension {
 			return result.joined(separator: ",\n  ")
 		}
 
-		registerFilter("renderTypeScriptInputProperties") { (value) -> Any? in
-			guard let variables = value as? [IntermediateRepresentation.Variable] else { return nil }
-			let result: [String] = variables.map { variable in
-				var rendered = "public \(TypeScriptReservedWordsExtension.escape(word: variable.name, reservedWords: reservedWords)): \(V.render(variableType: variable.type))"
-				switch variable.type {
-				case .nonNull:
-					break
-				default:
-					rendered += " | null = undefined"
-				}
-				return rendered
-			}
-			return result.joined(separator: "\n  ")
-		}
-
-		registerFilter("renderTypeScriptInputInitializers") { (value) -> Any? in
-			guard let variables = value as? [IntermediateRepresentation.Variable] else { return nil }
-			let result: [String] = variables.map { variable in
-				return "this.\(variable.name) = inputArguments.\(variable.name)"
-			}
-			return result.joined(separator: "\n    ")
-		}
-		
-		registerFilter("renderTypeScriptJsonConverters") { (value) -> Any? in
-			guard let variables = value as? [IntermediateRepresentation.Variable] else { return nil }
-			let result: [String] = variables.map { variable in
-				var rendered = "    if (this.\(variable.name) != undefined) {\n"
-				rendered += "      json[\"\(variable.name)\"] = \(self.getJsonType(start: "this.\(variable.name)", variableType: variable.type))\n"
-				return rendered + "    }\n"
-			}
-			
-			return result.joined(separator: "\n")
-		}
-		
 		registerFilter("renderInputArguments") { (value) -> Any? in
 			guard let variables = value as? [IntermediateRepresentation.Variable] else { return nil }
 			let result: [String] = variables.map { variable in
@@ -179,41 +137,6 @@ final class ArgumentRendererExtension<V: VariableTypeRenderer>: Extension {
 				return rendered
 			}
 			return result.joined(separator: ", ")
-		}
-	}
-	
-	private func getJsonType(start: String, variableType: IntermediateRepresentation.Variable.VariableType, nonNull: Bool = false, mapVar: String = "x") -> String {
-		switch variableType {
-		case .scalar(let scalarType):
-			if (scalarType is IntermediateRepresentation.CustomCodedScalar) {
-				let representation = "ScalarResolver.getTypeAdapter<\(scalarType.nativeType)>(\(scalarType.nativeType).name).serialize(\(start))"
-				
-				if (nonNull) {
-					return representation
-				} else {
-					return "\(start) != null ? \(representation) : null"
-				}
-			} else {
-				return start
-			}
-		case .enum:
-			return start
-		case .list(let nestedType):
-			if (nonNull) {
-				return "Array.from(\(start), \(mapVar) => \(self.getJsonType(start: mapVar, variableType: nestedType, nonNull: nonNull, mapVar: mapVar + "x")))"
-			} else {
-				return "\(start) != null ? Array.from(\(start), \(mapVar) => \(self.getJsonType(start: mapVar, variableType: nestedType, nonNull: nonNull, mapVar: mapVar + "x"))) : null"
-			}
-		case .input:
-			var nullable = "\(start)"
-			
-			if (!nonNull) {
-				nullable += "?"
-			}
-			
-			return "\(nullable).toJson()"
-		case .nonNull(let nestedType):
-			return self.getJsonType(start: start, variableType: nestedType, nonNull: true, mapVar: mapVar)
 		}
 	}
 }

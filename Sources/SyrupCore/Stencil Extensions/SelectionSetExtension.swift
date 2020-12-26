@@ -161,7 +161,7 @@ class SelectionSetExtension: Extension {
 			case let arg as SelectionSetVisitor.ListValue:
 				renders.append("[\(renderArgumentValues(arguments: arg.values))]")
 			case let arg as SelectionSetVisitor.Variable:
-				renders.append("operationVariables[\"\(arg.name)\"]")
+				renders.append("{ isOperationVariable: true, key: \"\(arg.name)\" }")
 			case let arg as SelectionSetVisitor.IntValue:
 				renders.append("\(arg.value)")
 			case let arg as SelectionSetVisitor.FloatValue:
@@ -206,7 +206,7 @@ class SelectionSetExtension: Extension {
 	func renderGIDPassed(_ field: SelectionSetVisitor.Field) -> String {
 		for argument in field.arguments {
 			if argument.name == "id", let variable = argument.value as? SelectionSetVisitor.Variable {
-				return "\"${operationVariables[\"\(variable.name)\"]}\""
+				return "\"\(variable.name)\""
 			}
 		}
 		return "null"
@@ -215,7 +215,7 @@ class SelectionSetExtension: Extension {
 	func renderTypeScriptGIDPassed(_ field: SelectionSetVisitor.Field) -> String {
 		for argument in field.arguments {
 			if argument.name == "id", let variable = argument.value as? SelectionSetVisitor.Variable {
-				return "`${operationVariables[\"\(variable.name)\"]}`"
+				return "\"\(variable.name)\""
 			}
 		}
 		return "null"
@@ -223,9 +223,9 @@ class SelectionSetExtension: Extension {
 
 	func renderTypeScriptConditionalDirective(_ field: SelectionSetVisitor.Field) -> String {
 		if let skip = field.conditionalDirective?.skip as? SelectionSetVisitor.Variable {
-			return "{ type: \"skip\", value: Boolean(`${operationVariables[\"\(skip.name)\"]}`) }"
+			return "{ type: \"skip\", valueKey: \"\(skip.name)\" }"
 		} else if let include = field.conditionalDirective?.include as? SelectionSetVisitor.Variable {
-			return "{ type: \"include\", value: Boolean(`${operationVariables[\"\(include.name)\"]}`) }"
+			return "{ type: \"include\", valueKey: \"\(include.name)\" }"
 		}
 		return "null"
 	}
@@ -316,7 +316,6 @@ class SelectionSetExtension: Extension {
 				return ""
 		}
 		let typeCondition = args.first as? String
-		let variableCount = args.count >= 2 ? (args[1] as? Int ?? 0) : 0
 		
 		var fieldRenders: [String] = []
 		var fragmentSpreadRenders: [String] = []
@@ -337,7 +336,7 @@ class SelectionSetExtension: Extension {
 			if let field = selection.field {
 				if field.name != "__typename" {
 					let name = field.alias ?? field.name
-					var render = "\nnew GraphSelection({"
+					var render = "\n{"
 					render.append("\nname: \"\(name)\",")
 					render.append("\ntype: \(renderTypeScriptTypeCondition(field.type)),")
 					render.append("\narguments: \(renderTypeScriptArguments(field.arguments)),")
@@ -350,7 +349,7 @@ class SelectionSetExtension: Extension {
 						typeConditionArgs = [renderTypeScriptTypeCondition(field.type)]
 					}
 					render.append("\nselections: \(renderTypeScriptSelections(field.selectionSet, args: typeConditionArgs))")
-					render.append("})")
+					render.append("}")
 					fieldRenders.append(render)
 				}
 			}
@@ -364,8 +363,8 @@ class SelectionSetExtension: Extension {
 			renderPassedTypeCondition = ".map(x => x.copyWithTypeCondition(\"\(typeCondition)\"))"
 		}
 		for fragmentSpread in fragmentSpreadRenders {
-			addFragmentSpreadRenders += ".concat(Fragments.\(fragmentSpread).getSelections(\(variableCount > 0 ? "operationVariables" : "{}")))" + renderPassedTypeCondition
+			addFragmentSpreadRenders += ".concat(Fragments.\(fragmentSpread.lowercasedFirstLetter)Selections)" + renderPassedTypeCondition
 		}
-		return "new Array<GraphSelection>(\((fieldRenders).joined(separator: ", ")))" + addFragmentSpreadRenders
+		return "[\((fieldRenders).joined(separator: ", "))]" + addFragmentSpreadRenders
 	}
 }
