@@ -144,7 +144,7 @@ class SelectionSetExtension: Extension {
 	func renderTypeScriptArguments(_ arguments: [SelectionSetVisitor.Argument]) -> String {
 		var render: [String] = []
 		for arg in arguments {
-			let renderValue = renderTypeScriptArgumentValues(arguments: [arg.value])
+			let renderValue = renderTypeScriptArgumentValue(argumentValueType: arg.value)
 			render.append("\(arg.name): \(renderValue)")
 		}
 		if render.isEmpty {
@@ -154,31 +154,42 @@ class SelectionSetExtension: Extension {
 		}
 	}
 	
-	func renderTypeScriptArgumentValues(arguments: [ArgumentValueType]) -> String {
-		var renders: [String] = []
-		for arg in arguments {
-			switch arg {
-			case let arg as SelectionSetVisitor.ListValue:
-				renders.append("[\(renderArgumentValues(arguments: arg.values))]")
-			case let arg as SelectionSetVisitor.Variable:
-				renders.append("{ isOperationVariable: true, key: \"\(arg.name)\" }")
-			case let arg as SelectionSetVisitor.IntValue:
-				renders.append("\(arg.value)")
-			case let arg as SelectionSetVisitor.FloatValue:
-				renders.append("\(arg.value)")
-			case let arg as SelectionSetVisitor.BooleanValue:
-				renders.append("\(arg.value)")
-			case let arg as SelectionSetVisitor.EnumValue:
-				renders.append("\(arg.value)")
-			case let arg as SelectionSetVisitor.StringValue:
-				renders.append("\(arg.value)")
-			case let arg as SelectionSetVisitor.ObjectValue:
-				renders.append(renderObjectField(arg))
-			default:
-				renders.append("\(arg)")
+	private func renderTypeScriptArgumentValue(argumentValueType: ArgumentValueType) -> String {
+		var renders = ""
+		
+		switch argumentValueType {
+		case let argumentValueType as SelectionSetVisitor.Variable:
+			renders.append("{ type: \"OperationVariableKey\", value: \"\(argumentValueType.name)\" }")
+		case let argumentValueType as SelectionSetVisitor.IntValue:
+			renders.append("{ type: \"IntValue\", value: \(argumentValueType.value) }")
+		case let argumentValueType as SelectionSetVisitor.FloatValue:
+			renders.append("{ type: \"FloatValue\", value: \(argumentValueType.value) }")
+		case let argumentValueType as SelectionSetVisitor.BooleanValue:
+			renders.append("{ type: \"BooleanValue\", value: \(argumentValueType.value) }")
+		case let argumentValueType as SelectionSetVisitor.EnumValue:
+			renders.append("{ type: \"EnumValue\", value: \"\(argumentValueType.value)\" }")
+		case let argumentValueType as SelectionSetVisitor.StringValue:
+			renders.append("{ type: \"StringValue\", value: \"\(argumentValueType.value)\" }")
+		case let argumentValueType as SelectionSetVisitor.ListValue:
+			let values = argumentValueType.values
+			var renderables: [String] = []
+			for value in values {
+				renderables.append(renderTypeScriptArgumentValue(argumentValueType: value))
 			}
+			
+			renders.append("{ type: \"ListValue\", value: [\(renderables.joined(separator: ", "))] }")
+		case let argumentValueType as SelectionSetVisitor.ObjectValue:
+			let fields = argumentValueType.objectFields
+			var renderables: [String] = []
+			for field in fields {
+				renderables.append("{ name: \"\(field.name)\", value: \(renderTypeScriptArgumentValue(argumentValueType: field.value))")
+			}
+			renders.append("{ type: \"ObjectValue\", value: [\(renderables.joined(separator: ", "))] }")
+		default:
+			renders.append("{ type: \"NullValue\", value: null }")
 		}
-		return renders.joined(separator: ", ")
+		
+		return renders
 	}
 
 	func renderTypeScriptTypeCondition(_ type: SelectionSetVisitor.TypeCondition?) -> String {
@@ -222,11 +233,12 @@ class SelectionSetExtension: Extension {
 	}
 
 	func renderTypeScriptConditionalDirective(_ field: SelectionSetVisitor.Field) -> String {
-		if let skip = field.conditionalDirective?.skip as? SelectionSetVisitor.Variable {
-			return "{ type: \"skip\", valueKey: \"\(skip.name)\" }"
-		} else if let include = field.conditionalDirective?.include as? SelectionSetVisitor.Variable {
-			return "{ type: \"include\", valueKey: \"\(include.name)\" }"
+		if let skip = field.conditionalDirective?.skip {
+			return "{ directiveType: \"skip\", value: \(renderTypeScriptArgumentValue(argumentValueType: skip)) }"
+		} else if let include = field.conditionalDirective?.include {
+			return "{ directiveType: \"include\", value: \(renderTypeScriptArgumentValue(argumentValueType: include)) }"
 		}
+		
 		return "null"
 	}
 	

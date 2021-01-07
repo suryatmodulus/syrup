@@ -19,8 +19,8 @@ export interface TypeDefinition {
 }
 
 export interface ConditionalDirective {
-  type: string,
-  valueKey: string
+  directiveType: string,
+  value: any
 }
 
 export interface SyrupOperation {
