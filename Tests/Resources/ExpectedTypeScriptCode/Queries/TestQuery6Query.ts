@@ -206,7 +206,7 @@ selections: []}]},
 {
 name: "orders",
 type: { name: "OrderConnection", definedType: "Object" },
-arguments: { first: { isOperationVariable: true, key: "first" } },
+arguments: { first: { type: "OperationVariableKey", value: "first" } },
 passedGID: null,
 typeCondition: { name: "Shop", definedType: "Object" },
 directive: null,

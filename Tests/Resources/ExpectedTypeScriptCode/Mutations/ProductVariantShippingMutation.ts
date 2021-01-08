@@ -75,7 +75,7 @@ const document: SimpleDocument<SyrupOperation, ProductVariantShippingMutationDat
 {
 name: "productVariantUpdate",
 type: { name: "ProductVariantUpdatePayload", definedType: "Object" },
-arguments: { input: { isOperationVariable: true, key: "variantInput" } },
+arguments: { input: { type: "OperationVariableKey", value: "variantInput" } },
 passedGID: null,
 typeCondition: { name: "Mutation", definedType: "Object" },
 directive: null,

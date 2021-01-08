@@ -8,47 +8,49 @@ export namespace TestQuery11QueryData {
   export interface Variables {
     productId: ID
   }
-  export interface Node {
-    realized: NodeRealizedProduct | NodeRealizedProductOption | {}
-  }
-  export interface NodeRealizedProduct {
-    /**
-     * Globally unique identifier.
-     */
-    id: ID,
-    /**
-     * A list of the collections that include the product.
-     */
-    collections: NodeRealizedProductCollections
-  }
-  export interface NodeRealizedProductCollections {
-    /**
-     * A list of edges.
-     */
-    edges: NodeRealizedProductCollectionsEdges[]
-  }
-  export interface NodeRealizedProductCollectionsEdges {
-    /**
-     * The item at the end of CollectionEdge.
-     */
-    node: NodeRealizedProductCollectionsEdgesNode
-  }
-  export interface NodeRealizedProductCollectionsEdgesNode {
-    /**
-     * Globally unique identifier.
-     */
-    id: ID,
-    /**
-     * The title of the collection.
-     */
-    title: string
-  }
-  export interface NodeRealizedProductOption {
-    /**
-     * Globally unique identifier.
-     */
-    id: ID
-  }
+
+export interface Node {
+  realized: NodeRealizedProduct | NodeRealizedProductOption | {}
+}
+export interface NodeRealizedProduct {
+  /**
+   * Globally unique identifier.
+   */
+  id: ID,
+  /**
+   * A list of the collections that include the product.
+   */
+  collections: NodeRealizedProductCollections
+}
+export interface NodeRealizedProductCollections {
+  /**
+   * A list of edges.
+   */
+  edges: NodeRealizedProductCollectionsEdges[]
+}
+export interface NodeRealizedProductCollectionsEdges {
+  /**
+   * The item at the end of CollectionEdge.
+   */
+  node: NodeRealizedProductCollectionsEdgesNode
+}
+export interface NodeRealizedProductCollectionsEdgesNode {
+  /**
+   * Globally unique identifier.
+   */
+  id: ID,
+  /**
+   * The title of the collection.
+   */
+  title: string
+}
+export interface NodeRealizedProductOption {
+  /**
+   * Globally unique identifier.
+   */
+  id: ID
+}
+
 }
 
 export interface TestQuery11QueryData {
@@ -69,7 +71,7 @@ const document: SimpleDocument<SyrupOperation, TestQuery11QueryData.Variables> =
 {
 name: "node",
 type: { name: "Node", definedType: "Interface" },
-arguments: { id: { isOperationVariable: true, key: "productId" } },
+arguments: { id: { type: "OperationVariableKey", value: "productId" } },
 passedGID: "productId",
 typeCondition: { name: "QueryRoot", definedType: "Object" },
 directive: null,
@@ -85,7 +87,7 @@ selections: []},
 {
 name: "collections",
 type: { name: "CollectionConnection", definedType: "Object" },
-arguments: { first: 100 },
+arguments: { first: { type: "IntValue", value: 100 } },
 passedGID: null,
 typeCondition: { name: "Product", definedType: "Object" },
 directive: null,

@@ -75,7 +75,7 @@ const document: SimpleDocument<SyrupOperation, TestQuery10QueryData.Variables> =
 {
 name: "priceRule",
 type: { name: "PriceRule", definedType: "Object" },
-arguments: { id: { isOperationVariable: true, key: "priceRuleId" } },
+arguments: { id: { type: "OperationVariableKey", value: "priceRuleId" } },
 passedGID: "priceRuleId",
 typeCondition: { name: "QueryRoot", definedType: "Object" },
 directive: null,

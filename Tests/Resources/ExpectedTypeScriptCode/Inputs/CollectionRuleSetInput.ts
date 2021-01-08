@@ -4,5 +4,5 @@ import * as Inputs from "../Inputs"
 
 export interface CollectionRuleSetInput {
   appliedDisjunctively?: boolean,
-  rules?: Array<Inputs.CollectionRuleInput> | undefined | null
+  rules?: (Inputs.CollectionRuleInput)[] | null
 }

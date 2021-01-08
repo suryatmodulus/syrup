@@ -1,5 +1,3 @@
-
-
 export enum CountryCode {
 
   /**
@@ -483,7 +481,7 @@ export enum CountryCode {
   HN = "HN",
 
   /**
-   * Hong Kong SAR China.
+   * Hong Kong SAR.
    */
   HK = "HK",
 
@@ -638,7 +636,7 @@ export enum CountryCode {
   LU = "LU",
 
   /**
-   * Macao SAR China.
+   * Macao SAR.
    */
   MO = "MO",
 

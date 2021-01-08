@@ -244,7 +244,7 @@ selections: [
 {
 name: "transformedSrc",
 type: { name: "URL", definedType: "Scalar" },
-arguments: { maxWidth: { isOperationVariable: true, key: "maxImageWidth" }, maxHeight: { isOperationVariable: true, key: "maxImageHeight" } },
+arguments: { maxWidth: { type: "OperationVariableKey", value: "maxImageWidth" }, maxHeight: { type: "OperationVariableKey", value: "maxImageHeight" } },
 passedGID: null,
 typeCondition: { name: "Image", definedType: "Object" },
 directive: null,

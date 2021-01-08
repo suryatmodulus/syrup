@@ -69,7 +69,7 @@ const document: SimpleDocument<SyrupOperation, CreateCollectionMutationData.Vari
 {
 name: "collectionCreate",
 type: { name: "CollectionCreatePayload", definedType: "Object" },
-arguments: { input: { isOperationVariable: true, key: "input" } },
+arguments: { input: { type: "OperationVariableKey", value: "input" } },
 passedGID: null,
 typeCondition: { name: "Mutation", definedType: "Object" },
 directive: null,

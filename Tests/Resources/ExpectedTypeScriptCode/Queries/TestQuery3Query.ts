@@ -56,7 +56,7 @@ const document: SimpleDocument<SyrupOperation, {}> = {
 {
 name: "customer",
 type: { name: "Customer", definedType: "Object" },
-arguments: { id:  },
+arguments: { id: { type: "StringValue", value: "" } },
 passedGID: null,
 typeCondition: { name: "QueryRoot", definedType: "Object" },
 directive: null,

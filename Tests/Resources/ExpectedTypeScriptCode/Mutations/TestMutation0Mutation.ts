@@ -41,7 +41,7 @@ const document: SimpleDocument<SyrupOperation, TestMutation0MutationData.Variabl
 {
 name: "customerUpdate",
 type: { name: "CustomerUpdatePayload", definedType: "Object" },
-arguments: { input: { isOperationVariable: true, key: "input" } },
+arguments: { input: { type: "OperationVariableKey", value: "input" } },
 passedGID: null,
 typeCondition: { name: "Mutation", definedType: "Object" },
 directive: null,

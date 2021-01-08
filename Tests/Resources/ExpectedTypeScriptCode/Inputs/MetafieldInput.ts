@@ -3,10 +3,10 @@ import * as Enums from "../Enums"
 import * as Inputs from "../Inputs"
 
 export interface MetafieldInput {
-  description?: string | undefined | null,
-  id?: ID | undefined | null,
-  key?: string | undefined | null,
-  'namespace'?: string | undefined | null,
-  value?: string | undefined | null,
-  valueType?: Enums.MetafieldValueType | undefined | null
+  description?: string | null,
+  id?: ID | null,
+  key?: string | null,
+  'namespace'?: string | null,
+  value?: string | null,
+  valueType?: Enums.MetafieldValueType | null
 }

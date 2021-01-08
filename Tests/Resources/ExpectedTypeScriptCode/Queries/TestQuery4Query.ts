@@ -74,7 +74,7 @@ selections: []},
 {
 name: "availableChannelApps",
 type: { name: "AppConnection", definedType: "Object" },
-arguments: { first: 250 },
+arguments: { first: { type: "IntValue", value: 250 } },
 passedGID: null,
 typeCondition: { name: "Shop", definedType: "Object" },
 directive: null,

@@ -61,7 +61,7 @@ const document: SimpleDocument<SyrupOperation, ProductsListQueryData.Variables> 
 {
 name: "products",
 type: { name: "ProductConnection", definedType: "Object" },
-arguments: { first: { isOperationVariable: true, key: "first" }, reverse: true, before: { isOperationVariable: true, key: "before" }, after: { isOperationVariable: true, key: "after" }, sortKey: CREATED_AT },
+arguments: { first: { type: "OperationVariableKey", value: "first" }, reverse: { type: "BooleanValue", value: true }, before: { type: "OperationVariableKey", value: "before" }, after: { type: "OperationVariableKey", value: "after" }, sortKey: { type: "EnumValue", value: "CREATED_AT" } },
 passedGID: null,
 typeCondition: { name: "QueryRoot", definedType: "Object" },
 directive: null,

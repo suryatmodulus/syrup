@@ -217,7 +217,7 @@ class SelectionSetExtension: Extension {
 	func renderGIDPassed(_ field: SelectionSetVisitor.Field) -> String {
 		for argument in field.arguments {
 			if argument.name == "id", let variable = argument.value as? SelectionSetVisitor.Variable {
-				return "\"\(variable.name)\""
+				return "\"${operationVariables[\"\(variable.name)\"]}\""
 			}
 		}
 		return "null"

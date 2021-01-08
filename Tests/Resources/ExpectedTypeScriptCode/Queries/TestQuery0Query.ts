@@ -34,7 +34,7 @@ const document: SimpleDocument<SyrupOperation, {}> = {
 {
 name: "nodes",
 type: { name: "Node", definedType: "Interface" },
-arguments: { ids: [gid://shopify/Customer/350635977] },
+arguments: { ids: { type: "ListValue", value: [{ type: "StringValue", value: "gid://shopify/Customer/350635977" }] } },
 passedGID: null,
 typeCondition: { name: "QueryRoot", definedType: "Object" },
 directive: null,

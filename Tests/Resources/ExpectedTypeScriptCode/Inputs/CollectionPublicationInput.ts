@@ -3,7 +3,7 @@ import * as Enums from "../Enums"
 import * as Inputs from "../Inputs"
 
 export interface CollectionPublicationInput {
-  publicationId?: ID | undefined | null,
-  channelId?: ID | undefined | null,
-  channelHandle?: string | undefined | null
+  publicationId?: ID | null,
+  channelId?: ID | null,
+  channelHandle?: string | null
 }

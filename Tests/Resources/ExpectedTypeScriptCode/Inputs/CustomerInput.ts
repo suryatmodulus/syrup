@@ -3,20 +3,20 @@ import * as Enums from "../Enums"
 import * as Inputs from "../Inputs"
 
 export interface CustomerInput {
-  acceptsMarketing?: boolean | undefined | null,
-  acceptsMarketingUpdatedAt?: string | undefined | null,
-  addresses?: Array<Inputs.MailingAddressInput> | undefined | null,
-  email?: string | undefined | null,
-  firstName?: string | undefined | null,
-  id?: ID | undefined | null,
-  lastName?: string | undefined | null,
-  locale?: string | undefined | null,
-  marketingOptInLevel?: Enums.CustomerMarketingOptInLevel | undefined | null,
-  metafields?: Array<Inputs.MetafieldInput> | undefined | null,
-  note?: string | undefined | null,
-  phone?: string | undefined | null,
-  privateMetafields?: Array<Inputs.PrivateMetafieldInput> | undefined | null,
-  tags?: Array<string> | undefined | null,
-  taxExempt?: boolean | undefined | null,
-  taxExemptions?: Array<Enums.TaxExemption> | undefined | null
+  acceptsMarketing?: boolean | null,
+  acceptsMarketingUpdatedAt?: string | null,
+  addresses?: (Inputs.MailingAddressInput)[] | null,
+  email?: string | null,
+  firstName?: string | null,
+  id?: ID | null,
+  lastName?: string | null,
+  locale?: string | null,
+  marketingOptInLevel?: Enums.CustomerMarketingOptInLevel | null,
+  metafields?: (Inputs.MetafieldInput)[] | null,
+  note?: string | null,
+  phone?: string | null,
+  privateMetafields?: (Inputs.PrivateMetafieldInput)[] | null,
+  tags?: (string)[] | null,
+  taxExempt?: boolean | null,
+  taxExemptions?: (Enums.TaxExemption)[] | null
 }

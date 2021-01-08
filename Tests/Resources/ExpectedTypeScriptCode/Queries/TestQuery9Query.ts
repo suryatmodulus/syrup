@@ -61,7 +61,7 @@ selections: [
 {
 name: "customers",
 type: { name: "CustomerConnection", definedType: "Object" },
-arguments: { first: 1 },
+arguments: { first: { type: "IntValue", value: 1 } },
 passedGID: null,
 typeCondition: { name: "Shop", definedType: "Object" },
 directive: null,

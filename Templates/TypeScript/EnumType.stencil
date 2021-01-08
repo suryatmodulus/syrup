@@ -1,6 +1,7 @@
+{% if header %}
 {{ header }}
 
-export enum {{ enumType.name }} {
+{% endif %}export enum {{ enumType.name }} {
   {% for enumValue in enumType.values %}
 
   {% with enumValue.attributes as attributes %}{% include "Helpers/Attributes.stencil" %}{% endwith %}

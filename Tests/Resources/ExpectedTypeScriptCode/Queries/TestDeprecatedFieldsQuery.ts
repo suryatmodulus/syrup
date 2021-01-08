@@ -101,7 +101,7 @@ const document: SimpleDocument<SyrupOperation, TestDeprecatedFieldsQueryData.Var
 {
 name: "channels",
 type: { name: "ChannelConnection", definedType: "Object" },
-arguments: { first: { isOperationVariable: true, key: "first" } },
+arguments: { first: { type: "OperationVariableKey", value: "first" } },
 passedGID: null,
 typeCondition: { name: "QueryRoot", definedType: "Object" },
 directive: null,

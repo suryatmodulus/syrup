@@ -38,7 +38,7 @@ const document: SimpleDocument<SyrupOperation, NodeInterfacesQueryData.Variables
 {
 name: "node",
 type: { name: "Node", definedType: "Interface" },
-arguments: { id: { isOperationVariable: true, key: "nodeId" } },
+arguments: { id: { type: "OperationVariableKey", value: "nodeId" } },
 passedGID: "nodeId",
 typeCondition: { name: "QueryRoot", definedType: "Object" },
 directive: null,
