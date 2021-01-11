@@ -60,7 +60,7 @@ export interface CreateCollectionMutationData {
 }
 
 const document: SimpleDocument<SyrupOperation, CreateCollectionMutationData.Variables> = {
-  id: "CreateCollection",
+  id: "abafa5f2606e8e323707b978fd34db34da7ba6f12c9af3eac1aa6bc15718e3aa",
   name: "CreateCollection",
   source: "mutation CreateCollection(\$input: CollectionInput!) { __typename collectionCreate(input: \$input) { __typename userErrors { __typename field message } collection { __typename title id feedback { __typename summary } } } }",
   __typeData: {

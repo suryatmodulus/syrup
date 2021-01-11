@@ -101,7 +101,7 @@ export interface TestQuery6QueryData {
 }
 
 const document: SimpleDocument<SyrupOperation, TestQuery6QueryData.Variables> = {
-  id: "TestQuery6",
+  id: "41f3e4e1eeec54f3b52a0f5310cf509a2c7b9d3ee15316a7653b2cdf6ef146fe",
   name: "TestQuery6",
   source: "query TestQuery6(\$first: Int) { __typename shop { __typename name currencyCode weightUnit billingAddress { __typename city company latitude longitude } fulfillmentServices { __typename serviceName handle } orders(first: \$first) { __typename edges { __typename node { __typename name displayFulfillmentStatus } } } } }",
   __typeData: {

@@ -81,7 +81,7 @@ export interface ShopDetailsQueryData {
 }
 
 const document: SimpleDocument<SyrupOperation, {}> = {
-  id: "ShopDetails",
+  id: "12bcc227187a96f64ccaa0998240f2e8ac8e568fb5e74b39c132e38130892014",
   name: "ShopDetails",
   source: "query ShopDetails { __typename shop { __typename id name currencyCode weightUnit billingAddress { __typename city company latitude longitude } alerts { __typename description } shipsToCountries paymentSettings { __typename supportedDigitalWallets } } }",
   __typeData: {

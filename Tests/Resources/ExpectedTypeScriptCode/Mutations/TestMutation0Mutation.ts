@@ -32,7 +32,7 @@ export interface TestMutation0MutationData {
 }
 
 const document: SimpleDocument<SyrupOperation, TestMutation0MutationData.Variables> = {
-  id: "TestMutation0",
+  id: "4889a09d381c0be1631a25b96073a5443a565ebd54297e0317f09fd6f0877ec9",
   name: "TestMutation0",
   source: "mutation TestMutation0(\$input: CustomerInput!) { __typename customerUpdate(input: \$input) { __typename customer { __typename id } } }",
   __typeData: {

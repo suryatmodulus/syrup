@@ -79,7 +79,7 @@ export interface TestQuery8QueryData {
 }
 
 const document: SimpleDocument<SyrupOperation, {}> = {
-  id: "TestQuery8",
+  id: "990334aad4748bb21ca83087aa5ad2fb617f68e08ce05993420ce5cc8d4a6318",
   name: "TestQuery8",
   source: "query TestQuery8 { __typename shop { __typename id firstProduct: products(first: 1) { __typename edges { __typename cursor node { __typename title } } } lastProduct: products(first: 1, reverse: true) { __typename edges { __typename cursor node { __typename title } } } } }",
   __typeData: {

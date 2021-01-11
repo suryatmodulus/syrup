@@ -56,7 +56,7 @@ export interface TestQuery2QueryData {
 }
 
 const document: SimpleDocument<SyrupOperation, {}> = {
-  id: "TestQuery2",
+  id: "61dd494be186ccaf1c1306459f7e3307affaf6bbaa3c0e87b5cdba9d5fdcd011",
   name: "TestQuery2",
   source: "query TestQuery2 { __typename shop { __typename name id email alerts { __typename action { __typename title url } description } } }",
   __typeData: {

@@ -52,7 +52,7 @@ export interface ProductsListQueryData {
 }
 
 const document: SimpleDocument<SyrupOperation, ProductsListQueryData.Variables> = {
-  id: "ProductsList",
+  id: "fb66b396a448514165511363b2dd4240640e9cc0bb880f30df7da076efb2c3c2",
   name: "ProductsList",
   source: "query ProductsList(\$first: Int, \$before: String, \$after: String) { __typename products(first: \$first, reverse: true, before: \$before, after: \$after, sortKey: CREATED_AT) { __typename edges { __typename node { __typename id title description } cursor } } }",
   __typeData: {

@@ -66,7 +66,7 @@ export interface TestQuery10QueryData {
 }
 
 const document: SimpleDocument<SyrupOperation, TestQuery10QueryData.Variables> = {
-  id: "TestQuery10",
+  id: "75aaf8fd01cc132180a5a101c008714c115e4af92188976552b7c6b9cf688e73",
   name: "TestQuery10",
   source: "query TestQuery10(\$priceRuleId: ID!) { __typename priceRule(id: \$priceRuleId) { __typename id value { __typename ... on PriceRulePercentValue { __typename percentage }... on PriceRuleFixedAmountValue { __typename amount } } valueV2 { __typename ... on MoneyV2 { __typename amount }... on PricingPercentageValue { __typename percentage } } } }",
   __typeData: {

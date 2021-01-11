@@ -47,7 +47,7 @@ export interface TestQuery3QueryData {
 }
 
 const document: SimpleDocument<SyrupOperation, {}> = {
-  id: "TestQuery3",
+  id: "08177dad068a9da658aabc64345bdbcbf3efbc3db71a39256411bd3fd1687958",
   name: "TestQuery3",
   source: "query TestQuery3 { __typename customer(id: \\\"\\\") { __typename addresses { __typename country } defaultAddress { __typename city longitude latitude } } }",
   __typeData: {

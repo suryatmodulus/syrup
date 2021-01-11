@@ -29,7 +29,7 @@ export interface NodeInterfacesQueryData {
 }
 
 const document: SimpleDocument<SyrupOperation, NodeInterfacesQueryData.Variables> = {
-  id: "NodeInterfaces",
+  id: "0f655c5eadd67518dc83675127dfbe028058931618ee1ae4dc6095228489f540",
   name: "NodeInterfaces",
   source: "fragment NodeId on Node { __typename id } fragment ProductNodeTitle on Product { __typename title } query NodeInterfaces(\$nodeId: ID!) { __typename node(id: \$nodeId) { __typename ... NodeId ... on Product { __typename ... ProductNodeTitle } } }",
   __typeData: {

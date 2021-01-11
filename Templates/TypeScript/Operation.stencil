@@ -34,7 +34,7 @@ export interface {{ name }} {
 }
 
 const document: SimpleDocument<SyrupOperation, {% if operation.variables.count > 0 %}{{ name }}.Variables{% else %}{}{% endif %}> = {
-  id: "{{ operation.name }}",
+  id: "{{ encryptedId }}",
   name: "{{ operation.name }}",
   source: "{{ queryString|replace:"$","\$"|replaceQuotes }}",
   __typeData: {

@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 import Foundation
+import CommonCrypto
 
 extension String {
 	func indented(indentStr: String = "\t") -> String {
@@ -59,5 +60,23 @@ extension String {
 	func removeSuffix(_ suffix: String) -> String {
 		guard self.hasSuffix(suffix) else { return self }
 		return String(self.dropLast(suffix.count))
+	}
+	
+	func sha256() -> String {
+		if let strData = self.data(using: String.Encoding.utf8) {
+			var digest = [UInt8](repeating: 0, count:Int(CC_SHA256_DIGEST_LENGTH))
+
+			_ = strData.withUnsafeBytes {
+				CC_SHA256($0.baseAddress, UInt32(strData.count), &digest)
+			}
+	 
+			var sha256String = ""
+			for byte in digest {
+				sha256String += String(format:"%02x", UInt8(byte))
+			}
+
+			return sha256String
+		}
+		return ""
 	}
 }

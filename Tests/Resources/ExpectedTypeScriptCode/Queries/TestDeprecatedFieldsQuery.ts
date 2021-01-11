@@ -92,7 +92,7 @@ export interface TestDeprecatedFieldsQueryData {
 }
 
 const document: SimpleDocument<SyrupOperation, TestDeprecatedFieldsQueryData.Variables> = {
-  id: "TestDeprecatedFields",
+  id: "7fdd039bc0572bbb159d3fa4a21621ace852fa86160f392c66a8a7907ee5d736",
   name: "TestDeprecatedFields",
   source: "query TestDeprecatedFields(\$first: Int) { __typename channels(first: \$first) { __typename edges { __typename node { __typename app { __typename id icon { __typename src } } } } } }",
   __typeData: {

@@ -81,7 +81,7 @@ export interface TestQuery1QueryData {
 }
 
 const document: SimpleDocument<SyrupOperation, {}> = {
-  id: "TestQuery1",
+  id: "0372694122f1af529fd4aeeb82b099e3d9a424d34e64f1ad2945f56cbde07cd1",
   name: "TestQuery1",
   source: "query TestQuery1 { __typename shop { __typename id name currencyCode weightUnit billingAddress { __typename city company latitude longitude } alerts { __typename description } shipsToCountries paymentSettings { __typename supportedDigitalWallets } } }",
   __typeData: {

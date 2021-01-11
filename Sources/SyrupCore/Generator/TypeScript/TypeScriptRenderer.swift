@@ -25,6 +25,7 @@
 import Foundation
 import Stencil
 import PathKit
+import CommonCrypto
 
 final class TypeScriptRenderer: Renderer {
 	override class func customExtensions(config: Config) -> [Extension] {
@@ -58,6 +59,7 @@ final class TypeScriptRenderer: Renderer {
 
 		let context: [String: Any] = [
 			"operation": operation,
+			"encryptedId": queryString.sha256(),
 			"name": name,
 			"fieldPrefix": name + ".",
 			"queryString": queryString,

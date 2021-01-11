@@ -66,7 +66,7 @@ export interface ProductVariantShippingMutationData {
 }
 
 const document: SimpleDocument<SyrupOperation, ProductVariantShippingMutationData.Variables> = {
-  id: "ProductVariantShipping",
+  id: "1e26c400249b417e4cfb40f04434e3740842134ed8f50b183024638190e11386",
   name: "ProductVariantShipping",
   source: "mutation ProductVariantShipping(\$variantInput: ProductVariantInput!) { __typename productVariantUpdate(input: \$variantInput) { __typename productVariant { __typename id weight weightUnit requiresShipping harmonizedSystemCode } userErrors { __typename message field } } }",
   __typeData: {
