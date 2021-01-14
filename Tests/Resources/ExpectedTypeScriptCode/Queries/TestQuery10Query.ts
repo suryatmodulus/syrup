@@ -1,4 +1,3 @@
-import { SimpleDocument } from "graphql-typed"
 import { ID, GraphSelection, SyrupOperation, copyWithTypeCondtion } from "../GraphApi"
 import * as Enums from "../Enums"
 import * as Inputs from "../Inputs"
@@ -65,13 +64,12 @@ export interface TestQuery10QueryData {
   priceRule: TestQuery10QueryData.PriceRule | undefined
 }
 
-const document: SimpleDocument<SyrupOperation, TestQuery10QueryData.Variables> = {
+const document: SyrupOperation<TestQuery10QueryData, TestQuery10QueryData.Variables> = {
   id: "75aaf8fd01cc132180a5a101c008714c115e4af92188976552b7c6b9cf688e73",
   name: "TestQuery10",
   source: "query TestQuery10(\$priceRuleId: ID!) { __typename priceRule(id: \$priceRuleId) { __typename id value { __typename ... on PriceRulePercentValue { __typename percentage }... on PriceRuleFixedAmountValue { __typename amount } } valueV2 { __typename ... on MoneyV2 { __typename amount }... on PricingPercentageValue { __typename percentage } } } }",
-  __typeData: {
-    operationType: 'query',
-    selections: [
+  operationType: 'query',
+  selections: [
 {
 name: "priceRule",
 type: { name: "PriceRule", definedType: "Object" },
@@ -136,6 +134,5 @@ passedGID: null,
 typeCondition: { name: "PricingPercentageValue", definedType: "Object" },
 directive: null,
 selections: []}]}]}]
-  }
 }
 export default document

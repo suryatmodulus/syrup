@@ -1,4 +1,3 @@
-import { SimpleDocument } from "graphql-typed"
 import { ID, GraphSelection, SyrupOperation, copyWithTypeCondtion } from "../GraphApi"
 import * as Enums from "../Enums"
 import * as Inputs from "../Inputs"
@@ -43,13 +42,12 @@ export interface TestQuery9QueryData {
   shop: TestQuery9QueryData.Shop
 }
 
-const document: SimpleDocument<SyrupOperation, {}> = {
+const document: SyrupOperation<TestQuery9QueryData, {}> = {
   id: "4550b9f75895705921d5c4dae4589afc9802a6b202d89691893306b20bc41d1d",
   name: "TestQuery9",
   source: "fragment BasicFragment on Customer { __typename id lastName } query TestQuery9 { __typename shop { __typename customers(first: 1) { __typename edges { __typename node { __typename id ... BasicFragment } } } } }",
-  __typeData: {
-    operationType: 'query',
-    selections: [
+  operationType: 'query',
+  selections: [
 {
 name: "shop",
 type: { name: "Shop", definedType: "Object" },
@@ -90,6 +88,5 @@ passedGID: null,
 typeCondition: { name: "Customer", definedType: "Object" },
 directive: null,
 selections: []}].concat(Fragments.basicFragmentSelections).map(x => x.copyWithTypeCondition("{ name: "Customer", definedType: "Object" }"))}]}]}]}]
-  }
 }
 export default document

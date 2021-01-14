@@ -1,4 +1,3 @@
-import { SimpleDocument } from "graphql-typed"
 import { ID, GraphSelection, SyrupOperation, copyWithTypeCondtion } from "../GraphApi"
 import * as Enums from "../Enums"
 import * as Inputs from "../Inputs"
@@ -31,13 +30,12 @@ export interface TestMutation0MutationData {
   customerUpdate: TestMutation0MutationData.CustomerUpdate | undefined
 }
 
-const document: SimpleDocument<SyrupOperation, TestMutation0MutationData.Variables> = {
+const document: SyrupOperation<TestMutation0MutationData, TestMutation0MutationData.Variables> = {
   id: "4889a09d381c0be1631a25b96073a5443a565ebd54297e0317f09fd6f0877ec9",
   name: "TestMutation0",
   source: "mutation TestMutation0(\$input: CustomerInput!) { __typename customerUpdate(input: \$input) { __typename customer { __typename id } } }",
-  __typeData: {
-    operationType: 'mutation',
-    selections: [
+  operationType: 'mutation',
+  selections: [
 {
 name: "customerUpdate",
 type: { name: "CustomerUpdatePayload", definedType: "Object" },
@@ -62,6 +60,5 @@ passedGID: null,
 typeCondition: { name: "Customer", definedType: "Object" },
 directive: null,
 selections: []}]}]}]
-  }
 }
 export default document

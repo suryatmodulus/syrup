@@ -1,4 +1,3 @@
-import { SimpleDocument } from "graphql-typed"
 import { ID, GraphSelection, SyrupOperation, copyWithTypeCondtion } from "../GraphApi"
 import * as Enums from "../Enums"
 import * as Inputs from "../Inputs"
@@ -61,13 +60,12 @@ export interface TestQuery11QueryData {
   node: TestQuery11QueryData.Node | undefined
 }
 
-const document: SimpleDocument<SyrupOperation, TestQuery11QueryData.Variables> = {
+const document: SyrupOperation<TestQuery11QueryData, TestQuery11QueryData.Variables> = {
   id: "109024c16a59d9092444f6f00751dd75a2d2c8bc285734a02ed2dea79a2976a8",
   name: "TestQuery11",
   source: "query TestQuery11(\$productId: ID!) { __typename node(id: \$productId) { __typename ... on Product { __typename id collections(first: 100) { __typename edges { __typename node { __typename id title } } } }... on ProductOption { __typename id } } }",
-  __typeData: {
-    operationType: 'query',
-    selections: [
+  operationType: 'query',
+  selections: [
 {
 name: "node",
 type: { name: "Node", definedType: "Interface" },
@@ -132,6 +130,5 @@ passedGID: null,
 typeCondition: { name: "ProductOption", definedType: "Object" },
 directive: null,
 selections: []}]}]
-  }
 }
 export default document

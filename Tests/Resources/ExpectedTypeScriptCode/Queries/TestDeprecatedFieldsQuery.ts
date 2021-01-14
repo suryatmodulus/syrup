@@ -1,4 +1,3 @@
-import { SimpleDocument } from "graphql-typed"
 import { ID, GraphSelection, SyrupOperation, copyWithTypeCondtion } from "../GraphApi"
 import * as Enums from "../Enums"
 import * as Inputs from "../Inputs"
@@ -91,13 +90,12 @@ export interface TestDeprecatedFieldsQueryData {
   channels: TestDeprecatedFieldsQueryData.Channels
 }
 
-const document: SimpleDocument<SyrupOperation, TestDeprecatedFieldsQueryData.Variables> = {
+const document: SyrupOperation<TestDeprecatedFieldsQueryData, TestDeprecatedFieldsQueryData.Variables> = {
   id: "7fdd039bc0572bbb159d3fa4a21621ace852fa86160f392c66a8a7907ee5d736",
   name: "TestDeprecatedFields",
   source: "query TestDeprecatedFields(\$first: Int) { __typename channels(first: \$first) { __typename edges { __typename node { __typename app { __typename id icon { __typename src } } } } } }",
-  __typeData: {
-    operationType: 'query',
-    selections: [
+  operationType: 'query',
+  selections: [
 {
 name: "channels",
 type: { name: "ChannelConnection", definedType: "Object" },
@@ -154,6 +152,5 @@ passedGID: null,
 typeCondition: { name: "Image", definedType: "Object" },
 directive: null,
 selections: []}]}]}]}]}]}]
-  }
 }
 export default document

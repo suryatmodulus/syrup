@@ -1,4 +1,3 @@
-import { SimpleDocument } from "graphql-typed"
 import { ID, GraphSelection, SyrupOperation, copyWithTypeCondtion } from "../GraphApi"
 import * as Enums from "../Enums"
 import * as Inputs from "../Inputs"
@@ -59,13 +58,12 @@ export interface CreateCollectionMutationData {
   collectionCreate: CreateCollectionMutationData.CollectionCreate | undefined
 }
 
-const document: SimpleDocument<SyrupOperation, CreateCollectionMutationData.Variables> = {
+const document: SyrupOperation<CreateCollectionMutationData, CreateCollectionMutationData.Variables> = {
   id: "abafa5f2606e8e323707b978fd34db34da7ba6f12c9af3eac1aa6bc15718e3aa",
   name: "CreateCollection",
   source: "mutation CreateCollection(\$input: CollectionInput!) { __typename collectionCreate(input: \$input) { __typename userErrors { __typename field message } collection { __typename title id feedback { __typename summary } } } }",
-  __typeData: {
-    operationType: 'mutation',
-    selections: [
+  operationType: 'mutation',
+  selections: [
 {
 name: "collectionCreate",
 type: { name: "CollectionCreatePayload", definedType: "Object" },
@@ -138,6 +136,5 @@ passedGID: null,
 typeCondition: { name: "ResourceFeedback", definedType: "Object" },
 directive: null,
 selections: []}]}]}]}]
-  }
 }
 export default document

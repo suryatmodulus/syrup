@@ -1,3 +1,5 @@
+import { SimpleDocument } from "graphql-typed"
+
 export type ID = string
 
 export interface GraphSelection {
@@ -20,9 +22,9 @@ export interface ConditionalDirective {
   value: any
 }
 
-export interface SyrupOperation {
-  operationType: 'query' | 'mutation' | 'subscription'
-  selections: GraphSelection[]
+export interface SyrupOperation<Data = {}, Variables = {}, DeepPartial = {}> extends SimpleDocument<Data, Variables, DeepPartial> {
+  readonly operationType: 'query' | 'mutation' | 'subscription'
+  readonly selections: GraphSelection[]
 }
 
 export const copyWithTypeCondtion: (

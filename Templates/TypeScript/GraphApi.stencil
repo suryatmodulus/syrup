@@ -1,7 +1,10 @@
-{% if supportFilesHeader %}{{ supportFilesHeader }}
+{% if supportFilesHeader %}import { SimpleDocument } from "graphql-typed"
+{{ supportFilesHeader }}
 
+{% else %}import { SimpleDocument } from "graphql-typed"
+
+{% endif %}
 export type ID = string
-{% else %}export type ID = string{% endif %}
 
 export interface GraphSelection {
   name: string
@@ -23,9 +26,9 @@ export interface ConditionalDirective {
   value: any
 }
 
-export interface SyrupOperation {
-  operationType: 'query' | 'mutation' | 'subscription'
-  selections: GraphSelection[]
+export interface SyrupOperation<Data = {}, Variables = {}, DeepPartial = {}> extends SimpleDocument<Data, Variables, DeepPartial> {
+  readonly operationType: 'query' | 'mutation' | 'subscription'
+  readonly selections: GraphSelection[]
 }
 
 export const copyWithTypeCondtion: (
