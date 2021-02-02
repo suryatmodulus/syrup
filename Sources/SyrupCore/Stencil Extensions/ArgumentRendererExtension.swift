@@ -104,9 +104,9 @@ final class ArgumentRendererExtension<V: VariableTypeRenderer>: Extension {
 				default:
 					rendered += "?"
 				}
-				return rendered + ": \(V.render(variableType: variable.type))"
+				return rendered + ": \(V.render(variableType: variable.type));"
 			}
-			return result.joined(separator: ",\n    ")
+			return result.joined(separator: "\n    ")
 		}
 
 		registerFilter("renderTypeScriptInputArguments") { (value) -> Any? in
@@ -115,13 +115,13 @@ final class ArgumentRendererExtension<V: VariableTypeRenderer>: Extension {
 				var rendered = "\(TypeScriptReservedWordsExtension.escape(word: variable.name, reservedWords: reservedWords))?: \(V.render(variableType: IntermediateRepresentation.Variable.VariableType.nonNull(variable.type)))"
 				switch variable.type {
 				case .nonNull:
-					break
+                    rendered += ";"
 				default:
-					rendered += " | null"
+					rendered += " | null;"
 				}
 				return rendered
 			}
-			return result.joined(separator: ",\n  ")
+			return result.joined(separator: "\n  ")
 		}
 
 		registerFilter("renderInputArguments") { (value) -> Any? in

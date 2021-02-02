@@ -1,8 +1,8 @@
 import { ID } from "../GraphApi"
 {{ header }}
 {% if enumImports.count > 0 %}import {
-    {% for enum in enumImports %}{{ enum }},
-    {% endfor %}
+  {% for enum in enumImports %}{{ enum }},
+  {% endfor %}
 } from "../Enums"{% endif %}
 {% if inputImports.count > 0 %}{% for input in inputImports %}import { {{ input }} } from "./{{ input }}"
 {% endfor %}{% endif %}
