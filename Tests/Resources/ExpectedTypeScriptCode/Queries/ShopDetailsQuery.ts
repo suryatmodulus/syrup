@@ -1,74 +1,80 @@
-import { ID, GraphSelection, SyrupOperation, copyWithTypeCondtion } from "../GraphApi"
-import * as Enums from "../Enums"
-import * as Inputs from "../Inputs"
-import * as Fragments from "../Fragments"
+import { ID, GraphSelection, SyrupOperation, copyWithTypeCondition } from "../GraphApi"
+import {
+  CurrencyCode,
+  WeightUnit,
+  CountryCode,
+  DigitalWallet,
+} from "../Enums"
 
 export namespace ShopDetailsQueryData {
-export interface Shop {
-  /**
-   * Globally unique identifier.
-   */
-  id: ID,
-  /**
-   * The shop's name.
-   */
-  name: string,
-  /**
-   * The three letter code for the shop's currency.
-   */
-  currencyCode: Enums.CurrencyCode,
-  /**
-   * The shop's primary unit of weight for products and shipping.
-   */
-  weightUnit: Enums.WeightUnit,
-  /**
-   * The shop's billing address information.
-   */
-  billingAddress: ShopBillingAddress,
-  /**
-   * Alert message that appears in the Shopify admin.
-   */
-  alerts: ShopAlerts[],
-  /**
-   * Countries that the shop ships to.
-   */
-  shipsToCountries: Enums.CountryCode[],
-  /**
-   * Settings related to payments.
-   */
-  paymentSettings: ShopPaymentSettings
-}
-export interface ShopBillingAddress {
-  /**
-   * The name of the city, district, village, or town.
-   */
-  city: string | undefined,
-  /**
-   * The name of the customer's company or organization.
-   */
-  company: string | undefined,
-  /**
-   * The latitude coordinate of the customer address.
-   */
-  latitude: number | undefined,
-  /**
-   * The longitude coordinate of the customer address.
-   */
-  longitude: number | undefined
-}
-export interface ShopAlerts {
-  /**
-   * Description of the alert.
-   */
-  description: string
-}
-export interface ShopPaymentSettings {
-  /**
-   * List of the digital wallets which the shop supports.
-   */
-  supportedDigitalWallets: Enums.DigitalWallet[]
-}
-
+  export interface Shop {
+    __typename: 'Shop';
+    /**
+     * Globally unique identifier.
+     */
+    id: ID;
+    /**
+     * The shop's name.
+     */
+    name: string;
+    /**
+     * The three letter code for the shop's currency.
+     */
+    currencyCode: CurrencyCode;
+    /**
+     * The shop's primary unit of weight for products and shipping.
+     */
+    weightUnit: WeightUnit;
+    /**
+     * The shop's billing address information.
+     */
+    billingAddress: ShopBillingAddress;
+    /**
+     * Alert message that appears in the Shopify admin.
+     */
+    alerts: ShopAlerts[];
+    /**
+     * Countries that the shop ships to.
+     */
+    shipsToCountries: CountryCode[];
+    /**
+     * Settings related to payments.
+     */
+    paymentSettings: ShopPaymentSettings;
+  }
+  export interface ShopBillingAddress {
+    __typename: 'MailingAddress';
+    /**
+     * The name of the city, district, village, or town.
+     */
+    city: string | undefined;
+    /**
+     * The name of the customer's company or organization.
+     */
+    company: string | undefined;
+    /**
+     * The latitude coordinate of the customer address.
+     */
+    latitude: number | undefined;
+    /**
+     * The longitude coordinate of the customer address.
+     */
+    longitude: number | undefined;
+  }
+  export interface ShopAlerts {
+    __typename: 'ShopAlert';
+    /**
+     * Description of the alert.
+     */
+    description: string;
+  }
+  export interface ShopPaymentSettings {
+    __typename: 'PaymentSettings';
+    /**
+     * List of the digital wallets which the shop supports.
+     */
+    supportedDigitalWallets: DigitalWallet[];
+  }
 }
 
 export interface ShopDetailsQueryData {
@@ -84,126 +90,146 @@ const document: SyrupOperation<ShopDetailsQueryData, {}> = {
   name: "ShopDetails",
   source: "query ShopDetails { __typename shop { __typename id name currencyCode weightUnit billingAddress { __typename city company latitude longitude } alerts { __typename description } shipsToCountries paymentSettings { __typename supportedDigitalWallets } } }",
   operationType: 'query',
-  selections: [
-{
-name: "shop",
-type: { name: "Shop", definedType: "Object" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "QueryRoot", definedType: "Object" },
-directive: null,
-selections: [
-{
-name: "id",
-type: { name: "ID", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "Shop", definedType: "Object" },
-directive: null,
-selections: []}, 
-{
-name: "name",
-type: { name: "String", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "Shop", definedType: "Object" },
-directive: null,
-selections: []}, 
-{
-name: "currencyCode",
-type: { name: "CurrencyCode", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "Shop", definedType: "Object" },
-directive: null,
-selections: []}, 
-{
-name: "weightUnit",
-type: { name: "WeightUnit", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "Shop", definedType: "Object" },
-directive: null,
-selections: []}, 
-{
-name: "billingAddress",
-type: { name: "MailingAddress", definedType: "Object" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "Shop", definedType: "Object" },
-directive: null,
-selections: [
-{
-name: "city",
-type: { name: "String", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "MailingAddress", definedType: "Object" },
-directive: null,
-selections: []}, 
-{
-name: "company",
-type: { name: "String", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "MailingAddress", definedType: "Object" },
-directive: null,
-selections: []}, 
-{
-name: "latitude",
-type: { name: "Float", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "MailingAddress", definedType: "Object" },
-directive: null,
-selections: []}, 
-{
-name: "longitude",
-type: { name: "Float", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "MailingAddress", definedType: "Object" },
-directive: null,
-selections: []}]}, 
-{
-name: "alerts",
-type: { name: "ShopAlert", definedType: "Object" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "Shop", definedType: "Object" },
-directive: null,
-selections: [
-{
-name: "description",
-type: { name: "String", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "ShopAlert", definedType: "Object" },
-directive: null,
-selections: []}]}, 
-{
-name: "shipsToCountries",
-type: { name: "CountryCode", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "Shop", definedType: "Object" },
-directive: null,
-selections: []}, 
-{
-name: "paymentSettings",
-type: { name: "PaymentSettings", definedType: "Object" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "Shop", definedType: "Object" },
-directive: null,
-selections: [
-{
-name: "supportedDigitalWallets",
-type: { name: "DigitalWallet", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "PaymentSettings", definedType: "Object" },
-directive: null,
-selections: []}]}]}]
+  selections: ([
+    {
+      name: "shop",
+      type: { name: "Shop", definedType: "Object" },
+      arguments: {},
+      passedGID: null,
+      typeCondition: { name: "QueryRoot", definedType: "Object" },
+      directive: null,
+      selections: ([
+        {
+          name: "id",
+          type: { name: "ID", definedType: "Scalar" },
+          arguments: {},
+          passedGID: null,
+          typeCondition: { name: "Shop", definedType: "Object" },
+          directive: null,
+          selections: ([] as GraphSelection[])
+        }, 
+        {
+          name: "name",
+          type: { name: "String", definedType: "Scalar" },
+          arguments: {},
+          passedGID: null,
+          typeCondition: { name: "Shop", definedType: "Object" },
+          directive: null,
+          selections: ([] as GraphSelection[])
+        }, 
+        {
+          name: "currencyCode",
+          type: { name: "CurrencyCode", definedType: "Scalar" },
+          arguments: {},
+          passedGID: null,
+          typeCondition: { name: "Shop", definedType: "Object" },
+          directive: null,
+          selections: ([] as GraphSelection[])
+        }, 
+        {
+          name: "weightUnit",
+          type: { name: "WeightUnit", definedType: "Scalar" },
+          arguments: {},
+          passedGID: null,
+          typeCondition: { name: "Shop", definedType: "Object" },
+          directive: null,
+          selections: ([] as GraphSelection[])
+        }, 
+        {
+          name: "billingAddress",
+          type: { name: "MailingAddress", definedType: "Object" },
+          arguments: {},
+          passedGID: null,
+          typeCondition: { name: "Shop", definedType: "Object" },
+          directive: null,
+          selections: ([
+            {
+              name: "city",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "MailingAddress", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
+            {
+              name: "company",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "MailingAddress", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
+            {
+              name: "latitude",
+              type: { name: "Float", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "MailingAddress", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
+            {
+              name: "longitude",
+              type: { name: "Float", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "MailingAddress", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }
+          ] as GraphSelection[])
+        }, 
+        {
+          name: "alerts",
+          type: { name: "ShopAlert", definedType: "Object" },
+          arguments: {},
+          passedGID: null,
+          typeCondition: { name: "Shop", definedType: "Object" },
+          directive: null,
+          selections: ([
+            {
+              name: "description",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "ShopAlert", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }
+          ] as GraphSelection[])
+        }, 
+        {
+          name: "shipsToCountries",
+          type: { name: "CountryCode", definedType: "Scalar" },
+          arguments: {},
+          passedGID: null,
+          typeCondition: { name: "Shop", definedType: "Object" },
+          directive: null,
+          selections: ([] as GraphSelection[])
+        }, 
+        {
+          name: "paymentSettings",
+          type: { name: "PaymentSettings", definedType: "Object" },
+          arguments: {},
+          passedGID: null,
+          typeCondition: { name: "Shop", definedType: "Object" },
+          directive: null,
+          selections: ([
+            {
+              name: "supportedDigitalWallets",
+              type: { name: "DigitalWallet", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "PaymentSettings", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }
+          ] as GraphSelection[])
+        }
+      ] as GraphSelection[])
+    }
+  ] as GraphSelection[])
 }
 export default document

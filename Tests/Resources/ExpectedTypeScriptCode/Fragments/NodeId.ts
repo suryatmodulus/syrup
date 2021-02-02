@@ -1,21 +1,24 @@
-import { ID, Response, GraphSelection } from "../GraphApi"
-import * as Enums from "../Enums"
 
+
+import { ID, GraphSelection, copyWithTypeCondition } from "../GraphApi"
 export interface NodeId {
-  realized: {},
+  __typename: '';
+  realized: {};
 
   /**
    * Globally unique identifier.
    */
-  id: ID
+  id: ID;
 }
 
-export const nodeIdSelections = [
-{
-name: "id",
-type: { name: "ID", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "Node", definedType: "Interface" },
-directive: null,
-selections: []}]
+export const nodeIdSelections: GraphSelection[] = ([
+  {
+    name: "id",
+    type: { name: "ID", definedType: "Scalar" },
+    arguments: {},
+    passedGID: null,
+    typeCondition: { name: "Node", definedType: "Interface" },
+    directive: null,
+    selections: ([] as GraphSelection[])
+  }
+] as GraphSelection[])

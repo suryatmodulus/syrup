@@ -1,22 +1,25 @@
-import { ID, GraphSelection, SyrupOperation, copyWithTypeCondtion } from "../GraphApi"
-import * as Enums from "../Enums"
-import * as Inputs from "../Inputs"
-import * as Fragments from "../Fragments"
+import { ID, GraphSelection, SyrupOperation, copyWithTypeCondition } from "../GraphApi"
+import {
+  NodeId,
+  nodeIdSelections,
+  ProductNodeTitle,
+  productNodeTitleSelections,
+} from "../Fragments"
 
 export namespace NodeInterfacesQueryData {
   export interface Variables {
     nodeId: ID
   }
-
-export interface Node {
-  realized: NodeRealizedProduct | {},
-  nodeId: Fragments.NodeId 
-}
-export interface NodeRealizedProduct {
-  nodeId: Fragments.NodeId,
-  productNodeTitle: Fragments.ProductNodeTitle
-}
-
+  export interface Node {
+    __typename: 'Product' | '';
+    realized: NodeRealizedProduct | {};
+    nodeId: NodeId;
+  }
+  export interface NodeRealizedProduct {
+    __typename: 'Product';
+    nodeId: NodeId;
+    productNodeTitle: ProductNodeTitle;
+  }
 }
 
 export interface NodeInterfacesQueryData {
@@ -32,14 +35,16 @@ const document: SyrupOperation<NodeInterfacesQueryData, NodeInterfacesQueryData.
   name: "NodeInterfaces",
   source: "fragment NodeId on Node { __typename id } fragment ProductNodeTitle on Product { __typename title } query NodeInterfaces(\$nodeId: ID!) { __typename node(id: \$nodeId) { __typename ... NodeId ... on Product { __typename ... ProductNodeTitle } } }",
   operationType: 'query',
-  selections: [
-{
-name: "node",
-type: { name: "Node", definedType: "Interface" },
-arguments: { id: { type: "OperationVariableKey", value: "nodeId" } },
-passedGID: "nodeId",
-typeCondition: { name: "QueryRoot", definedType: "Object" },
-directive: null,
-selections: [].concat(Fragments.nodeIdSelections).concat(Fragments.productNodeTitleSelections)}]
+  selections: ([
+    {
+      name: "node",
+      type: { name: "Node", definedType: "Interface" },
+      arguments: { id: { type: "OperationVariableKey", value: "nodeId" } },
+      passedGID: "nodeId",
+      typeCondition: { name: "QueryRoot", definedType: "Object" },
+      directive: null,
+      selections: ([] as GraphSelection[]).concat(nodeIdSelections).concat(productNodeTitleSelections)
+    }
+  ] as GraphSelection[])
 }
 export default document

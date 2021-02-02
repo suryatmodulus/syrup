@@ -1,6 +1,13 @@
 import { ID } from "../GraphApi"
-import * as Enums from "../Enums"
-import * as Inputs from "../Inputs"
+import {
+    ProductVariantInventoryManagement,
+    ProductVariantInventoryPolicy,
+    WeightUnit,
+} from "../Enums"
+import { InventoryLevelInput } from "./InventoryLevelInput"
+import { InventoryItemInput } from "./InventoryItemInput"
+import { MetafieldInput } from "./MetafieldInput"
+import { PrivateMetafieldInput } from "./PrivateMetafieldInput"
 
 export interface ProductVariantInput {
   barcode?: string | null,
@@ -10,12 +17,12 @@ export interface ProductVariantInput {
   id?: ID | null,
   imageId?: ID | null,
   imageSrc?: string | null,
-  inventoryManagement?: Enums.ProductVariantInventoryManagement | null,
-  inventoryPolicy?: Enums.ProductVariantInventoryPolicy | null,
-  inventoryQuantities?: (Inputs.InventoryLevelInput)[] | null,
-  inventoryItem?: Inputs.InventoryItemInput | null,
-  metafields?: (Inputs.MetafieldInput)[] | null,
-  privateMetafields?: (Inputs.PrivateMetafieldInput)[] | null,
+  inventoryManagement?: ProductVariantInventoryManagement | null,
+  inventoryPolicy?: ProductVariantInventoryPolicy | null,
+  inventoryQuantities?: (InventoryLevelInput)[] | null,
+  inventoryItem?: InventoryItemInput | null,
+  metafields?: (MetafieldInput)[] | null,
+  privateMetafields?: (PrivateMetafieldInput)[] | null,
   options?: (string)[] | null,
   position?: number | null,
   price?: number | null,
@@ -26,5 +33,5 @@ export interface ProductVariantInput {
   title?: string | null,
   taxCode?: string | null,
   weight?: number | null,
-  weightUnit?: Enums.WeightUnit | null
+  weightUnit?: WeightUnit | null
 }

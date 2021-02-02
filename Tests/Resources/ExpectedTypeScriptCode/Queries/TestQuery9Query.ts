@@ -1,37 +1,41 @@
-import { ID, GraphSelection, SyrupOperation, copyWithTypeCondtion } from "../GraphApi"
-import * as Enums from "../Enums"
-import * as Inputs from "../Inputs"
-import * as Fragments from "../Fragments"
+import { ID, GraphSelection, SyrupOperation, copyWithTypeCondition } from "../GraphApi"
+import {
+  BasicFragment,
+  basicFragmentSelections,
+} from "../Fragments"
 
 export namespace TestQuery9QueryData {
-export interface Shop {
-  /**
-   * Customer accounts associated to the shop.
-   *
-   * @deprecated Use `QueryRoot.customers` instead.
-   */
-  customers: ShopCustomers
-}
-export interface ShopCustomers {
-  /**
-   * A list of edges.
-   */
-  edges: ShopCustomersEdges[]
-}
-export interface ShopCustomersEdges {
-  /**
-   * The item at the end of CustomerEdge.
-   */
-  node: ShopCustomersEdgesNode
-}
-export interface ShopCustomersEdgesNode {
-  /**
-   * Globally unique identifier.
-   */
-  id: ID,
-  basicFragment: Fragments.BasicFragment
-}
-
+  export interface Shop {
+    __typename: 'Shop';
+    /**
+     * Customer accounts associated to the shop.
+     *
+     * @deprecated Use `QueryRoot.customers` instead.
+     */
+    customers: ShopCustomers;
+  }
+  export interface ShopCustomers {
+    __typename: 'CustomerConnection';
+    /**
+     * A list of edges.
+     */
+    edges: ShopCustomersEdges[];
+  }
+  export interface ShopCustomersEdges {
+    __typename: 'CustomerEdge';
+    /**
+     * The item at the end of CustomerEdge.
+     */
+    node: ShopCustomersEdgesNode;
+  }
+  export interface ShopCustomersEdgesNode {
+    __typename: 'Customer';
+    /**
+     * Globally unique identifier.
+     */
+    id: ID;
+    basicFragment: BasicFragment;
+  }
 }
 
 export interface TestQuery9QueryData {
@@ -47,46 +51,56 @@ const document: SyrupOperation<TestQuery9QueryData, {}> = {
   name: "TestQuery9",
   source: "fragment BasicFragment on Customer { __typename id lastName } query TestQuery9 { __typename shop { __typename customers(first: 1) { __typename edges { __typename node { __typename id ... BasicFragment } } } } }",
   operationType: 'query',
-  selections: [
-{
-name: "shop",
-type: { name: "Shop", definedType: "Object" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "QueryRoot", definedType: "Object" },
-directive: null,
-selections: [
-{
-name: "customers",
-type: { name: "CustomerConnection", definedType: "Object" },
-arguments: { first: { type: "IntValue", value: 1 } },
-passedGID: null,
-typeCondition: { name: "Shop", definedType: "Object" },
-directive: null,
-selections: [
-{
-name: "edges",
-type: { name: "CustomerEdge", definedType: "Object" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "CustomerConnection", definedType: "Object" },
-directive: null,
-selections: [
-{
-name: "node",
-type: { name: "Customer", definedType: "Object" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "CustomerEdge", definedType: "Object" },
-directive: null,
-selections: [
-{
-name: "id",
-type: { name: "ID", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "Customer", definedType: "Object" },
-directive: null,
-selections: []}].concat(Fragments.basicFragmentSelections).map(x => x.copyWithTypeCondition("{ name: "Customer", definedType: "Object" }"))}]}]}]}]
+  selections: ([
+    {
+      name: "shop",
+      type: { name: "Shop", definedType: "Object" },
+      arguments: {},
+      passedGID: null,
+      typeCondition: { name: "QueryRoot", definedType: "Object" },
+      directive: null,
+      selections: ([
+        {
+          name: "customers",
+          type: { name: "CustomerConnection", definedType: "Object" },
+          arguments: { first: { type: "IntValue", value: 1 } },
+          passedGID: null,
+          typeCondition: { name: "Shop", definedType: "Object" },
+          directive: null,
+          selections: ([
+            {
+              name: "edges",
+              type: { name: "CustomerEdge", definedType: "Object" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "CustomerConnection", definedType: "Object" },
+              directive: null,
+              selections: ([
+                {
+                  name: "node",
+                  type: { name: "Customer", definedType: "Object" },
+                  arguments: {},
+                  passedGID: null,
+                  typeCondition: { name: "CustomerEdge", definedType: "Object" },
+                  directive: null,
+                  selections: ([
+                    {
+                      name: "id",
+                      type: { name: "ID", definedType: "Scalar" },
+                      arguments: {},
+                      passedGID: null,
+                      typeCondition: { name: "Customer", definedType: "Object" },
+                      directive: null,
+                      selections: ([] as GraphSelection[])
+                    }
+                  ] as GraphSelection[]).concat(basicFragmentSelections).map(x => copyWithTypeCondition(x, { name: "Customer", definedType: "Object" }))
+                }
+              ] as GraphSelection[])
+            }
+          ] as GraphSelection[])
+        }
+      ] as GraphSelection[])
+    }
+  ] as GraphSelection[])
 }
 export default document

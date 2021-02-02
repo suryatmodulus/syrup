@@ -1,251 +1,275 @@
-import { ID, Response, GraphSelection } from "../GraphApi"
-import * as Enums from "../Enums"
 
+
+import { ID, GraphSelection, copyWithTypeCondition } from "../GraphApi"
 export interface TimelineEventFragment {
-  realized: TimelineEventFragmentRealizedCommentEvent | {},
+  __typename: 'CommentEvent' | '';
+  realized: TimelineEventFragmentRealizedCommentEvent | {};
 
   /**
    * Globally unique identifier.
    */
-  id: ID,
+  id: ID;
 
   /**
    * The date and time when the event was created.
    */
-  createdAt: string,
+  createdAt: string;
 
   /**
    * Human readable text that describes the event.
    */
-  message: string,
+  message: string;
 
   /**
    * Whether the event was created by an app.
    */
-  attributeToApp: boolean,
+  attributeToApp: boolean;
 
   /**
    * Whether the event was caused by an admin user.
    */
-  attributeToUser: boolean,
+  attributeToUser: boolean;
 
   /**
    * Whether the event is critical.
    */
-  criticalAlert: boolean
+  criticalAlert: boolean;
 }
 
 export interface TimelineEventFragmentRealizedCommentEvent {
+  __typename: 'CommentEvent';
   /**
    * Globally unique identifier.
    */
-  id: ID,
+  id: ID;
   /**
    * The date and time when the event was created.
    */
-  createdAt: string,
+  createdAt: string;
   /**
    * Human readable text that describes the event.
    */
-  message: string,
+  message: string;
   /**
    * Whether the event was created by an app.
    */
-  attributeToApp: boolean,
+  attributeToApp: boolean;
   /**
    * Whether the event was caused by an admin user.
    */
-  attributeToUser: boolean,
+  attributeToUser: boolean;
   /**
    * Whether the event is critical.
    */
-  criticalAlert: boolean,
+  criticalAlert: boolean;
   /**
    * Whether the comment event has been edited. If true, then the comment event has been edited.
    */
-  edited: boolean,
+  edited: boolean;
   /**
    * Whether the comment event can be edited. If true, then the comment event can be edited.
    */
-  canEdit: boolean,
+  canEdit: boolean;
   /**
    * Whether the comment event can be deleted. If true, then the comment event can be deleted.
    */
-  canDelete: boolean,
+  canDelete: boolean;
   /**
    * The attachments associated with the comment event.
    */
-  attachments: TimelineEventFragmentRealizedCommentEventAttachments[]
+  attachments: TimelineEventFragmentRealizedCommentEventAttachments[];
 }
 export interface TimelineEventFragmentRealizedCommentEventAttachments {
+  __typename: 'CommentEventAttachment';
   /**
    * Globally unique identifier.
    */
-  id: ID,
+  id: ID;
   /**
    * The filename of the comment event attachment.
    */
-  name: string,
+  name: string;
   /**
    * The size of the attachment.
    */
-  size: number,
+  size: number;
   /**
    * The file extension of the comment event attachment, indicating the file format.
    */
-  fileExtension: string | undefined,
+  fileExtension: string | undefined;
   /**
    * The URL of the attachment.
    */
-  url: string,
+  url: string;
   /**
    * The image attached to the comment event.
    */
-  image: TimelineEventFragmentRealizedCommentEventAttachmentsImage | undefined
+  image: TimelineEventFragmentRealizedCommentEventAttachmentsImage | undefined;
 }
 export interface TimelineEventFragmentRealizedCommentEventAttachmentsImage {
+  __typename: 'Image';
   /**
    * The location of the transformed image as a URL.
    * All transformation arguments are considered "best-effort". If they can be applied to an image, they will be.
    * Otherwise any transformations which an image type does not support will be ignored.
    */
-  transformedSrc: string
+  transformedSrc: string;
 }
 
-export const timelineEventFragmentSelections = [
-{
-name: "id",
-type: { name: "ID", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "Event", definedType: "Interface" },
-directive: null,
-selections: []}, 
-{
-name: "createdAt",
-type: { name: "DateTime", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "Event", definedType: "Interface" },
-directive: null,
-selections: []}, 
-{
-name: "message",
-type: { name: "FormattedString", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "Event", definedType: "Interface" },
-directive: null,
-selections: []}, 
-{
-name: "attributeToApp",
-type: { name: "Boolean", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "Event", definedType: "Interface" },
-directive: null,
-selections: []}, 
-{
-name: "attributeToUser",
-type: { name: "Boolean", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "Event", definedType: "Interface" },
-directive: null,
-selections: []}, 
-{
-name: "criticalAlert",
-type: { name: "Boolean", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "Event", definedType: "Interface" },
-directive: null,
-selections: []}, 
-{
-name: "edited",
-type: { name: "Boolean", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "CommentEvent", definedType: "Object" },
-directive: null,
-selections: []}, 
-{
-name: "canEdit",
-type: { name: "Boolean", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "CommentEvent", definedType: "Object" },
-directive: null,
-selections: []}, 
-{
-name: "canDelete",
-type: { name: "Boolean", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "CommentEvent", definedType: "Object" },
-directive: null,
-selections: []}, 
-{
-name: "attachments",
-type: { name: "CommentEventAttachment", definedType: "Object" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "CommentEvent", definedType: "Object" },
-directive: null,
-selections: [
-{
-name: "id",
-type: { name: "ID", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "CommentEventAttachment", definedType: "Object" },
-directive: null,
-selections: []}, 
-{
-name: "name",
-type: { name: "String", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "CommentEventAttachment", definedType: "Object" },
-directive: null,
-selections: []}, 
-{
-name: "size",
-type: { name: "Int", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "CommentEventAttachment", definedType: "Object" },
-directive: null,
-selections: []}, 
-{
-name: "fileExtension",
-type: { name: "String", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "CommentEventAttachment", definedType: "Object" },
-directive: null,
-selections: []}, 
-{
-name: "url",
-type: { name: "URL", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "CommentEventAttachment", definedType: "Object" },
-directive: null,
-selections: []}, 
-{
-name: "image",
-type: { name: "Image", definedType: "Object" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "CommentEventAttachment", definedType: "Object" },
-directive: null,
-selections: [
-{
-name: "transformedSrc",
-type: { name: "URL", definedType: "Scalar" },
-arguments: { maxWidth: { type: "OperationVariableKey", value: "maxImageWidth" }, maxHeight: { type: "OperationVariableKey", value: "maxImageHeight" } },
-passedGID: null,
-typeCondition: { name: "Image", definedType: "Object" },
-directive: null,
-selections: []}]}]}]
+export const timelineEventFragmentSelections: GraphSelection[] = ([
+  {
+    name: "id",
+    type: { name: "ID", definedType: "Scalar" },
+    arguments: {},
+    passedGID: null,
+    typeCondition: { name: "Event", definedType: "Interface" },
+    directive: null,
+    selections: ([] as GraphSelection[])
+  }, 
+  {
+    name: "createdAt",
+    type: { name: "DateTime", definedType: "Scalar" },
+    arguments: {},
+    passedGID: null,
+    typeCondition: { name: "Event", definedType: "Interface" },
+    directive: null,
+    selections: ([] as GraphSelection[])
+  }, 
+  {
+    name: "message",
+    type: { name: "FormattedString", definedType: "Scalar" },
+    arguments: {},
+    passedGID: null,
+    typeCondition: { name: "Event", definedType: "Interface" },
+    directive: null,
+    selections: ([] as GraphSelection[])
+  }, 
+  {
+    name: "attributeToApp",
+    type: { name: "Boolean", definedType: "Scalar" },
+    arguments: {},
+    passedGID: null,
+    typeCondition: { name: "Event", definedType: "Interface" },
+    directive: null,
+    selections: ([] as GraphSelection[])
+  }, 
+  {
+    name: "attributeToUser",
+    type: { name: "Boolean", definedType: "Scalar" },
+    arguments: {},
+    passedGID: null,
+    typeCondition: { name: "Event", definedType: "Interface" },
+    directive: null,
+    selections: ([] as GraphSelection[])
+  }, 
+  {
+    name: "criticalAlert",
+    type: { name: "Boolean", definedType: "Scalar" },
+    arguments: {},
+    passedGID: null,
+    typeCondition: { name: "Event", definedType: "Interface" },
+    directive: null,
+    selections: ([] as GraphSelection[])
+  }, 
+  {
+    name: "edited",
+    type: { name: "Boolean", definedType: "Scalar" },
+    arguments: {},
+    passedGID: null,
+    typeCondition: { name: "CommentEvent", definedType: "Object" },
+    directive: null,
+    selections: ([] as GraphSelection[])
+  }, 
+  {
+    name: "canEdit",
+    type: { name: "Boolean", definedType: "Scalar" },
+    arguments: {},
+    passedGID: null,
+    typeCondition: { name: "CommentEvent", definedType: "Object" },
+    directive: null,
+    selections: ([] as GraphSelection[])
+  }, 
+  {
+    name: "canDelete",
+    type: { name: "Boolean", definedType: "Scalar" },
+    arguments: {},
+    passedGID: null,
+    typeCondition: { name: "CommentEvent", definedType: "Object" },
+    directive: null,
+    selections: ([] as GraphSelection[])
+  }, 
+  {
+    name: "attachments",
+    type: { name: "CommentEventAttachment", definedType: "Object" },
+    arguments: {},
+    passedGID: null,
+    typeCondition: { name: "CommentEvent", definedType: "Object" },
+    directive: null,
+    selections: ([
+      {
+        name: "id",
+        type: { name: "ID", definedType: "Scalar" },
+        arguments: {},
+        passedGID: null,
+        typeCondition: { name: "CommentEventAttachment", definedType: "Object" },
+        directive: null,
+        selections: ([] as GraphSelection[])
+      }, 
+      {
+        name: "name",
+        type: { name: "String", definedType: "Scalar" },
+        arguments: {},
+        passedGID: null,
+        typeCondition: { name: "CommentEventAttachment", definedType: "Object" },
+        directive: null,
+        selections: ([] as GraphSelection[])
+      }, 
+      {
+        name: "size",
+        type: { name: "Int", definedType: "Scalar" },
+        arguments: {},
+        passedGID: null,
+        typeCondition: { name: "CommentEventAttachment", definedType: "Object" },
+        directive: null,
+        selections: ([] as GraphSelection[])
+      }, 
+      {
+        name: "fileExtension",
+        type: { name: "String", definedType: "Scalar" },
+        arguments: {},
+        passedGID: null,
+        typeCondition: { name: "CommentEventAttachment", definedType: "Object" },
+        directive: null,
+        selections: ([] as GraphSelection[])
+      }, 
+      {
+        name: "url",
+        type: { name: "URL", definedType: "Scalar" },
+        arguments: {},
+        passedGID: null,
+        typeCondition: { name: "CommentEventAttachment", definedType: "Object" },
+        directive: null,
+        selections: ([] as GraphSelection[])
+      }, 
+      {
+        name: "image",
+        type: { name: "Image", definedType: "Object" },
+        arguments: {},
+        passedGID: null,
+        typeCondition: { name: "CommentEventAttachment", definedType: "Object" },
+        directive: null,
+        selections: ([
+          {
+            name: "transformedSrc",
+            type: { name: "URL", definedType: "Scalar" },
+            arguments: { maxWidth: { type: "OperationVariableKey", value: "maxImageWidth" }, maxHeight: { type: "OperationVariableKey", value: "maxImageHeight" } },
+            passedGID: null,
+            typeCondition: { name: "Image", definedType: "Object" },
+            directive: null,
+            selections: ([] as GraphSelection[])
+          }
+        ] as GraphSelection[])
+      }
+    ] as GraphSelection[])
+  }
+] as GraphSelection[])

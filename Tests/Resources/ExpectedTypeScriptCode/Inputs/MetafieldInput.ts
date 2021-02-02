@@ -1,6 +1,7 @@
 import { ID } from "../GraphApi"
-import * as Enums from "../Enums"
-import * as Inputs from "../Inputs"
+import {
+    MetafieldValueType,
+} from "../Enums"
 
 export interface MetafieldInput {
   description?: string | null,
@@ -8,5 +9,5 @@ export interface MetafieldInput {
   key?: string | null,
   'namespace'?: string | null,
   value?: string | null,
-  valueType?: Enums.MetafieldValueType | null
+  valueType?: MetafieldValueType | null
 }

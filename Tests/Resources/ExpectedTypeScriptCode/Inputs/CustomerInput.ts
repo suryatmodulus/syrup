@@ -1,22 +1,27 @@
 import { ID } from "../GraphApi"
-import * as Enums from "../Enums"
-import * as Inputs from "../Inputs"
+import {
+    CustomerMarketingOptInLevel,
+    TaxExemption,
+} from "../Enums"
+import { MailingAddressInput } from "./MailingAddressInput"
+import { MetafieldInput } from "./MetafieldInput"
+import { PrivateMetafieldInput } from "./PrivateMetafieldInput"
 
 export interface CustomerInput {
   acceptsMarketing?: boolean | null,
   acceptsMarketingUpdatedAt?: string | null,
-  addresses?: (Inputs.MailingAddressInput)[] | null,
+  addresses?: (MailingAddressInput)[] | null,
   email?: string | null,
   firstName?: string | null,
   id?: ID | null,
   lastName?: string | null,
   locale?: string | null,
-  marketingOptInLevel?: Enums.CustomerMarketingOptInLevel | null,
-  metafields?: (Inputs.MetafieldInput)[] | null,
+  marketingOptInLevel?: CustomerMarketingOptInLevel | null,
+  metafields?: (MetafieldInput)[] | null,
   note?: string | null,
   phone?: string | null,
-  privateMetafields?: (Inputs.PrivateMetafieldInput)[] | null,
+  privateMetafields?: (PrivateMetafieldInput)[] | null,
   tags?: (string)[] | null,
   taxExempt?: boolean | null,
-  taxExemptions?: (Enums.TaxExemption)[] | null
+  taxExemptions?: (TaxExemption)[] | null
 }

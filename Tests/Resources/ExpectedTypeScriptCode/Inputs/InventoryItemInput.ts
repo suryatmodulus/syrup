@@ -1,10 +1,11 @@
 import { ID } from "../GraphApi"
-import * as Enums from "../Enums"
-import * as Inputs from "../Inputs"
+import {
+    CountryCode,
+} from "../Enums"
 
 export interface InventoryItemInput {
   cost?: number | null,
   tracked?: boolean | null,
-  countryCodeOfOrigin?: Enums.CountryCode | null,
+  countryCodeOfOrigin?: CountryCode | null,
   harmonizedSystemCode?: string | null
 }

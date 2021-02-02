@@ -1,20 +1,24 @@
-import { ID, GraphSelection } from "../GraphApi"
-import * as Enums from "../Enums"
+
+
+import { ID, GraphSelection, copyWithTypeCondition } from "../GraphApi"
 
 export interface ProductNodeTitle {
+  __typename: 'Product';
 
   /**
    * The title of the product.
    */
-  title: string
+  title: string;
 }
 
-export const productNodeTitleSelections = [
-{
-name: "title",
-type: { name: "String", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "Product", definedType: "Object" },
-directive: null,
-selections: []}]
+export const productNodeTitleSelections: GraphSelection[] = ([
+  {
+    name: "title",
+    type: { name: "String", definedType: "Scalar" },
+    arguments: {},
+    passedGID: null,
+    typeCondition: { name: "Product", definedType: "Object" },
+    directive: null,
+    selections: ([] as GraphSelection[])
+  }
+] as GraphSelection[])

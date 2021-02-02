@@ -1,10 +1,9 @@
 import { ID } from "../GraphApi"
-import * as Enums from "../Enums"
-import * as Inputs from "../Inputs"
+import { PrivateMetafieldValueInput } from "./PrivateMetafieldValueInput"
 
 export interface PrivateMetafieldInput {
   owner?: ID | null,
   'namespace'?: string,
   key?: string,
-  valueInput?: Inputs.PrivateMetafieldValueInput
+  valueInput?: PrivateMetafieldValueInput
 }

@@ -1,59 +1,64 @@
-import { ID, GraphSelection, SyrupOperation, copyWithTypeCondtion } from "../GraphApi"
-import * as Enums from "../Enums"
-import * as Inputs from "../Inputs"
-import * as Fragments from "../Fragments"
+import { ID, GraphSelection, SyrupOperation, copyWithTypeCondition } from "../GraphApi"
+import {
+  ProductVariantInput,
+} from "../Inputs"
+import {
+  WeightUnit,
+} from "../Enums"
 
 export namespace ProductVariantShippingMutationData {
   export interface Variables {
-    variantInput: Inputs.ProductVariantInput
+    variantInput: ProductVariantInput
   }
-export interface ProductVariantUpdate {
-  /**
-   * The updated variant.
-   */
-  productVariant: ProductVariantUpdateProductVariant | undefined,
-  /**
-   * List of errors that occurred executing the mutation.
-   */
-  userErrors: ProductVariantUpdateUserErrors[]
-}
-export interface ProductVariantUpdateProductVariant {
-  /**
-   * Globally unique identifier.
-   */
-  id: ID,
-  /**
-   * The weight of the product variant in the unit system specified with weight_unit.
-   */
-  weight: number | undefined,
-  /**
-   * The unit of measurement that applies to the product variant's weight. If you don't specify a value for weight_unit, then the shop's default unit of measurement is applied. Valid values: `g`, `kg`, `oz`, `lb`.
-   */
-  weightUnit: Enums.WeightUnit,
-  /**
-   * Whether a customer needs to provide a shipping address when placing an order for the product variant.
-   *
-   * @deprecated Use `InventoryItem.requiresShipping` instead.
-   */
-  requiresShipping: boolean,
-  /**
-   * The Harmonized System Code (or HS Tariff Code) for the variant.
-   *
-   * @deprecated Use `InventoryItem.harmonizedSystemCode` instead.
-   */
-  harmonizedSystemCode: string | undefined
-}
-export interface ProductVariantUpdateUserErrors {
-  /**
-   * The error message.
-   */
-  message: string,
-  /**
-   * Path to the input field which caused the error.
-   */
-  field: string[] | undefined
-}
-
+  export interface ProductVariantUpdate {
+    __typename: 'ProductVariantUpdatePayload';
+    /**
+     * The updated variant.
+     */
+    productVariant: ProductVariantUpdateProductVariant | undefined;
+    /**
+     * List of errors that occurred executing the mutation.
+     */
+    userErrors: ProductVariantUpdateUserErrors[];
+  }
+  export interface ProductVariantUpdateProductVariant {
+    __typename: 'ProductVariant';
+    /**
+     * Globally unique identifier.
+     */
+    id: ID;
+    /**
+     * The weight of the product variant in the unit system specified with weight_unit.
+     */
+    weight: number | undefined;
+    /**
+     * The unit of measurement that applies to the product variant's weight. If you don't specify a value for weight_unit, then the shop's default unit of measurement is applied. Valid values: `g`, `kg`, `oz`, `lb`.
+     */
+    weightUnit: WeightUnit;
+    /**
+     * Whether a customer needs to provide a shipping address when placing an order for the product variant.
+     *
+     * @deprecated Use `InventoryItem.requiresShipping` instead.
+     */
+    requiresShipping: boolean;
+    /**
+     * The Harmonized System Code (or HS Tariff Code) for the variant.
+     *
+     * @deprecated Use `InventoryItem.harmonizedSystemCode` instead.
+     */
+    harmonizedSystemCode: string | undefined;
+  }
+  export interface ProductVariantUpdateUserErrors {
+    __typename: 'UserError';
+    /**
+     * The error message.
+     */
+    message: string;
+    /**
+     * Path to the input field which caused the error.
+     */
+    field: string[] | undefined;
+  }
 }
 
 export interface ProductVariantShippingMutationData {
@@ -69,86 +74,100 @@ const document: SyrupOperation<ProductVariantShippingMutationData, ProductVarian
   name: "ProductVariantShipping",
   source: "mutation ProductVariantShipping(\$variantInput: ProductVariantInput!) { __typename productVariantUpdate(input: \$variantInput) { __typename productVariant { __typename id weight weightUnit requiresShipping harmonizedSystemCode } userErrors { __typename message field } } }",
   operationType: 'mutation',
-  selections: [
-{
-name: "productVariantUpdate",
-type: { name: "ProductVariantUpdatePayload", definedType: "Object" },
-arguments: { input: { type: "OperationVariableKey", value: "variantInput" } },
-passedGID: null,
-typeCondition: { name: "Mutation", definedType: "Object" },
-directive: null,
-selections: [
-{
-name: "productVariant",
-type: { name: "ProductVariant", definedType: "Object" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "ProductVariantUpdatePayload", definedType: "Object" },
-directive: null,
-selections: [
-{
-name: "id",
-type: { name: "ID", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "ProductVariant", definedType: "Object" },
-directive: null,
-selections: []}, 
-{
-name: "weight",
-type: { name: "Float", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "ProductVariant", definedType: "Object" },
-directive: null,
-selections: []}, 
-{
-name: "weightUnit",
-type: { name: "WeightUnit", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "ProductVariant", definedType: "Object" },
-directive: null,
-selections: []}, 
-{
-name: "requiresShipping",
-type: { name: "Boolean", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "ProductVariant", definedType: "Object" },
-directive: null,
-selections: []}, 
-{
-name: "harmonizedSystemCode",
-type: { name: "String", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "ProductVariant", definedType: "Object" },
-directive: null,
-selections: []}]}, 
-{
-name: "userErrors",
-type: { name: "UserError", definedType: "Object" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "ProductVariantUpdatePayload", definedType: "Object" },
-directive: null,
-selections: [
-{
-name: "message",
-type: { name: "String", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "UserError", definedType: "Object" },
-directive: null,
-selections: []}, 
-{
-name: "field",
-type: { name: "String", definedType: "Scalar" },
-arguments: {},
-passedGID: null,
-typeCondition: { name: "UserError", definedType: "Object" },
-directive: null,
-selections: []}]}]}]
+  selections: ([
+    {
+      name: "productVariantUpdate",
+      type: { name: "ProductVariantUpdatePayload", definedType: "Object" },
+      arguments: { input: { type: "OperationVariableKey", value: "variantInput" } },
+      passedGID: null,
+      typeCondition: { name: "Mutation", definedType: "Object" },
+      directive: null,
+      selections: ([
+        {
+          name: "productVariant",
+          type: { name: "ProductVariant", definedType: "Object" },
+          arguments: {},
+          passedGID: null,
+          typeCondition: { name: "ProductVariantUpdatePayload", definedType: "Object" },
+          directive: null,
+          selections: ([
+            {
+              name: "id",
+              type: { name: "ID", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "ProductVariant", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
+            {
+              name: "weight",
+              type: { name: "Float", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "ProductVariant", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
+            {
+              name: "weightUnit",
+              type: { name: "WeightUnit", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "ProductVariant", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
+            {
+              name: "requiresShipping",
+              type: { name: "Boolean", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "ProductVariant", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
+            {
+              name: "harmonizedSystemCode",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "ProductVariant", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }
+          ] as GraphSelection[])
+        }, 
+        {
+          name: "userErrors",
+          type: { name: "UserError", definedType: "Object" },
+          arguments: {},
+          passedGID: null,
+          typeCondition: { name: "ProductVariantUpdatePayload", definedType: "Object" },
+          directive: null,
+          selections: ([
+            {
+              name: "message",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "UserError", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
+            {
+              name: "field",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "UserError", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }
+          ] as GraphSelection[])
+        }
+      ] as GraphSelection[])
+    }
+  ] as GraphSelection[])
 }
 export default document

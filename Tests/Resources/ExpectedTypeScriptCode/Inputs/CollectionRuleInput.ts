@@ -1,9 +1,11 @@
 import { ID } from "../GraphApi"
-import * as Enums from "../Enums"
-import * as Inputs from "../Inputs"
+import {
+    CollectionRuleColumn,
+    CollectionRuleRelation,
+} from "../Enums"
 
 export interface CollectionRuleInput {
-  column?: Enums.CollectionRuleColumn,
-  relation?: Enums.CollectionRuleRelation,
+  column?: CollectionRuleColumn,
+  relation?: CollectionRuleRelation,
   condition?: string
 }

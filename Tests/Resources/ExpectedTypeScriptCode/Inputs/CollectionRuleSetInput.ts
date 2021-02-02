@@ -1,8 +1,7 @@
 import { ID } from "../GraphApi"
-import * as Enums from "../Enums"
-import * as Inputs from "../Inputs"
+import { CollectionRuleInput } from "./CollectionRuleInput"
 
 export interface CollectionRuleSetInput {
   appliedDisjunctively?: boolean,
-  rules?: (Inputs.CollectionRuleInput)[] | null
+  rules?: (CollectionRuleInput)[] | null
 }

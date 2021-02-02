@@ -1,6 +1,7 @@
 import { ID } from "../GraphApi"
-import * as Enums from "../Enums"
-import * as Inputs from "../Inputs"
+import {
+    CountryCode,
+} from "../Enums"
 
 export interface MailingAddressInput {
   address1?: string | null,
@@ -8,7 +9,7 @@ export interface MailingAddressInput {
   city?: string | null,
   company?: string | null,
   country?: string | null,
-  countryCode?: Enums.CountryCode | null,
+  countryCode?: CountryCode | null,
   firstName?: string | null,
   id?: ID | null,
   lastName?: string | null,

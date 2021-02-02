@@ -27,7 +27,7 @@ export interface SyrupOperation<Data = {}, Variables = {}, DeepPartial = {}> ext
   readonly selections: GraphSelection[]
 }
 
-export const copyWithTypeCondtion: (
+export const copyWithTypeCondition: (
   selection: GraphSelection, 
   typeCondition: TypeDefinition | null
 ) => GraphSelection = (selection, typeCondition) => {
