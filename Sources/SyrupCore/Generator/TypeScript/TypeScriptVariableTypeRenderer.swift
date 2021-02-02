@@ -38,23 +38,23 @@ enum TypeScriptVariableTypeRenderer: VariableTypeRenderer {
 		case .nonNull(let wrappedType):
 			return render(variableType: wrappedType, nonNull: true)
 		case .list(let wrappedType):
-			let rendered = "(" + render(variableType: wrappedType, nonNull: false) + ")[]"
+            let rendered = "(" + render(variableType: wrappedType, nonNull: false) + ")[]"
 			if nonNull {
 				return rendered
 			} else {
-				return rendered + " | undefined"
+				return "\(rendered) | undefined"
 			}
 		case .enum(let name):
 			if nonNull {
-				return "Enums.\(name)"
+				return name
 			} else {
-				return "Enums.\(name) | undefined"
+				return "\(name) | undefined"
 			}
 		case .input(let name):
 			if nonNull {
-				return "Inputs.\(name)"
+				return name
 			} else {
-				return "Inputs.\(name) | undefined"
+				return "\(name) | undefined"
 			}
 		case .scalar(let scalarType):
 			if nonNull {

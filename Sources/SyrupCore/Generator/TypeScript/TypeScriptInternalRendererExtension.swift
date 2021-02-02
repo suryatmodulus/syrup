@@ -34,37 +34,45 @@ final class TypeScriptInternalRendererExtension: Extension {
 		registerFilter("internalTypeDefinition") { (value, args) -> Any? in
 			guard let field = value as? IntermediateRepresentation.CollectedObjectField else { return nil }
 			let parentTypeName = args.first as? String ?? ""
+            let isNameSpaced = args.dropFirst().first as? Bool ?? false
 			let fields = field.collectedFields.scopedTo(parentFragment: field.parentFragment?.name)
 			let fragmentSpreads = IntermediateRepresentation.fragments(from: field.fragmentSpreads, onConcreteType: field.type.graphQLName)
 			let renderer = TypeScriptRenderer(config: config)
+            let fieldName = field.name.capitalizedFirstLetter
 			if fields.isEmpty && fragmentSpreads.isEmpty { return nil }
 
 			return try! renderer.renderResponseType(
-				name: "\(parentTypeName)\(field.name.capitalizedFirstLetter)",
+				name: "\(parentTypeName)\(fieldName)",
+                typeName: field.type.graphQLName,
 				fields: fields,
-				fragmentNames: fragmentSpreads.map { $0.name }
+				fragmentNames: fragmentSpreads.map { $0.name },
+                isNameSpaced: isNameSpaced
 			)
 		}
 		
 		registerFilter("internalInterfaceWrapper") { (value, args) -> Any? in
 			guard let field = value as? IntermediateRepresentation.CollectedInterfaceField else { return nil }
 			let parentTypeName = args.first as? String ?? ""
+            let isNameSpaced = args.dropFirst().first as? Bool ?? false
 			let renderer = TypeScriptRenderer(config: config)
 			let scopedFields = field.collectedFields.scopedTo(parentFragment: field.parentFragment?.name)
 			let groupedFragmentSpreads = IntermediateRepresentation.groupedFragmentSpreads(fragmentSpreads: field.fragmentSpreads, inheritedType: field.type.graphQLName)
+            let fieldName = field.name.capitalizedFirstLetter
 			
 			return try! renderer.renderInterfaceWrapper(
-				name: "\(parentTypeName)\(field.name.capitalizedFirstLetter)",
+				name: "\(parentTypeName)\(fieldName)",
 				scopedFields: scopedFields,
 				collectedFields: field.collectedFields,
 				interfaceTypeName: field.type.graphQLName,
-				groupedFragmentSpreads: groupedFragmentSpreads
+				groupedFragmentSpreads: groupedFragmentSpreads,
+                isNameSpaced: isNameSpaced
 			)
 		}
 		
 		registerFilter("internalUnionWrapper") { (value, args) -> Any? in
 			guard let field = value as? IntermediateRepresentation.CollectedUnionField else { return nil }
 			let parentTypeName = args.first as? String ?? ""
+            let isNameSpaced = args.dropFirst().first as? Bool ?? false
 			let renderer = TypeScriptRenderer(config: config)
 			let unionTypeName = field.type.graphQLName
 			let groupedFragmentSpreads = IntermediateRepresentation.groupedFragmentSpreads(fragmentSpreads: field.fragmentSpreads, inheritedType: unionTypeName)
@@ -74,13 +82,19 @@ final class TypeScriptInternalRendererExtension: Extension {
 				name: "\(parentTypeName)\(field.name.capitalizedFirstLetter)",
 				unionTypeName: unionTypeName,
 				collectedFields: collectedFields,
-				groupedFragmentSpreads: groupedFragmentSpreads
+				groupedFragmentSpreads: groupedFragmentSpreads,
+                isNameSpaced: isNameSpaced
 			)
 		}
 		
 		registerFilter("internalInterfaceTypeDefinitions") { (value, args) -> Any? in
 			var rendered = ""
-			guard let collectedFields = value as? [CollectedField], let interfaceTypeName = args.first as? String, let groupedFragmentSpreads = args.dropFirst().first as? [String: [IntermediateRepresentation.SelectionPath.PathComponent.Fragment]], let concreteTypeNames = args.dropFirst(2).first as? [String] else { return nil }
+			guard let collectedFields = value as? [CollectedField],
+                  let interfaceTypeName = args.first as? String,
+                  let groupedFragmentSpreads = args.dropFirst().first as? [String: [IntermediateRepresentation.SelectionPath.PathComponent.Fragment]],
+                  let concreteTypeNames = args.dropFirst(2).first as? [String] else { return nil }
+
+            let isNameSpaced = args.dropFirst(3).first as? Bool ?? false
 			let groupedFields = try collectedFields.groupedFields(fromInterfaceType: interfaceTypeName)
 			concreteTypeNames.forEach { concreteType in
 				let graphQLName = concreteType
@@ -89,14 +103,27 @@ final class TypeScriptInternalRendererExtension: Extension {
 				protocolConformances.append(contentsOf: groupedFragmentSpreads[interfaceTypeName] ?? [])
 				
 				let renderer = TypeScriptRenderer(config: config)
-				rendered += try! renderer.renderResponseType(name: "\(interfaceTypeName)Realized\(graphQLName)", fields: fields, fragmentNames: protocolConformances.unique.map { $0.name })
+				rendered += try! renderer.renderResponseType(
+                    name: "\(interfaceTypeName)Realized\(graphQLName)",
+                    typeName: graphQLName,
+                    fields: fields,
+                    fragmentNames: protocolConformances.unique.map {
+                        $0.name
+                    },
+                    isNameSpaced: isNameSpaced
+                )
 			}
 			return rendered
 		}
 		
 		registerFilter("internalUnionTypeDefinitions") { (value, args) -> Any? in
 			var rendered = ""
-			guard let collectedFields = value as? [CollectedField], let unionTypeName = args.first as? String, let groupedProtocolConformances = args.dropFirst().first as? [String: [IntermediateRepresentation.SelectionPath.PathComponent.Fragment]], let concreteTypeNames = args.dropFirst(2).first as? [String] else { return nil }
+			guard let collectedFields = value as? [CollectedField],
+                  let unionTypeName = args.first as? String,
+                  let groupedProtocolConformances = args.dropFirst().first as? [String: [IntermediateRepresentation.SelectionPath.PathComponent.Fragment]],
+                  let concreteTypeNames = args.dropFirst(2).first as? [String] else { return nil }
+            
+            let isNameSpaced = args.dropFirst(3).first as? Bool ?? false
 			let groupedFields = collectedFields.groupedFields(fromUnionType: unionTypeName)
 			
 			concreteTypeNames.forEach { concreteType in
@@ -104,7 +131,13 @@ final class TypeScriptInternalRendererExtension: Extension {
 				let fields = groupedFields[concreteType] ?? []
 				let protocolConformances = groupedProtocolConformances[concreteType] ?? []
 				let renderer = TypeScriptRenderer(config: config)
-				rendered += try! renderer.renderResponseType(name: "\(unionTypeName)Realized\(graphQLName)", fields: fields, fragmentNames: protocolConformances.map { $0.name })
+				rendered += try! renderer.renderResponseType(
+                    name: "\(unionTypeName)Realized\(graphQLName)",
+                    typeName: graphQLName,
+                    fields: fields,
+                    fragmentNames: protocolConformances.map { $0.name },
+                    isNameSpaced: isNameSpaced
+                )
 			}
 			return rendered
 		}

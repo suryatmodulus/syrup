@@ -1,8 +1,18 @@
-import { ID, GraphSelection, SyrupOperation, copyWithTypeCondtion } from "../GraphApi"
+import { ID, GraphSelection, SyrupOperation, copyWithTypeCondition } from "../GraphApi"
 {{ header }}
-{% if importEnums %}import * as Enums from "../Enums"{% endif %}
-{% if importInputs %}import * as Inputs from "../Inputs"{% endif %}
-{% if importFragments %}import * as Fragments from "../Fragments"{% endif %}
+{% if allReferencedFragments.count > 0 %}import {
+  {% for name in allReferencedFragments %}{{ name }},
+  {{ name|lowercasedFirstLetter }}Selections,
+  {% endfor %}
+} from "../Fragments"{% endif %}
+{% if allReferencedInputTypes.count > 0 %}import {
+  {% for name in allReferencedInputTypes %}{{ name }},
+  {% endfor %}
+} from "../Inputs"{% endif %}
+{% if allReferencedEnums.count > 0 %}import {
+  {% for name in allReferencedEnums %}{{ name }},
+  {% endfor %}
+} from "../Enums"{% endif %}
 
 export namespace {{ name }} {
   {% if operation.variables.count > 0 %}export interface Variables {
@@ -10,15 +20,9 @@ export namespace {{ name }} {
   }{% endif %}
   
   {% for field in fields %}
-  {{ field|internalTypeDefinition }}
-  {% endfor %}
-
-  {% for field in fields %}
-  {{ field|internalInterfaceWrapper }}
-  {% endfor %}
-
-  {% for field in fields %}
-  {{ field|internalUnionWrapper }}
+  {{ field|internalTypeDefinition:null,true }}
+  {{ field|internalInterfaceWrapper:null,true }}
+  {{ field|internalUnionWrapper:null,true }}
   {% endfor %}
 }
 
@@ -27,8 +31,8 @@ export interface {{ name }} {
   {% with field.attributes as attributes %}{% include "Helpers/Attributes.stencil" %}{% endwith %}
   {{ field|renderPropertyDeclaration:fieldPrefix }}{% if fragmentNames or not forloop.last %},{% endif %}
   {% endfor %}
-  {% for fragmentName in fragmentNames %}
-  {{ fragmentName|lowercasedFirstLetter }}: Fragments.{{ fragmentName }}{% if not forloop.last %},{% endif %}
+  {% for fragmentName in topLevelFragmentNames %}
+  {{ fragmentName|lowercasedFirstLetter }}: {{ fragmentName }}{% if not forloop.last %},{% endif %}
   {% endfor %}
 }
 
@@ -37,6 +41,6 @@ const document: SyrupOperation<{{ name }}, {% if operation.variables.count > 0 %
   name: "{{ operation.name }}",
   source: "{{ queryString|replace:"$","\$"|replaceQuotes }}",
   operationType: '{{ operation|renderOperationTypeName|lowercase } }}',
-  selections: {{ selections|renderTypeScriptSelections:null,operation.variables.count }}
+  selections: {{ selections|renderTypeScriptSelections:null,2 }}
 }
 export default document

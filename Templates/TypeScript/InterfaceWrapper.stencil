@@ -1,34 +1,44 @@
-{% if asFile %}import { ID, Response, GraphSelection } from "../GraphApi"
-{{ header }}
-{% if importEnums %}import * as Enums from "../Enums"{% endif %}
-{% if fragmentNames.count > 0 %}import * as Fragments from "../Fragments"{% endif %}
-{% endif %}
-
-export interface {{ name }} {
-  realized: {% for concreteType in concreteTypeNames %}{{ name }}Realized{{ concreteType }} | {% endfor %}{}{% if baseFields or fragmentSpreads %},{% endif %}
+{% macro buildInterface name baseFields fragmentSpreads concreteTypeNames spacing %}
+{{ spacing }}export interface {{ name }} {
+{{ spacing }}  __typename: {% for concreteType in concreteTypeNames %}'{{ concreteType }}' | {% endfor %}'';
+{{ spacing }}  realized: {% for concreteType in concreteTypeNames %}{{ name }}Realized{{ concreteType }} | {% endfor %}{};
   {% for field in baseFields %}
   {% with field.attributes as attributes %}{% include "Helpers/Attributes.stencil" %}{% endwith %}
-  {{ field|renderPropertyDeclaration:name }}{% if fragmentNames or not forloop.last %},{% endif %}
+{{ spacing }}  {{ field|renderPropertyDeclaration:name }};
   {% endfor %}
   {% for fragment in fragmentSpreads %}
-  {{ fragment.name|lowercasedFirstLetter }}: Fragments.{{ fragment.name }} {% if not forloop.last %},{% endif %}
+{{ spacing }}  {{ fragment.name|lowercasedFirstLetter }}: {{ fragment.name }};
   {% endfor %}
-}
+{{ spacing }}}
+{% endmacro %}
 
-{% for field in fields %}
-{{ field|internalTypeDefinition:name }}
+{% if asFile %}import { ID, GraphSelection, copyWithTypeCondition } from "../GraphApi"
+{{ header }}
+{% if fileReferencedEnums.count > 0 %}import {
+  {% for enum in fileReferencedEnums %}{{ enum }},
+  {% endfor %}
+} from "../Enums"{% endif %}
+{% for fragment in fileReferencedFragments %}import {
+  {{ fragment }},
+  {{ fragment|lowercasedFirstLetter }}Selections
+} from "./{{ fragment }}"
+{% endfor %}
+{% endif %}
+  
+{% if not isNameSpaced %}
+{% call buildInterface name baseFields fragmentSpreads concreteTypeNames "" %}
+{% else %}
+{% call buildInterface name baseFields fragmentNames concreteTypeNames "  " %}
+{% endif %}
+
+{% for field in baseFields %}
+{{ field|internalTypeDefinition:name,isNameSpaced }}
+{{ field|internalInterfaceWrapper:name,isNameSpaced }}
+{{ field|internalUnionWrapper:name,isNameSpaced }}
 {% endfor %}
 
-{% for field in fields %}
-{{ field|internalInterfaceWrapper:name }}
-{% endfor %}
+{{ collectedFields|internalInterfaceTypeDefinitions:name,groupedFragmentSpreads,concreteTypeNames,isNameSpaced }}
 
-{% for field in fields %}
-{{ field|internalUnionWrapper:name }}
-{% endfor %}
-
-{{ collectedFields|internalInterfaceTypeDefinitions:name,groupedFragmentSpreads,concreteTypeNames }}
-
-{% if asFile %}
-export const {{ name|lowercasedFirstLetter }}Selections = {{ fragmentSelections|renderTypeScriptSelections }}
+{% if asFile and fragmentSelections %}
+export const {{ name|lowercasedFirstLetter }}Selections: GraphSelection[] = {{ fragmentSelections|renderTypeScriptSelections:null,0 }}
 {% endif %}

@@ -1,31 +1,41 @@
-{% if asFile %}import { ID, GraphSelection } from "../GraphApi"
-{{ header }}
-{% if importEnums %}import * as Enums from "../Enums"{% endif %}
-{% if fragmentNames.count > 0 %}import * as Fragments from "../Fragments"{% endif %}
-{% endif %}
-
-export interface {{ name }} {
+{% macro buildResponse name fields fragmentNames spacing %}
+{{ spacing }}export interface {{ name }} {
+{{ spacing }}  __typename: '{{ typeName }}';
   {% for field in fields %}
   {% with field.attributes as attributes %}{% include "Helpers/Attributes.stencil" %}{% endwith %}
-  {{ field|renderPropertyDeclaration:name }}{% if fragmentNames or not forloop.last %},{% endif %}
+{{ spacing }}  {{ field|renderPropertyDeclaration:name }};
   {% endfor %}
   {% for fragmentName in fragmentNames %}
-  {{ fragmentName|lowercasedFirstLetter }}: Fragments.{{ fragmentName }}{% if not forloop.last %},{% endif %}
+{{ spacing }}  {{ fragmentName|lowercasedFirstLetter }}: {{ fragmentName }};
   {% endfor %}
-}
+{{ spacing }}}
+{% endmacro %}
 
-{% for field in fields %}
-{{ field|internalTypeDefinition:name }}
+{% if asFile %}import { ID, GraphSelection, copyWithTypeCondition } from "../GraphApi"
+{{ header }}
+{% if fileReferencedEnums.count > 0 %}import {
+  {% for enum in fileReferencedEnums %}{{ enum }},
+  {% endfor %}
+} from "../Enums"{% endif %}
+{% for fragment in fileReferencedFragments %}import {
+  {{ fragment }},
+  {{ fragment|lowercasedFirstLetter }}Selections
+} from "./{{ fragment }}"
 {% endfor %}
+{% endif %}
+
+{% if not isNameSpaced %}
+{% call buildResponse name fields fragmentNames "" %}
+{% else %}
+{% call buildResponse name fields fragmentNames "  " %}
+{% endif %}
 
 {% for field in fields %}
-{{ field|internalInterfaceWrapper:name }}
-{% endfor %}
-
-{% for field in fields %}
-{{ field|internalUnionWrapper:name }}
+{{ field|internalTypeDefinition:name,isNameSpaced }}
+{{ field|internalInterfaceWrapper:name,isNameSpaced }}
+{{ field|internalUnionWrapper:name,isNameSpaced }}
 {% endfor %}
 
 {% if asFile and fragmentSelections %}
-export const {{ name|lowercasedFirstLetter }}Selections = {{ fragmentSelections|renderTypeScriptSelections }}
+export const {{ name|lowercasedFirstLetter }}Selections: GraphSelection[] = {{ fragmentSelections|renderTypeScriptSelections:null,0 }}
 {% endif %}

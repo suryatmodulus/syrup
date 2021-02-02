@@ -1,14 +1,34 @@
-{% if asFile %}import { ID, GraphSelection } from "../GraphApi"
+{% macro buildUnion name fragmentSpreads concreteTypeNames spacing %}
+{{ spacing }}export interface {{ name }} {
+{{ spacing }}  __typename: {% for concreteType in concreteTypeNames %}'{{ concreteType }}' | {% endfor %}'';
+{{ spacing }}  realized: {% for concreteType in concreteTypeNames %}{{ name }}Realized{{ concreteType }} | {% endfor %}{};
+  {% for fragment in fragmentSpreads %}
+{{ spacing }}  {{ fragment.name|lowercasedFirstLetter }}: {{ fragment.name }};
+  {% endfor %}
+{{ spacing }}}
+{% endmacro %}
+
+{% if asFile %}import { ID, GraphSelection, copyWithTypeCondition } from "../GraphApi"
 {{ header }}
-{% if importEnums %}import * as Enums from "../Enums"{% endif %}
-{% if fragmentNames.count > 0 %}import * as Fragments from "../Fragments"{% endif %}
+{% if fileReferencedEnums.count > 0 %}import {
+  {% for enum in fileReferencedEnums %}{{ enum }},
+  {% endfor %}
+} from "../Enums"{% endif %}
+{% for fragment in fileReferencedFragments %}import {
+  {{ fragment }},
+  {{ fragment|lowercasedFirstLetter }}Selections
+} from "./{{ fragment }}"
+{% endfor %}
+{% endif %}
+  
+{% if not isNameSpaced %}
+{% call buildUnion name fragmentSpreads concreteTypeNames "" %}
+{% else %}
+{% call buildUnion name fragmentSpreads concreteTypeNames "  " %}
 {% endif %}
 
-export interface {{ name }} {
-  realized: {% for concreteType in concreteTypeNames %}{{ name }}Realized{{ concreteType }} | {% endfor %}{}{% if baseFields or fragmentSpreads %},{% endif %}
-  {% for fragment in fragmentSpreads %}
-  {{ fragment.name|lowercasedFirstLetter }}: Fragments.{{ fragment.name }} {% if not forloop.last %},{% endif %}
-  {% endfor %}
-}
+{{ collectedFields|internalUnionTypeDefinitions:name,groupedFragmentSpreads,concreteTypeNames,isNameSpaced }}
 
-{{ collectedFields|internalInterfaceTypeDefinitions:name,groupedFragmentSpreads,concreteTypeNames }}
+{% if asFile and fragmentSelections %}
+export const {{ name|lowercasedFirstLetter }}Selections: GraphSelection[] = {{ fragmentSelections|renderTypeScriptSelections:null,0 }}
+{% endif %}

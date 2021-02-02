@@ -47,13 +47,14 @@ final class TypeScriptRenderer: Renderer {
 	) throws -> String {
 		let queryString = intermediateRepresentation.fullQueryString(for: operation).removingLeadingSpaces.removingNewLines
 
-		let importEnums = intermediateRepresentation.referencedEnums.isEmpty == false
-		let importInputs = intermediateRepresentation.referencedInputTypes.isEmpty == false
-		let importFragments = intermediateRepresentation.fragmentDefinitions.isEmpty == false
-
+        let referencedImportsForOperation = referencedImports(
+            selections: operation.selections,
+            intermediateRepresentation: intermediateRepresentation,
+            variables: operation.variables
+        )
 		let collectionResults = try intermediateRepresentation.collectFields(for: operation)
 		let fields = collectionResults.fields.scopedTo(parentFragment: nil)
-		let fragmentSpreads = IntermediateRepresentation.fragments(from: collectionResults.fragmentSpreads, onConcreteType: operation.typeName)
+		let topLevelFragmentSpreads = IntermediateRepresentation.fragments(from: collectionResults.fragmentSpreads, onConcreteType: operation.typeName)
 		let operationTypeName = "\(operation.type)".capitalized
 		let name = "\(operation.name)\(operationTypeName)Data"
 
@@ -64,15 +65,38 @@ final class TypeScriptRenderer: Renderer {
 			"fieldPrefix": name + ".",
 			"queryString": queryString,
 			"fields": fields,
-			"fragmentNames": fragmentSpreads.map { $0.name },
-			"importEnums": importEnums,
-			"importInputs": importInputs,
-			"importFragments": importFragments,
+			"topLevelFragmentNames": topLevelFragmentSpreads.map { $0.name },
+            "allReferencedFragments": referencedImportsForOperation.fragments,
+            "allReferencedEnums": referencedImportsForOperation.enums,
+            "allReferencedInputTypes": referencedImportsForOperation.inputs,
 			"selections": operationSelections.selectionSet
 		]
 
 		return try render(template: "Operation", asFile: true, context: context)
 	}
+    
+    override func renderInputTypes(intermediateRepresentation: IntermediateRepresentation) throws -> [String] {
+        var rendered: [String] = []
+
+        for inputType in intermediateRepresentation.referencedInputTypes {
+            var inputImports: [String] = []
+            var enumImports: [String] = []
+            
+            for inputField in inputType.inputFields {
+                addEnumAndInputImportIfFound(variableType: inputField.type, &inputImports, &enumImports)
+            }
+            
+            let context: [String: Any] = [
+                "inputType": inputType,
+                "inputImports": inputImports,
+                "enumImports": enumImports,
+                "moduleName": config.project.moduleName,
+                "importEnums": true
+            ]
+            rendered.append(try render(template: "InputType", asFile: true, context: context))
+        }
+        return rendered
+    }
 
 	func renderGraphApi() throws -> String {
 		try render(template: "GraphApi", context: [:])
@@ -90,23 +114,28 @@ final class TypeScriptRenderer: Renderer {
 	
 	func renderFragmentEntryPoint(intermediateRepresentation: IntermediateRepresentation) throws -> String {
 		let context: [String: Any] = ["fragmentNames": intermediateRepresentation.fragmentDefinitions.map { $0.name }.sorted()]
-		return try render(template: "InterfaceWrapperIndex", asFile: true, context: context)
+		return try render(template: "FragmentIndex", asFile: true, context: context)
 	}
 
 	func renderResponseType(
 		name: String,
+        typeName: String,
 		fields: [CollectedField],
 		fragmentNames: [String],
 		fragmentSelections: SelectionSetVisitor.FragmentDefinition? = nil,
 		asFile: Bool = false,
-		importEnums: Bool = false
+        referencedResponseImports: (fragments: [String], enums: [String]) = (fragments: [], enums: []),
+        isNameSpaced: Bool = false
 	) throws -> String {
 		var context: [String: Any] = [
 			"name": name,
+            "typeName": typeName,
 			"fields": fields,
 			"fragmentNames": fragmentNames,
-			"importEnums": importEnums,
-			"fragmentSelections": fragmentSelections?.selectionSet ?? []
+            "fileReferencedFragments": referencedResponseImports.fragments,
+            "fileReferencedEnums": referencedResponseImports.enums,
+			"fragmentSelections": fragmentSelections?.selectionSet ?? [],
+            "isNameSpaced": isNameSpaced
 		]
 		if asFile {
 			let containsFragment = !fragmentNames.isEmpty || checkContainsFragment(fields: fields)
@@ -117,8 +146,8 @@ final class TypeScriptRenderer: Renderer {
 
 	func renderFragmentDefinitions(intermediateRepresentation: IntermediateRepresentation, selectionSets: SelectionSetVisitor.Results) throws -> [String] {
 		var rendered: [String] = []
-		let importEnums = intermediateRepresentation.referencedEnums.isEmpty == false
 		for fragment in intermediateRepresentation.fragmentDefinitions {
+            let referencedImportsForFragment = referencedImports(selections: fragment.selections, intermediateRepresentation: intermediateRepresentation)
 			let collectionResults = try intermediateRepresentation.collectFields(for: fragment)
 			let fields = collectionResults.fields.scopedTo(parentFragment: fragment.name)
 			let definition: String
@@ -126,17 +155,17 @@ final class TypeScriptRenderer: Renderer {
 			case .interface(let interfaceType):
 				let fragmentSelections = selectionSets.fragmentDefinition(named: fragment.name)
 				let groupedFragmentSpreads = IntermediateRepresentation.groupedFragmentSpreads(fragmentSpreads: collectionResults.fragmentSpreads, inheritedType: interfaceType)
-				definition = try renderInterfaceWrapper(name: fragment.name, scopedFields: fields, collectedFields: collectionResults.fields, interfaceTypeName: interfaceType, groupedFragmentSpreads: groupedFragmentSpreads, fragmentSelections: fragmentSelections, asFile: true, importEnums: importEnums)
+				definition = try renderInterfaceWrapper(name: fragment.name, scopedFields: fields, collectedFields: collectionResults.fields, interfaceTypeName: interfaceType, groupedFragmentSpreads: groupedFragmentSpreads, fragmentSelections: fragmentSelections, asFile: true, referencedResponseImports: (fragments: referencedImportsForFragment.fragments, enums: referencedImportsForFragment.enums))
 			case .union(let unionType):
 				let fragmentSelections = selectionSets.fragmentDefinition(named: fragment.name)
 				let groupedFragmentSpreads = IntermediateRepresentation.groupedFragmentSpreads(fragmentSpreads: collectionResults.fragmentSpreads, inheritedType: unionType)
-				definition = try renderUnionWrapper(name: fragment.name, unionTypeName: unionType, collectedFields: fields, groupedFragmentSpreads: groupedFragmentSpreads, fragmentSelections: fragmentSelections, asFile: true, importEnums: importEnums)
+				definition = try renderUnionWrapper(name: fragment.name, unionTypeName: unionType, collectedFields: fields, groupedFragmentSpreads: groupedFragmentSpreads, fragmentSelections: fragmentSelections, asFile: true, referencedResponseImports: (fragments: referencedImportsForFragment.fragments, enums: referencedImportsForFragment.enums))
 			case .object:
 				let fragmentSelections = selectionSets.fragmentDefinition(named: fragment.name)
 				let fragmentSpreads = IntermediateRepresentation.fragments(from: collectionResults.fragmentSpreads, onConcreteType: fragment.typeCondition.name)
-				definition = try renderResponseType(name: fragment.name, fields: fields, fragmentNames: fragmentSpreads.map {
+                definition = try renderResponseType(name: fragment.name, typeName: fragment.typeCondition.name, fields: fields, fragmentNames: fragmentSpreads.map {
 					$0.name
-				}, fragmentSelections: fragmentSelections, asFile: true, importEnums: importEnums)
+                }, fragmentSelections: fragmentSelections, asFile: true, referencedResponseImports: (fragments: referencedImportsForFragment.fragments, enums: referencedImportsForFragment.enums))
 			}
 			rendered.append(definition)
 		}
@@ -173,7 +202,8 @@ final class TypeScriptRenderer: Renderer {
 		groupedFragmentSpreads: [String: [IntermediateRepresentation.SelectionPath.PathComponent.Fragment]],
 		fragmentSelections: SelectionSetVisitor.FragmentDefinition? = nil,
 		asFile: Bool = false,
-		importEnums: Bool = false
+        referencedResponseImports: (fragments: [String], enums: [String]) = (fragments: [], enums: []),
+        isNameSpaced: Bool = false
 	) throws -> String {
 		let groupedFields = collectedFields.groupedFields(fromUnionType: unionTypeName)
 		var concreteTypeNames = groupedFields.map {
@@ -193,8 +223,10 @@ final class TypeScriptRenderer: Renderer {
 			"groupedFragmentSpreads": groupedFragmentSpreads,
 			"collectedFields": collectedFields,
 			"package": "fragments",
-			"importEnums": importEnums,
-			"fragmentSelections": fragmentSelections?.selectionSet ?? []
+            "fileReferencedFragments": referencedResponseImports.fragments,
+            "fileReferencedEnums": referencedResponseImports.enums,
+			"fragmentSelections": fragmentSelections?.selectionSet ?? [],
+            "isNameSpaced": isNameSpaced
 		]
 		return try render(template: "UnionWrapper", asFile: asFile, context: context)
 	}
@@ -207,7 +239,8 @@ final class TypeScriptRenderer: Renderer {
 		groupedFragmentSpreads: [String: [IntermediateRepresentation.SelectionPath.PathComponent.Fragment]],
 		fragmentSelections: SelectionSetVisitor.FragmentDefinition? = nil,
 		asFile: Bool = false,
-		importEnums: Bool = false
+        referencedResponseImports: (fragments: [String], enums: [String]) = (fragments: [], enums: []),
+        isNameSpaced: Bool = false
 	) throws -> String {
 		let groupedFields = try scopedFields.groupedFields(fromInterfaceType: interfaceTypeName)
 		let baseFields = scopedFields.baseFields(fromInterfaceType: interfaceTypeName)
@@ -227,10 +260,89 @@ final class TypeScriptRenderer: Renderer {
 			"fragmentSpreads": fragmentSpreads,
 			"groupedFragmentSpreads": groupedFragmentSpreads,
 			"fragmentSelections": fragmentSelections?.selectionSet ?? [],
-			"importEnums": importEnums
+            "fileReferencedFragments": referencedResponseImports.fragments,
+            "fileReferencedEnums": referencedResponseImports.enums,
+            "isNameSpaced": isNameSpaced
 		]
 		return try render(template: "InterfaceWrapper", asFile: asFile, context: context)
 	}
+    
+    private func referencedImports(
+        selections: [IntermediateRepresentation.Selection],
+        intermediateRepresentation: IntermediateRepresentation,
+        variables: [IntermediateRepresentation.Variable] = []
+    ) -> (
+        fragments: [String],
+        enums: [String],
+        inputs: [String]
+    ) {
+        func readFieldType(fieldType: IntermediateRepresentation.FieldType , _ fragmentImports: inout [String], _ enumImports: inout [String]) {
+            switch fieldType {
+            case .nonNull(let fieldType):
+                readFieldType(fieldType: fieldType, &fragmentImports, &enumImports)
+            case .list(let fieldType):
+                readFieldType(fieldType: fieldType, &fragmentImports, &enumImports)
+            case .enum(let enumName):
+                enumImports.append(enumName)
+            case .interface(let interface):
+                let imports = referencedImports(selections: interface.selectionSet, intermediateRepresentation: intermediateRepresentation)
+                fragmentImports.append(contentsOf: imports.fragments)
+                enumImports.append(contentsOf: imports.enums)
+            case .union(let union):
+                let imports = referencedImports(selections: union.selectionSet, intermediateRepresentation: intermediateRepresentation)
+                fragmentImports.append(contentsOf: imports.fragments)
+                enumImports.append(contentsOf: imports.enums)
+            case .object(let object):
+                let imports = referencedImports(selections: object.selectionSet, intermediateRepresentation: intermediateRepresentation)
+                fragmentImports.append(contentsOf: imports.fragments)
+                enumImports.append(contentsOf: imports.enums)
+            default:
+                break
+            }
+        }
+        
+        var fragments: [String] = []
+        var enums: [String] = []
+        var inputs: [String] = []
+        
+        for variable in variables {
+            addEnumAndInputImportIfFound(variableType: variable.type, &inputs, &enums)
+        }
+        
+        for selection in selections {
+            switch selection {
+            case .field(let field):
+                readFieldType(fieldType: field.type, &fragments, &enums)
+            case .fragmentSpread(let fragment):
+                fragments.append(fragment.name)
+            case .inlineFragment(let inlineFragment):
+                let imports = referencedImports(selections: inlineFragment.selectionSet, intermediateRepresentation: intermediateRepresentation)
+                fragments.append(contentsOf: imports.fragments)
+                enums.append(contentsOf: imports.enums)
+            }
+        }
+        
+        return (
+            fragments: fragments.unique,
+            enums: enums.unique,
+            inputs: inputs.unique
+        )
+    }
+    
+    private func addEnumAndInputImportIfFound(variableType: IntermediateRepresentation.Variable.VariableType, _ inputImports: inout [String], _ enumImports: inout [String]) {
+        switch variableType {
+        case .enum(let enumName):
+            enumImports.append(enumName)
+        case .input(let inputName):
+            inputImports.append(inputName)
+        case .nonNull(let wrappedType):
+            addEnumAndInputImportIfFound(variableType: wrappedType, &inputImports, &enumImports)
+        case .list(let wrappedType):
+            addEnumAndInputImportIfFound(variableType: wrappedType, &inputImports, &enumImports)
+        default:
+            break
+        }
+    }
 
 	private static func customExtension() -> Extension {
 		let customExtension = Extension()

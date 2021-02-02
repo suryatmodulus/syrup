@@ -328,6 +328,8 @@ class SelectionSetExtension: Extension {
 				return ""
 		}
 		let typeCondition = args.first as? String
+        let spacingAmount = args[1] as? Int ?? 0
+        let spacing = String(repeating: " ", count: spacingAmount)
 		
 		var fieldRenders: [String] = []
 		var fragmentSpreadRenders: [String] = []
@@ -348,20 +350,23 @@ class SelectionSetExtension: Extension {
 			if let field = selection.field {
 				if field.name != "__typename" {
 					let name = field.alias ?? field.name
-					var render = "\n{"
-					render.append("\nname: \"\(name)\",")
-					render.append("\ntype: \(renderTypeScriptTypeCondition(field.type)),")
-					render.append("\narguments: \(renderTypeScriptArguments(field.arguments)),")
-					render.append("\npassedGID: \(renderTypeScriptGIDPassed(field)),")
-					render.append("\ntypeCondition: \(renderTypeScriptTypeCondition(field.parentType)),")
-					render.append("\ndirective: \(renderTypeScriptConditionalDirective(field)),")
+					var render = "\n\(spacing)  {"
+					render.append("\n\(spacing)    name: \"\(name)\",")
+					render.append("\n\(spacing)    type: \(renderTypeScriptTypeCondition(field.type)),")
+					render.append("\n\(spacing)    arguments: \(renderTypeScriptArguments(field.arguments)),")
+					render.append("\n\(spacing)    passedGID: \(renderTypeScriptGIDPassed(field)),")
+					render.append("\n\(spacing)    typeCondition: \(renderTypeScriptTypeCondition(field.parentType)),")
+					render.append("\n\(spacing)    directive: \(renderTypeScriptConditionalDirective(field)),")
 
-					var typeConditionArgs: [String] = []
+                    let nextSpacingAmount = spacingAmount+4
+					var typeConditionArgs: [Any?] = []
 					if shouldPassTypeCondition(field.type) {
-						typeConditionArgs = [renderTypeScriptTypeCondition(field.type)]
-					}
-					render.append("\nselections: \(renderTypeScriptSelections(field.selectionSet, args: typeConditionArgs))")
-					render.append("}")
+						typeConditionArgs = [renderTypeScriptTypeCondition(field.type), nextSpacingAmount]
+                    } else {
+                        typeConditionArgs = [nil, nextSpacingAmount]
+                    }
+					render.append("\n\(spacing)    selections: \(renderTypeScriptSelections(field.selectionSet, args: typeConditionArgs))")
+					render.append("\n\(spacing)  }")
 					fieldRenders.append(render)
 				}
 			}
@@ -372,11 +377,16 @@ class SelectionSetExtension: Extension {
 		var addFragmentSpreadRenders = ""
 		var renderPassedTypeCondition = ""
 		if let typeCondition = typeCondition {
-			renderPassedTypeCondition = ".map(x => x.copyWithTypeCondition(\"\(typeCondition)\"))"
+			renderPassedTypeCondition = ".map(x => copyWithTypeCondition(x, \(typeCondition)))"
 		}
 		for fragmentSpread in fragmentSpreadRenders {
-			addFragmentSpreadRenders += ".concat(Fragments.\(fragmentSpread.lowercasedFirstLetter)Selections)" + renderPassedTypeCondition
+			addFragmentSpreadRenders += ".concat(\(fragmentSpread.lowercasedFirstLetter)Selections)" + renderPassedTypeCondition
 		}
-		return "[\((fieldRenders).joined(separator: ", "))]" + addFragmentSpreadRenders
+        
+        if (fieldRenders.isEmpty) {
+            return "([\((fieldRenders).joined(separator: ", "))] as GraphSelection[])" + addFragmentSpreadRenders
+        } else {
+            return "([\((fieldRenders).joined(separator: ", "))\n\(spacing)] as GraphSelection[])" + addFragmentSpreadRenders
+        }
 	}
 }

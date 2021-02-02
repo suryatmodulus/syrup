@@ -1,7 +1,11 @@
 import { ID } from "../GraphApi"
 {{ header }}
-{% if importEnums %}import * as Enums from "../Enums"{% endif %}
-{% if inputType.inputFields.count > 0 %}import * as Inputs from "../Inputs"{% endif %}
+{% if enumImports.count > 0 %}import {
+    {% for enum in enumImports %}{{ enum }},
+    {% endfor %}
+} from "../Enums"{% endif %}
+{% if inputImports.count > 0 %}{% for input in inputImports %}import { {{ input }} } from "./{{ input }}"
+{% endfor %}{% endif %}
 
 export interface {{ inputType.name }} {
   {{ inputType.inputFields|renderTypeScriptInputArguments }}

@@ -35,7 +35,7 @@ enum TypeScriptTypeAnnotationRenderer {
 		switch scalarType {
 		case let enumType as IntermediateRepresentation.EnumFieldType:
 			let name = enumType.name
-			rendered = "Enums.\(name)"
+			rendered = "\(name)"
 		case let scalarType as IntermediateRepresentation.ScalarFieldType:
 			rendered = scalarType.scalar.nativeType
 		case let listType as IntermediateRepresentation.ListFieldType:
