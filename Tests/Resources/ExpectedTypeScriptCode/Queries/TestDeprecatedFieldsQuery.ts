@@ -2,39 +2,7 @@ import { ID, GraphSelection, SyrupOperation, copyWithTypeCondition } from "../Gr
 
 export namespace TestDeprecatedFieldsQueryData {
   export interface Variables {
-    first?: number | undefined
-  }
-  export interface Channels {
-    __typename: 'ChannelConnection';
-    /**
-     * A list of edges.
-     */
-    edges: ChannelsEdges[];
-  }
-  export interface ChannelsEdges {
-    __typename: 'ChannelEdge';
-    /**
-     * The item at the end of ChannelEdge.
-     */
-    node: ChannelsEdgesNode;
-  }
-  export interface ChannelsEdgesNode {
-    __typename: 'Channel';
-    /**
-     * Underlying app used by the channel.
-     */
-    app: ChannelsEdgesNodeApp;
-  }
-  export interface ChannelsEdgesNodeApp {
-    __typename: 'App';
-    /**
-     * Globally unique identifier.
-     */
-    id: ID;
-    /**
-     * Icon that represents the app.
-     */
-    icon: ChannelsEdgesNodeAppIcon;
+    first?: number | undefined;
   }
   export interface ChannelsEdgesNodeAppIcon {
     __typename: 'Image';
@@ -78,6 +46,38 @@ export namespace TestDeprecatedFieldsQueryData {
      * ```
      */
     src: string;
+  }
+  export interface ChannelsEdgesNodeApp {
+    __typename: 'App';
+    /**
+     * Globally unique identifier.
+     */
+    id: ID;
+    /**
+     * Icon that represents the app.
+     */
+    icon: ChannelsEdgesNodeAppIcon;
+  }
+  export interface ChannelsEdgesNode {
+    __typename: 'Channel';
+    /**
+     * Underlying app used by the channel.
+     */
+    app: ChannelsEdgesNodeApp;
+  }
+  export interface ChannelsEdges {
+    __typename: 'ChannelEdge';
+    /**
+     * The item at the end of ChannelEdge.
+     */
+    node: ChannelsEdgesNode;
+  }
+  export interface Channels {
+    __typename: 'ChannelConnection';
+    /**
+     * A list of edges.
+     */
+    edges: ChannelsEdges[];
   }
 }
 

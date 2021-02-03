@@ -48,7 +48,7 @@ enum TypeScriptTypeAnnotationRenderer {
 		if nonNull {
 			return rendered
 		} else {
-			return "\(rendered) | undefined"
+			return "\(rendered) | null"
 		}
 	}
 	
@@ -91,7 +91,7 @@ enum TypeScriptTypeAnnotationRenderer {
 		if nonNull {
 			return rendered
 		} else {
-			return "\(rendered) | undefined"
+			return "\(rendered) | null"
 		}
 	}
 }

@@ -2,7 +2,43 @@ import { ID, GraphSelection, SyrupOperation, copyWithTypeCondition } from "../Gr
 
 export namespace TestQuery10QueryData {
   export interface Variables {
-    priceRuleId: ID
+    priceRuleId: ID;
+  }
+  export interface PriceRuleValueRealizedPriceRuleFixedAmountValue {
+    __typename: 'PriceRuleFixedAmountValue';
+    /**
+     * The monetary value of the price rule.
+     */
+    amount: number;
+  }
+  export interface PriceRuleValueRealizedPriceRulePercentValue {
+    __typename: 'PriceRulePercentValue';
+    /**
+     * The percent value of the price rule.
+     */
+    percentage: number;
+  }
+  export interface PriceRuleValue {
+    __typename: 'PriceRuleFixedAmountValue' | 'PriceRulePercentValue';
+    realized: PriceRuleValueRealizedPriceRuleFixedAmountValue | PriceRuleValueRealizedPriceRulePercentValue;
+  }
+  export interface PriceRuleValueV2RealizedMoneyV2 {
+    __typename: 'MoneyV2';
+    /**
+     * Decimal money amount.
+     */
+    amount: number;
+  }
+  export interface PriceRuleValueV2RealizedPricingPercentageValue {
+    __typename: 'PricingPercentageValue';
+    /**
+     * The percentage value of the object.
+     */
+    percentage: number;
+  }
+  export interface PriceRuleValueV2 {
+    __typename: 'MoneyV2' | 'PricingPercentageValue';
+    realized: PriceRuleValueV2RealizedMoneyV2 | PriceRuleValueV2RealizedPricingPercentageValue;
   }
   export interface PriceRule {
     __typename: 'PriceRule';
@@ -21,42 +57,6 @@ export namespace TestQuery10QueryData {
      */
     valueV2: PriceRuleValueV2;
   }
-  export interface PriceRuleValue {
-    __typename: 'PriceRuleFixedAmountValue' | 'PriceRulePercentValue' | '';
-    realized: PriceRuleValueRealizedPriceRuleFixedAmountValue | PriceRuleValueRealizedPriceRulePercentValue | {};
-  }
-  export interface PriceRuleValueRealizedPriceRuleFixedAmountValue {
-    __typename: 'PriceRuleFixedAmountValue';
-    /**
-     * The monetary value of the price rule.
-     */
-    amount: number;
-  }
-  export interface PriceRuleValueRealizedPriceRulePercentValue {
-    __typename: 'PriceRulePercentValue';
-    /**
-     * The percent value of the price rule.
-     */
-    percentage: number;
-  }
-  export interface PriceRuleValueV2 {
-    __typename: 'MoneyV2' | 'PricingPercentageValue' | '';
-    realized: PriceRuleValueV2RealizedMoneyV2 | PriceRuleValueV2RealizedPricingPercentageValue | {};
-  }
-  export interface PriceRuleValueV2RealizedMoneyV2 {
-    __typename: 'MoneyV2';
-    /**
-     * Decimal money amount.
-     */
-    amount: number;
-  }
-  export interface PriceRuleValueV2RealizedPricingPercentageValue {
-    __typename: 'PricingPercentageValue';
-    /**
-     * The percentage value of the object.
-     */
-    percentage: number;
-  }
 }
 
 export interface TestQuery10QueryData {
@@ -64,7 +64,7 @@ export interface TestQuery10QueryData {
   /**
    * Lookup a price rule by ID.
    */
-  priceRule: TestQuery10QueryData.PriceRule | undefined
+  priceRule?: TestQuery10QueryData.PriceRule | null
 }
 
 const document: SyrupOperation<TestQuery10QueryData, TestQuery10QueryData.Variables> = {

@@ -2,36 +2,7 @@ import { ID, GraphSelection, SyrupOperation, copyWithTypeCondition } from "../Gr
 
 export namespace TestQuery11QueryData {
   export interface Variables {
-    productId: ID
-  }
-  export interface Node {
-    __typename: 'Product' | 'ProductOption' | '';
-    realized: NodeRealizedProduct | NodeRealizedProductOption | {};
-  }
-  export interface NodeRealizedProduct {
-    __typename: 'Product';
-    /**
-     * Globally unique identifier.
-     */
-    id: ID;
-    /**
-     * A list of the collections that include the product.
-     */
-    collections: NodeRealizedProductCollections;
-  }
-  export interface NodeRealizedProductCollections {
-    __typename: 'CollectionConnection';
-    /**
-     * A list of edges.
-     */
-    edges: NodeRealizedProductCollectionsEdges[];
-  }
-  export interface NodeRealizedProductCollectionsEdges {
-    __typename: 'CollectionEdge';
-    /**
-     * The item at the end of CollectionEdge.
-     */
-    node: NodeRealizedProductCollectionsEdgesNode;
+    productId: ID;
   }
   export interface NodeRealizedProductCollectionsEdgesNode {
     __typename: 'Collection';
@@ -44,12 +15,41 @@ export namespace TestQuery11QueryData {
      */
     title: string;
   }
+  export interface NodeRealizedProductCollectionsEdges {
+    __typename: 'CollectionEdge';
+    /**
+     * The item at the end of CollectionEdge.
+     */
+    node: NodeRealizedProductCollectionsEdgesNode;
+  }
+  export interface NodeRealizedProductCollections {
+    __typename: 'CollectionConnection';
+    /**
+     * A list of edges.
+     */
+    edges: NodeRealizedProductCollectionsEdges[];
+  }
+  export interface NodeRealizedProduct {
+    __typename: 'Product';
+    /**
+     * Globally unique identifier.
+     */
+    id: ID;
+    /**
+     * A list of the collections that include the product.
+     */
+    collections: NodeRealizedProductCollections;
+  }
   export interface NodeRealizedProductOption {
     __typename: 'ProductOption';
     /**
      * Globally unique identifier.
      */
     id: ID;
+  }
+  export interface Node {
+    __typename: 'Product' | 'ProductOption';
+    realized: NodeRealizedProduct | NodeRealizedProductOption;
   }
 }
 
@@ -58,7 +58,7 @@ export interface TestQuery11QueryData {
   /**
    * Returns a specific node by ID.
    */
-  node: TestQuery11QueryData.Node | undefined
+  node?: TestQuery11QueryData.Node | null
 }
 
 const document: SyrupOperation<TestQuery11QueryData, TestQuery11QueryData.Variables> = {

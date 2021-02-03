@@ -1,6 +1,28 @@
 import { ID, GraphSelection, SyrupOperation, copyWithTypeCondition } from "../GraphApi"
 
 export namespace TestQuery3QueryData {
+  export interface CustomerAddresses {
+    __typename: 'MailingAddress';
+    /**
+     * The name of the country.
+     */
+    country?: string | null;
+  }
+  export interface CustomerDefaultAddress {
+    __typename: 'MailingAddress';
+    /**
+     * The name of the city, district, village, or town.
+     */
+    city?: string | null;
+    /**
+     * The longitude coordinate of the customer address.
+     */
+    longitude?: number | null;
+    /**
+     * The latitude coordinate of the customer address.
+     */
+    latitude?: number | null;
+  }
   export interface Customer {
     __typename: 'Customer';
     /**
@@ -10,29 +32,7 @@ export namespace TestQuery3QueryData {
     /**
      * The default address associated with the customer.
      */
-    defaultAddress: CustomerDefaultAddress | undefined;
-  }
-  export interface CustomerAddresses {
-    __typename: 'MailingAddress';
-    /**
-     * The name of the country.
-     */
-    country: string | undefined;
-  }
-  export interface CustomerDefaultAddress {
-    __typename: 'MailingAddress';
-    /**
-     * The name of the city, district, village, or town.
-     */
-    city: string | undefined;
-    /**
-     * The longitude coordinate of the customer address.
-     */
-    longitude: number | undefined;
-    /**
-     * The latitude coordinate of the customer address.
-     */
-    latitude: number | undefined;
+    defaultAddress?: CustomerDefaultAddress | null;
   }
 }
 
@@ -41,7 +41,7 @@ export interface TestQuery3QueryData {
   /**
    * Returns a Customer resource by ID.
    */
-  customer: TestQuery3QueryData.Customer | undefined
+  customer?: TestQuery3QueryData.Customer | null
 }
 
 const document: SyrupOperation<TestQuery3QueryData, {}> = {

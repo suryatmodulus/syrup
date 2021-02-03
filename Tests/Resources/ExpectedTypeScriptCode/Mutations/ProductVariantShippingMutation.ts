@@ -8,18 +8,7 @@ import {
 
 export namespace ProductVariantShippingMutationData {
   export interface Variables {
-    variantInput: ProductVariantInput
-  }
-  export interface ProductVariantUpdate {
-    __typename: 'ProductVariantUpdatePayload';
-    /**
-     * The updated variant.
-     */
-    productVariant: ProductVariantUpdateProductVariant | undefined;
-    /**
-     * List of errors that occurred executing the mutation.
-     */
-    userErrors: ProductVariantUpdateUserErrors[];
+    variantInput: ProductVariantInput;
   }
   export interface ProductVariantUpdateProductVariant {
     __typename: 'ProductVariant';
@@ -30,7 +19,7 @@ export namespace ProductVariantShippingMutationData {
     /**
      * The weight of the product variant in the unit system specified with weight_unit.
      */
-    weight: number | undefined;
+    weight?: number | null;
     /**
      * The unit of measurement that applies to the product variant's weight. If you don't specify a value for weight_unit, then the shop's default unit of measurement is applied. Valid values: `g`, `kg`, `oz`, `lb`.
      */
@@ -46,7 +35,7 @@ export namespace ProductVariantShippingMutationData {
      *
      * @deprecated Use `InventoryItem.harmonizedSystemCode` instead.
      */
-    harmonizedSystemCode: string | undefined;
+    harmonizedSystemCode?: string | null;
   }
   export interface ProductVariantUpdateUserErrors {
     __typename: 'UserError';
@@ -57,7 +46,18 @@ export namespace ProductVariantShippingMutationData {
     /**
      * Path to the input field which caused the error.
      */
-    field: string[] | undefined;
+    field?: string[] | null;
+  }
+  export interface ProductVariantUpdate {
+    __typename: 'ProductVariantUpdatePayload';
+    /**
+     * The updated variant.
+     */
+    productVariant?: ProductVariantUpdateProductVariant | null;
+    /**
+     * List of errors that occurred executing the mutation.
+     */
+    userErrors: ProductVariantUpdateUserErrors[];
   }
 }
 
@@ -66,7 +66,7 @@ export interface ProductVariantShippingMutationData {
   /**
    * Updates a product variant.
    */
-  productVariantUpdate: ProductVariantShippingMutationData.ProductVariantUpdate | undefined
+  productVariantUpdate?: ProductVariantShippingMutationData.ProductVariantUpdate | null
 }
 
 const document: SyrupOperation<ProductVariantShippingMutationData, ProductVariantShippingMutationData.Variables> = {

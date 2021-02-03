@@ -1,8 +1,8 @@
 import { ID, GraphSelection, SyrupOperation, copyWithTypeCondition } from "../GraphApi"
 {{ header }}
 {% if allReferencedFragments.count > 0 %}import {
-  {% for name in allReferencedFragments %}{{ name }},
-  {{ name|lowercasedFirstLetter }}Selections,
+  {% for name in allReferencedFragments %}{{ name }}FragmentData,
+  {{ name|lowercasedFirstLetter }}FragmentDataSelections,
   {% endfor %}
 } from "../Fragments"{% endif %}
 {% if allReferencedInputTypes.count > 0 %}import {

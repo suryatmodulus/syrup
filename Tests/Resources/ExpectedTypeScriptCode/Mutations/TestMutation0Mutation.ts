@@ -5,14 +5,7 @@ import {
 
 export namespace TestMutation0MutationData {
   export interface Variables {
-    input: CustomerInput
-  }
-  export interface CustomerUpdate {
-    __typename: 'CustomerUpdatePayload';
-    /**
-     * The updated customer.
-     */
-    customer: CustomerUpdateCustomer | undefined;
+    input: CustomerInput;
   }
   export interface CustomerUpdateCustomer {
     __typename: 'Customer';
@@ -21,6 +14,13 @@ export namespace TestMutation0MutationData {
      */
     id: ID;
   }
+  export interface CustomerUpdate {
+    __typename: 'CustomerUpdatePayload';
+    /**
+     * The updated customer.
+     */
+    customer?: CustomerUpdateCustomer | null;
+  }
 }
 
 export interface TestMutation0MutationData {
@@ -28,7 +28,7 @@ export interface TestMutation0MutationData {
   /**
    * Updates a customer's attributes.
    */
-  customerUpdate: TestMutation0MutationData.CustomerUpdate | undefined
+  customerUpdate?: TestMutation0MutationData.CustomerUpdate | null
 }
 
 const document: SyrupOperation<TestMutation0MutationData, TestMutation0MutationData.Variables> = {

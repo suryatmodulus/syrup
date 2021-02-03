@@ -1,6 +1,56 @@
 import { ID, GraphSelection, SyrupOperation, copyWithTypeCondition } from "../GraphApi"
 
 export namespace TestQuery8QueryData {
+  export interface ShopFirstProductEdgesNode {
+    __typename: 'Product';
+    /**
+     * The title of the product.
+     */
+    title: string;
+  }
+  export interface ShopFirstProductEdges {
+    __typename: 'ProductEdge';
+    /**
+     * A cursor for use in pagination.
+     */
+    cursor: string;
+    /**
+     * The item at the end of ProductEdge.
+     */
+    node: ShopFirstProductEdgesNode;
+  }
+  export interface ShopFirstProduct {
+    __typename: 'ProductConnection';
+    /**
+     * A list of edges.
+     */
+    edges: ShopFirstProductEdges[];
+  }
+  export interface ShopLastProductEdgesNode {
+    __typename: 'Product';
+    /**
+     * The title of the product.
+     */
+    title: string;
+  }
+  export interface ShopLastProductEdges {
+    __typename: 'ProductEdge';
+    /**
+     * A cursor for use in pagination.
+     */
+    cursor: string;
+    /**
+     * The item at the end of ProductEdge.
+     */
+    node: ShopLastProductEdgesNode;
+  }
+  export interface ShopLastProduct {
+    __typename: 'ProductConnection';
+    /**
+     * A list of edges.
+     */
+    edges: ShopLastProductEdges[];
+  }
   export interface Shop {
     __typename: 'Shop';
     /**
@@ -19,56 +69,6 @@ export namespace TestQuery8QueryData {
      * @deprecated Use `QueryRoot.products`.
      */
     lastProduct: ShopLastProduct;
-  }
-  export interface ShopFirstProduct {
-    __typename: 'ProductConnection';
-    /**
-     * A list of edges.
-     */
-    edges: ShopFirstProductEdges[];
-  }
-  export interface ShopFirstProductEdges {
-    __typename: 'ProductEdge';
-    /**
-     * A cursor for use in pagination.
-     */
-    cursor: string;
-    /**
-     * The item at the end of ProductEdge.
-     */
-    node: ShopFirstProductEdgesNode;
-  }
-  export interface ShopFirstProductEdgesNode {
-    __typename: 'Product';
-    /**
-     * The title of the product.
-     */
-    title: string;
-  }
-  export interface ShopLastProduct {
-    __typename: 'ProductConnection';
-    /**
-     * A list of edges.
-     */
-    edges: ShopLastProductEdges[];
-  }
-  export interface ShopLastProductEdges {
-    __typename: 'ProductEdge';
-    /**
-     * A cursor for use in pagination.
-     */
-    cursor: string;
-    /**
-     * The item at the end of ProductEdge.
-     */
-    node: ShopLastProductEdgesNode;
-  }
-  export interface ShopLastProductEdgesNode {
-    __typename: 'Product';
-    /**
-     * The title of the product.
-     */
-    title: string;
   }
 }
 

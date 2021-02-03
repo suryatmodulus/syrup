@@ -2,7 +2,7 @@
 
 import { ID, GraphSelection, copyWithTypeCondition } from "../GraphApi"
 
-export interface ProductNodeTitle {
+export interface ProductNodeTitleFragmentData {
   __typename: 'Product';
 
   /**
@@ -11,7 +11,7 @@ export interface ProductNodeTitle {
   title: string;
 }
 
-export const productNodeTitleSelections: GraphSelection[] = ([
+export const productNodeTitleFragmentDataSelections: GraphSelection[] = ([
   {
     name: "title",
     type: { name: "String", definedType: "Scalar" },

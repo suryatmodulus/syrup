@@ -1,14 +1,22 @@
-{% macro buildResponse name fields fragmentNames spacing %}
+{% macro buildResponse name fields fragmentNames spacing fieldPrefix %}
 {{ spacing }}export interface {{ name }} {
 {{ spacing }}  __typename: '{{ typeName }}';
   {% for field in fields %}
   {% with field.attributes as attributes %}{% include "Helpers/Attributes.stencil" %}{% endwith %}
-{{ spacing }}  {{ field|renderPropertyDeclaration:name }};
+{{ spacing }}  {{ field|renderPropertyDeclaration:fieldPrefix }};
   {% endfor %}
   {% for fragmentName in fragmentNames %}
-{{ spacing }}  {{ fragmentName|lowercasedFirstLetter }}: {{ fragmentName }};
+{{ spacing }}  {{ fragmentName|lowercasedFirstLetter }}: {{ fragmentName }}FragmentData;
   {% endfor %}
 {{ spacing }}}
+{% endmacro %}
+
+{% macro renderFields fields name %}
+{% for field in fields %}
+{{ field|internalTypeDefinition:name }}
+{{ field|internalInterfaceWrapper:name }}
+{{ field|internalUnionWrapper:name }}
+{% endfor %}
 {% endmacro %}
 
 {% if asFile %}import { ID, GraphSelection, copyWithTypeCondition } from "../GraphApi"
@@ -18,23 +26,24 @@
   {% endfor %}
 } from "../Enums"{% endif %}
 {% for fragment in fileReferencedFragments %}import {
-  {{ fragment }},
-  {{ fragment|lowercasedFirstLetter }}Selections
+  {{ fragment }}FragmentData,
+  {{ fragment|lowercasedFirstLetter }}FragmentDataSelections
 } from "./{{ fragment }}"
 {% endfor %}
 {% endif %}
 
-{% if not isNameSpaced %}
-{% call buildResponse name fields fragmentNames "" %}
+{% if asFile and hasInternalDefinitions %}export namespace {{ name }} {
+{% call renderFields fields "" %}
+}
 {% else %}
-{% call buildResponse name fields fragmentNames "  " %}
+{% call renderFields fields name %}
 {% endif %}
 
-{% for field in fields %}
-{{ field|internalTypeDefinition:name,isNameSpaced }}
-{{ field|internalInterfaceWrapper:name,isNameSpaced }}
-{{ field|internalUnionWrapper:name,isNameSpaced }}
-{% endfor %}
+{% if asFile %}
+{% call buildResponse name fields fragmentNames "" fieldPrefix %}
+{% else %}
+{% call buildResponse name fields fragmentNames "  " name %}
+{% endif %}
 
 {% if asFile and fragmentSelections %}
 export const {{ name|lowercasedFirstLetter }}Selections: GraphSelection[] = {{ fragmentSelections|renderTypeScriptSelections:null,0 }}

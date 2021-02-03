@@ -1,9 +1,10 @@
 
 
 import { ID, GraphSelection, copyWithTypeCondition } from "../GraphApi"
-export interface NodeId {
-  __typename: '';
-  realized: {};
+
+export interface NodeIdFragmentData {
+  __typename: unknown;
+  realized: unknown;
 
   /**
    * Globally unique identifier.
@@ -11,7 +12,7 @@ export interface NodeId {
   id: ID;
 }
 
-export const nodeIdSelections: GraphSelection[] = ([
+export const nodeIdFragmentDataSelections: GraphSelection[] = ([
   {
     name: "id",
     type: { name: "ID", definedType: "Scalar" },

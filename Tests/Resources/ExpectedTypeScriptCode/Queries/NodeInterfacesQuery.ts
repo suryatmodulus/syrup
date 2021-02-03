@@ -1,24 +1,24 @@
 import { ID, GraphSelection, SyrupOperation, copyWithTypeCondition } from "../GraphApi"
 import {
-  NodeId,
-  nodeIdSelections,
-  ProductNodeTitle,
-  productNodeTitleSelections,
+  NodeIdFragmentData,
+  nodeIdFragmentDataSelections,
+  ProductNodeTitleFragmentData,
+  productNodeTitleFragmentDataSelections,
 } from "../Fragments"
 
 export namespace NodeInterfacesQueryData {
   export interface Variables {
-    nodeId: ID
-  }
-  export interface Node {
-    __typename: 'Product' | '';
-    realized: NodeRealizedProduct | {};
-    nodeId: NodeId;
+    nodeId: ID;
   }
   export interface NodeRealizedProduct {
     __typename: 'Product';
-    nodeId: NodeId;
-    productNodeTitle: ProductNodeTitle;
+    nodeId: NodeIdFragmentData;
+    productNodeTitle: ProductNodeTitleFragmentData;
+  }
+  export interface Node {
+    __typename: 'Product';
+    realized: NodeRealizedProduct;
+    nodeId: NodeIdFragmentData;
   }
 }
 
@@ -27,7 +27,7 @@ export interface NodeInterfacesQueryData {
   /**
    * Returns a specific node by ID.
    */
-  node: NodeInterfacesQueryData.Node | undefined
+  node?: NodeInterfacesQueryData.Node | null
 }
 
 const document: SyrupOperation<NodeInterfacesQueryData, NodeInterfacesQueryData.Variables> = {
@@ -43,7 +43,7 @@ const document: SyrupOperation<NodeInterfacesQueryData, NodeInterfacesQueryData.
       passedGID: "nodeId",
       typeCondition: { name: "QueryRoot", definedType: "Object" },
       directive: null,
-      selections: ([] as GraphSelection[]).concat(nodeIdSelections).concat(productNodeTitleSelections)
+      selections: ([] as GraphSelection[]).concat(nodeIdFragmentDataSelections).concat(productNodeTitleFragmentDataSelections)
     }
   ] as GraphSelection[])
 }

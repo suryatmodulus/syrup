@@ -2,27 +2,9 @@ import { ID, GraphSelection, SyrupOperation, copyWithTypeCondition } from "../Gr
 
 export namespace ProductsListQueryData {
   export interface Variables {
-    first?: number | undefined,
-    before?: string | undefined,
-    after?: string | undefined
-  }
-  export interface Products {
-    __typename: 'ProductConnection';
-    /**
-     * A list of edges.
-     */
-    edges: ProductsEdges[];
-  }
-  export interface ProductsEdges {
-    __typename: 'ProductEdge';
-    /**
-     * The item at the end of ProductEdge.
-     */
-    node: ProductsEdgesNode;
-    /**
-     * A cursor for use in pagination.
-     */
-    cursor: string;
+    first?: number | undefined;
+    before?: string | undefined;
+    after?: string | undefined;
   }
   export interface ProductsEdgesNode {
     __typename: 'Product';
@@ -38,6 +20,24 @@ export namespace ProductsListQueryData {
      * A stripped description of the product, single line with HTML tags removed.
      */
     description: string;
+  }
+  export interface ProductsEdges {
+    __typename: 'ProductEdge';
+    /**
+     * The item at the end of ProductEdge.
+     */
+    node: ProductsEdgesNode;
+    /**
+     * A cursor for use in pagination.
+     */
+    cursor: string;
+  }
+  export interface Products {
+    __typename: 'ProductConnection';
+    /**
+     * A list of edges.
+     */
+    edges: ProductsEdges[];
   }
 }
 

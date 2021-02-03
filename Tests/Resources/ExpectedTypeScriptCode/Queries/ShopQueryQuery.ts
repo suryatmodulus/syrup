@@ -1,12 +1,12 @@
 import { ID, GraphSelection, SyrupOperation, copyWithTypeCondition } from "../GraphApi"
 import {
-  Shop,
-  shopSelections,
+  ShopFragmentData,
+  shopFragmentDataSelections,
 } from "../Fragments"
 
 export namespace ShopQueryQueryData {
   export interface Variables {
-    first: number
+    first: number;
   }
 }
 
@@ -19,6 +19,6 @@ const document: SyrupOperation<ShopQueryQueryData, ShopQueryQueryData.Variables>
   name: "ShopQuery",
   source: "fragment Shop on QueryRoot { __typename shop { __typename availableChannelApps(first: \$first) { __typename edges { __typename node { __typename id } } } } } query ShopQuery(\$first: Int!) { __typename ... Shop }",
   operationType: 'query',
-  selections: ([] as GraphSelection[]).concat(shopSelections)
+  selections: ([] as GraphSelection[]).concat(shopFragmentDataSelections)
 }
 export default document

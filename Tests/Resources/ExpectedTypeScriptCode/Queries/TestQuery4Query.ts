@@ -1,31 +1,6 @@
 import { ID, GraphSelection, SyrupOperation, copyWithTypeCondition } from "../GraphApi"
 
 export namespace TestQuery4QueryData {
-  export interface Shop {
-    __typename: 'Shop';
-    /**
-     * Globally unique identifier.
-     */
-    id: ID;
-    /**
-     * List of sales channels not currently installed on the shop.
-     */
-    availableChannelApps: ShopAvailableChannelApps;
-  }
-  export interface ShopAvailableChannelApps {
-    __typename: 'AppConnection';
-    /**
-     * A list of edges.
-     */
-    edges: ShopAvailableChannelAppsEdges[];
-  }
-  export interface ShopAvailableChannelAppsEdges {
-    __typename: 'AppEdge';
-    /**
-     * The item at the end of AppEdge.
-     */
-    node: ShopAvailableChannelAppsEdgesNode;
-  }
   export interface ShopAvailableChannelAppsEdgesNode {
     __typename: 'App';
     /**
@@ -36,6 +11,31 @@ export namespace TestQuery4QueryData {
      * Name of the app.
      */
     title: string;
+  }
+  export interface ShopAvailableChannelAppsEdges {
+    __typename: 'AppEdge';
+    /**
+     * The item at the end of AppEdge.
+     */
+    node: ShopAvailableChannelAppsEdgesNode;
+  }
+  export interface ShopAvailableChannelApps {
+    __typename: 'AppConnection';
+    /**
+     * A list of edges.
+     */
+    edges: ShopAvailableChannelAppsEdges[];
+  }
+  export interface Shop {
+    __typename: 'Shop';
+    /**
+     * Globally unique identifier.
+     */
+    id: ID;
+    /**
+     * List of sales channels not currently installed on the shop.
+     */
+    availableChannelApps: ShopAvailableChannelApps;
   }
 }
 

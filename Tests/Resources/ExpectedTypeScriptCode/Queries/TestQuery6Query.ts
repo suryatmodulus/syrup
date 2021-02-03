@@ -7,7 +7,65 @@ import {
 
 export namespace TestQuery6QueryData {
   export interface Variables {
-    first?: number | undefined
+    first?: number | undefined;
+  }
+  export interface ShopBillingAddress {
+    __typename: 'MailingAddress';
+    /**
+     * The name of the city, district, village, or town.
+     */
+    city?: string | null;
+    /**
+     * The name of the customer's company or organization.
+     */
+    company?: string | null;
+    /**
+     * The latitude coordinate of the customer address.
+     */
+    latitude?: number | null;
+    /**
+     * The longitude coordinate of the customer address.
+     */
+    longitude?: number | null;
+  }
+  export interface ShopFulfillmentServices {
+    __typename: 'FulfillmentService';
+    /**
+     * The name of the fulfillment service as seen by merchants.
+     */
+    serviceName: string;
+    /**
+     * Human-readable unique identifier for this fulfillment service.
+     */
+    handle: string;
+  }
+  export interface ShopOrdersEdgesNode {
+    __typename: 'Order';
+    /**
+     * Unique identifier for the order that appears on the order.
+     * For example, _#1000_ or _Store1001.
+     * This value is not unique across multiple stores.
+     */
+    name: string;
+    /**
+     * Fulfillment status for the order that can be shown to the merchant.
+     * This field does not capture all the possible details of an order's fulfillment state. It should only be used for display summary purposes.
+     */
+    displayFulfillmentStatus: OrderDisplayFulfillmentStatus;
+  }
+  export interface ShopOrdersEdges {
+    __typename: 'OrderEdge';
+    /**
+     * The item at the end of OrderEdge.
+     */
+    node: ShopOrdersEdgesNode;
+  }
+  export interface ShopOrders {
+    __typename: 'OrderConnection';
+    /**
+     * A list of edges.
+     */
+    edges: ShopOrdersEdges[];
   }
   export interface Shop {
     __typename: 'Shop';
@@ -37,64 +95,6 @@ export namespace TestQuery6QueryData {
      * @deprecated Use `QueryRoot.orders` instead.
      */
     orders: ShopOrders;
-  }
-  export interface ShopBillingAddress {
-    __typename: 'MailingAddress';
-    /**
-     * The name of the city, district, village, or town.
-     */
-    city: string | undefined;
-    /**
-     * The name of the customer's company or organization.
-     */
-    company: string | undefined;
-    /**
-     * The latitude coordinate of the customer address.
-     */
-    latitude: number | undefined;
-    /**
-     * The longitude coordinate of the customer address.
-     */
-    longitude: number | undefined;
-  }
-  export interface ShopFulfillmentServices {
-    __typename: 'FulfillmentService';
-    /**
-     * The name of the fulfillment service as seen by merchants.
-     */
-    serviceName: string;
-    /**
-     * Human-readable unique identifier for this fulfillment service.
-     */
-    handle: string;
-  }
-  export interface ShopOrders {
-    __typename: 'OrderConnection';
-    /**
-     * A list of edges.
-     */
-    edges: ShopOrdersEdges[];
-  }
-  export interface ShopOrdersEdges {
-    __typename: 'OrderEdge';
-    /**
-     * The item at the end of OrderEdge.
-     */
-    node: ShopOrdersEdgesNode;
-  }
-  export interface ShopOrdersEdgesNode {
-    __typename: 'Order';
-    /**
-     * Unique identifier for the order that appears on the order.
-     * For example, _#1000_ or _Store1001.
-     * This value is not unique across multiple stores.
-     */
-    name: string;
-    /**
-     * Fulfillment status for the order that can be shown to the merchant.
-     * This field does not capture all the possible details of an order's fulfillment state. It should only be used for display summary purposes.
-     */
-    displayFulfillmentStatus: OrderDisplayFulfillmentStatus;
   }
 }
 

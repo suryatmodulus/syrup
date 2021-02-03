@@ -1,9 +1,9 @@
 import { ID } from "../GraphApi"
 import {
-    PrivateMetafieldValueType,
+  PrivateMetafieldValueType,
 } from "../Enums"
 
 export interface PrivateMetafieldValueInput {
-  value?: string,
-  valueType?: PrivateMetafieldValueType
+  value?: string;
+  valueType?: PrivateMetafieldValueType;
 }

@@ -5,29 +5,25 @@ import {
 
 export namespace CreateCollectionMutationData {
   export interface Variables {
-    input: CollectionInput
-  }
-  export interface CollectionCreate {
-    __typename: 'CollectionCreatePayload';
-    /**
-     * List of errors that occurred executing the mutation.
-     */
-    userErrors: CollectionCreateUserErrors[];
-    /**
-     * The collection that has been created.
-     */
-    collection: CollectionCreateCollection | undefined;
+    input: CollectionInput;
   }
   export interface CollectionCreateUserErrors {
     __typename: 'UserError';
     /**
      * Path to the input field which caused the error.
      */
-    field: string[] | undefined;
+    field?: string[] | null;
     /**
      * The error message.
      */
     message: string;
+  }
+  export interface CollectionCreateCollectionFeedback {
+    __typename: 'ResourceFeedback';
+    /**
+     * Summary of resource feedback pertaining to the resource.
+     */
+    summary: string;
   }
   export interface CollectionCreateCollection {
     __typename: 'Collection';
@@ -42,14 +38,18 @@ export namespace CreateCollectionMutationData {
     /**
      * Information about the collection that's provided through resource feedback.
      */
-    feedback: CollectionCreateCollectionFeedback | undefined;
+    feedback?: CollectionCreateCollectionFeedback | null;
   }
-  export interface CollectionCreateCollectionFeedback {
-    __typename: 'ResourceFeedback';
+  export interface CollectionCreate {
+    __typename: 'CollectionCreatePayload';
     /**
-     * Summary of resource feedback pertaining to the resource.
+     * List of errors that occurred executing the mutation.
      */
-    summary: string;
+    userErrors: CollectionCreateUserErrors[];
+    /**
+     * The collection that has been created.
+     */
+    collection?: CollectionCreateCollection | null;
   }
 }
 
@@ -58,7 +58,7 @@ export interface CreateCollectionMutationData {
   /**
    * Creates a collection.
    */
-  collectionCreate: CreateCollectionMutationData.CollectionCreate | undefined
+  collectionCreate?: CreateCollectionMutationData.CollectionCreate | null
 }
 
 const document: SyrupOperation<CreateCollectionMutationData, CreateCollectionMutationData.Variables> = {

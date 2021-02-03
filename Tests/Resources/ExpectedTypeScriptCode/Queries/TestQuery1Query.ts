@@ -7,6 +7,39 @@ import {
 } from "../Enums"
 
 export namespace TestQuery1QueryData {
+  export interface ShopBillingAddress {
+    __typename: 'MailingAddress';
+    /**
+     * The name of the city, district, village, or town.
+     */
+    city?: string | null;
+    /**
+     * The name of the customer's company or organization.
+     */
+    company?: string | null;
+    /**
+     * The latitude coordinate of the customer address.
+     */
+    latitude?: number | null;
+    /**
+     * The longitude coordinate of the customer address.
+     */
+    longitude?: number | null;
+  }
+  export interface ShopAlerts {
+    __typename: 'ShopAlert';
+    /**
+     * Description of the alert.
+     */
+    description: string;
+  }
+  export interface ShopPaymentSettings {
+    __typename: 'PaymentSettings';
+    /**
+     * List of the digital wallets which the shop supports.
+     */
+    supportedDigitalWallets: DigitalWallet[];
+  }
   export interface Shop {
     __typename: 'Shop';
     /**
@@ -41,39 +74,6 @@ export namespace TestQuery1QueryData {
      * Settings related to payments.
      */
     paymentSettings: ShopPaymentSettings;
-  }
-  export interface ShopBillingAddress {
-    __typename: 'MailingAddress';
-    /**
-     * The name of the city, district, village, or town.
-     */
-    city: string | undefined;
-    /**
-     * The name of the customer's company or organization.
-     */
-    company: string | undefined;
-    /**
-     * The latitude coordinate of the customer address.
-     */
-    latitude: number | undefined;
-    /**
-     * The longitude coordinate of the customer address.
-     */
-    longitude: number | undefined;
-  }
-  export interface ShopAlerts {
-    __typename: 'ShopAlert';
-    /**
-     * Description of the alert.
-     */
-    description: string;
-  }
-  export interface ShopPaymentSettings {
-    __typename: 'PaymentSettings';
-    /**
-     * List of the digital wallets which the shop supports.
-     */
-    supportedDigitalWallets: DigitalWallet[];
   }
 }
 

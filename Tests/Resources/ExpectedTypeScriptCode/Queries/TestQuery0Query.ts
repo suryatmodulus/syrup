@@ -2,8 +2,8 @@ import { ID, GraphSelection, SyrupOperation, copyWithTypeCondition } from "../Gr
 
 export namespace TestQuery0QueryData {
   export interface Nodes {
-    __typename: '';
-    realized: {};
+    __typename: unknown;
+    realized: unknown;
     /**
      * Globally unique identifier.
      */
@@ -16,7 +16,7 @@ export interface TestQuery0QueryData {
   /**
    * Returns the list of nodes with the given IDs.
    */
-  nodes: TestQuery0QueryData.Nodes | undefined[]
+  nodes: TestQuery0QueryData.Nodes | null[]
 }
 
 const document: SyrupOperation<TestQuery0QueryData, {}> = {

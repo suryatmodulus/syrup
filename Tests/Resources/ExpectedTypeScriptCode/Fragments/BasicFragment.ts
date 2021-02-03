@@ -2,7 +2,7 @@
 
 import { ID, GraphSelection, copyWithTypeCondition } from "../GraphApi"
 
-export interface BasicFragment {
+export interface BasicFragmentFragmentData {
   __typename: 'Customer';
 
   /**
@@ -13,10 +13,10 @@ export interface BasicFragment {
   /**
    * The customer's last name.
    */
-  lastName: string | undefined;
+  lastName?: string | null;
 }
 
-export const basicFragmentSelections: GraphSelection[] = ([
+export const basicFragmentFragmentDataSelections: GraphSelection[] = ([
   {
     name: "id",
     type: { name: "ID", definedType: "Scalar" },

@@ -1,9 +1,9 @@
-{% macro buildUnion name fragmentSpreads concreteTypeNames spacing %}
+{% macro buildUnion name fragmentSpreads concreteTypeNames spacing fieldPrefix %}
 {{ spacing }}export interface {{ name }} {
-{{ spacing }}  __typename: {% for concreteType in concreteTypeNames %}'{{ concreteType }}' | {% endfor %}'';
-{{ spacing }}  realized: {% for concreteType in concreteTypeNames %}{{ name }}Realized{{ concreteType }} | {% endfor %}{};
+{{ spacing }}  __typename: {% if concreteTypeNames.count > 0 %}{% for concreteType in concreteTypeNames %}'{{ concreteType }}'{% if not forloop.last %} | {% endif %}{% endfor %}{% else %}unknown{% endif %};
+{{ spacing }}  realized: {% if concreteTypeNames.count > 0 %}{% for concreteType in concreteTypeNames %}{{ fieldPrefix }}Realized{{ concreteType }}{% if not forloop.last %} | {% endif %}{% endfor %}{% else %}unknown{% endif %};
   {% for fragment in fragmentSpreads %}
-{{ spacing }}  {{ fragment.name|lowercasedFirstLetter }}: {{ fragment.name }};
+{{ spacing }}  {{ fragment.name|lowercasedFirstLetter }}: {{ fragment.name }}FragmentData;
   {% endfor %}
 {{ spacing }}}
 {% endmacro %}
@@ -15,19 +15,24 @@
   {% endfor %}
 } from "../Enums"{% endif %}
 {% for fragment in fileReferencedFragments %}import {
-  {{ fragment }},
-  {{ fragment|lowercasedFirstLetter }}Selections
+  {{ fragment }}FragmentData,
+  {{ fragment|lowercasedFirstLetter }}FragmentDataSelections
 } from "./{{ fragment }}"
 {% endfor %}
 {% endif %}
-  
-{% if not isNameSpaced %}
-{% call buildUnion name fragmentSpreads concreteTypeNames "" %}
+
+{% if asFile and concreteTypeNames.count > 0 %}export namespace {{ name }} {
+{{ collectedFields|internalUnionTypeDefinitions:"",groupedFragmentSpreads,concreteTypeNames }}
+}
 {% else %}
-{% call buildUnion name fragmentSpreads concreteTypeNames "  " %}
+{{ collectedFields|internalUnionTypeDefinitions:name,groupedFragmentSpreads,concreteTypeNames }}
 {% endif %}
 
-{{ collectedFields|internalUnionTypeDefinitions:name,groupedFragmentSpreads,concreteTypeNames,isNameSpaced }}
+{% if asFile %}
+{% call buildUnion name fragmentSpreads concreteTypeNames "" fieldPrefix %}
+{% else %}
+{% call buildUnion name fragmentSpreads concreteTypeNames "  " name %}
+{% endif %}
 
 {% if asFile and fragmentSelections %}
 export const {{ name|lowercasedFirstLetter }}Selections: GraphSelection[] = {{ fragmentSelections|renderTypeScriptSelections:null,0 }}

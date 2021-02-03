@@ -2,45 +2,47 @@
 
 import { ID, GraphSelection, copyWithTypeCondition } from "../GraphApi"
 
-export interface Shop {
+export namespace ShopFragmentData {
+  export interface ShopAvailableChannelAppsEdgesNode {
+    __typename: 'App';
+    /**
+     * Globally unique identifier.
+     */
+    id: ID;
+  }
+  export interface ShopAvailableChannelAppsEdges {
+    __typename: 'AppEdge';
+    /**
+     * The item at the end of AppEdge.
+     */
+    node: ShopAvailableChannelAppsEdgesNode;
+  }
+  export interface ShopAvailableChannelApps {
+    __typename: 'AppConnection';
+    /**
+     * A list of edges.
+     */
+    edges: ShopAvailableChannelAppsEdges[];
+  }
+  export interface Shop {
+    __typename: 'Shop';
+    /**
+     * List of sales channels not currently installed on the shop.
+     */
+    availableChannelApps: ShopAvailableChannelApps;
+  }
+}
+
+export interface ShopFragmentData {
   __typename: 'QueryRoot';
 
   /**
    * Returns a Shop resource corresponding to access token used in request.
    */
-  shop: ShopShop;
+  shop: ShopFragmentData.Shop;
 }
 
-export interface ShopShop {
-  __typename: 'Shop';
-  /**
-   * List of sales channels not currently installed on the shop.
-   */
-  availableChannelApps: ShopShopAvailableChannelApps;
-}
-export interface ShopShopAvailableChannelApps {
-  __typename: 'AppConnection';
-  /**
-   * A list of edges.
-   */
-  edges: ShopShopAvailableChannelAppsEdges[];
-}
-export interface ShopShopAvailableChannelAppsEdges {
-  __typename: 'AppEdge';
-  /**
-   * The item at the end of AppEdge.
-   */
-  node: ShopShopAvailableChannelAppsEdgesNode;
-}
-export interface ShopShopAvailableChannelAppsEdgesNode {
-  __typename: 'App';
-  /**
-   * Globally unique identifier.
-   */
-  id: ID;
-}
-
-export const shopSelections: GraphSelection[] = ([
+export const shopFragmentDataSelections: GraphSelection[] = ([
   {
     name: "shop",
     type: { name: "Shop", definedType: "Object" },

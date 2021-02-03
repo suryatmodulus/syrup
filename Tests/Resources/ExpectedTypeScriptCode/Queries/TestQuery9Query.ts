@@ -1,25 +1,17 @@
 import { ID, GraphSelection, SyrupOperation, copyWithTypeCondition } from "../GraphApi"
 import {
-  BasicFragment,
-  basicFragmentSelections,
+  BasicFragmentFragmentData,
+  basicFragmentFragmentDataSelections,
 } from "../Fragments"
 
 export namespace TestQuery9QueryData {
-  export interface Shop {
-    __typename: 'Shop';
+  export interface ShopCustomersEdgesNode {
+    __typename: 'Customer';
     /**
-     * Customer accounts associated to the shop.
-     *
-     * @deprecated Use `QueryRoot.customers` instead.
+     * Globally unique identifier.
      */
-    customers: ShopCustomers;
-  }
-  export interface ShopCustomers {
-    __typename: 'CustomerConnection';
-    /**
-     * A list of edges.
-     */
-    edges: ShopCustomersEdges[];
+    id: ID;
+    basicFragment: BasicFragmentFragmentData;
   }
   export interface ShopCustomersEdges {
     __typename: 'CustomerEdge';
@@ -28,13 +20,21 @@ export namespace TestQuery9QueryData {
      */
     node: ShopCustomersEdgesNode;
   }
-  export interface ShopCustomersEdgesNode {
-    __typename: 'Customer';
+  export interface ShopCustomers {
+    __typename: 'CustomerConnection';
     /**
-     * Globally unique identifier.
+     * A list of edges.
      */
-    id: ID;
-    basicFragment: BasicFragment;
+    edges: ShopCustomersEdges[];
+  }
+  export interface Shop {
+    __typename: 'Shop';
+    /**
+     * Customer accounts associated to the shop.
+     *
+     * @deprecated Use `QueryRoot.customers` instead.
+     */
+    customers: ShopCustomers;
   }
 }
 
@@ -93,7 +93,7 @@ const document: SyrupOperation<TestQuery9QueryData, {}> = {
                       directive: null,
                       selections: ([] as GraphSelection[])
                     }
-                  ] as GraphSelection[]).concat(basicFragmentSelections).map(x => copyWithTypeCondition(x, { name: "Customer", definedType: "Object" }))
+                  ] as GraphSelection[]).concat(basicFragmentFragmentDataSelections).map(x => copyWithTypeCondition(x, { name: "Customer", definedType: "Object" }))
                 }
               ] as GraphSelection[])
             }

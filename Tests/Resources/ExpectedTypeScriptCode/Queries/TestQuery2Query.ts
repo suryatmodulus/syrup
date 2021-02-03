@@ -1,6 +1,28 @@
 import { ID, GraphSelection, SyrupOperation, copyWithTypeCondition } from "../GraphApi"
 
 export namespace TestQuery2QueryData {
+  export interface ShopAlertsAction {
+    __typename: 'ShopAlertAction';
+    /**
+     * Action title.
+     */
+    title: string;
+    /**
+     * Action target URL.
+     */
+    url: string;
+  }
+  export interface ShopAlerts {
+    __typename: 'ShopAlert';
+    /**
+     * Button in the alert that links to related information.
+     */
+    action: ShopAlertsAction;
+    /**
+     * Description of the alert.
+     */
+    description: string;
+  }
   export interface Shop {
     __typename: 'Shop';
     /**
@@ -20,28 +42,6 @@ export namespace TestQuery2QueryData {
      * Alert message that appears in the Shopify admin.
      */
     alerts: ShopAlerts[];
-  }
-  export interface ShopAlerts {
-    __typename: 'ShopAlert';
-    /**
-     * Button in the alert that links to related information.
-     */
-    action: ShopAlertsAction;
-    /**
-     * Description of the alert.
-     */
-    description: string;
-  }
-  export interface ShopAlertsAction {
-    __typename: 'ShopAlertAction';
-    /**
-     * Action title.
-     */
-    title: string;
-    /**
-     * Action target URL.
-     */
-    url: string;
   }
 }
 
