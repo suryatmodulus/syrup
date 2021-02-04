@@ -43,7 +43,7 @@ export interface TestQuery9QueryData {
   /**
    * Returns a Shop resource corresponding to access token used in request.
    */
-  shop: TestQuery9QueryData.Shop
+  shop: TestQuery9QueryData.Shop;
 }
 
 const document: SyrupOperation<TestQuery9QueryData, {}> = {

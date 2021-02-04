@@ -2,7 +2,7 @@ import { ID, GraphSelection, SyrupOperation, copyWithTypeCondition } from "../Gr
 
 export namespace TestDeprecatedFieldsQueryData {
   export interface Variables {
-    first?: number | undefined;
+    first?: number | null;
   }
   export interface ChannelsEdgesNodeAppIcon {
     __typename: 'Image';
@@ -88,7 +88,7 @@ export interface TestDeprecatedFieldsQueryData {
    *
    * @deprecated Use `publications` instead
    */
-  channels: TestDeprecatedFieldsQueryData.Channels
+  channels: TestDeprecatedFieldsQueryData.Channels;
 }
 
 const document: SyrupOperation<TestDeprecatedFieldsQueryData, TestDeprecatedFieldsQueryData.Variables> = {

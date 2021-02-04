@@ -3,5 +3,5 @@ import { CollectionRuleInput } from "./CollectionRuleInput"
 
 export interface CollectionRuleSetInput {
   appliedDisjunctively?: boolean;
-  rules?: (CollectionRuleInput)[] | null;
+  rules?: CollectionRuleInput[];
 }

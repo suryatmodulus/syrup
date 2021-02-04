@@ -82,7 +82,7 @@ export interface TestQuery1QueryData {
   /**
    * Returns a Shop resource corresponding to access token used in request.
    */
-  shop: TestQuery1QueryData.Shop
+  shop: TestQuery1QueryData.Shop;
 }
 
 const document: SyrupOperation<TestQuery1QueryData, {}> = {

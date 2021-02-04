@@ -58,7 +58,7 @@ export interface CreateCollectionMutationData {
   /**
    * Creates a collection.
    */
-  collectionCreate?: CreateCollectionMutationData.CollectionCreate | null
+  collectionCreate?: CreateCollectionMutationData.CollectionCreate | null;
 }
 
 const document: SyrupOperation<CreateCollectionMutationData, CreateCollectionMutationData.Variables> = {

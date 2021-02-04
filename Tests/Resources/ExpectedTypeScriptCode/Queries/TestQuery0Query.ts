@@ -16,7 +16,7 @@ export interface TestQuery0QueryData {
   /**
    * Returns the list of nodes with the given IDs.
    */
-  nodes: TestQuery0QueryData.Nodes | null[]
+  nodes: (TestQuery0QueryData.Nodes | null)[];
 }
 
 const document: SyrupOperation<TestQuery0QueryData, {}> = {

@@ -112,14 +112,7 @@ final class ArgumentRendererExtension<V: VariableTypeRenderer>: Extension {
 		registerFilter("renderTypeScriptInputArguments") { (value) -> Any? in
 			guard let variables = value as? [IntermediateRepresentation.Variable] else { return nil }
 			let result: [String] = variables.map { variable in
-				var rendered = "\(TypeScriptReservedWordsExtension.escape(word: variable.name, reservedWords: reservedWords))?: \(V.render(variableType: IntermediateRepresentation.Variable.VariableType.nonNull(variable.type)))"
-				switch variable.type {
-				case .nonNull:
-                    rendered += ";"
-				default:
-					rendered += " | null;"
-				}
-				return rendered
+				return "\(TypeScriptReservedWordsExtension.escape(word: variable.name, reservedWords: reservedWords))?: \(V.render(variableType: variable.type));"
 			}
 			return result.joined(separator: "\n  ")
 		}

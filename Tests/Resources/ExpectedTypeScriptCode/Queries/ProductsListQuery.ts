@@ -2,9 +2,9 @@ import { ID, GraphSelection, SyrupOperation, copyWithTypeCondition } from "../Gr
 
 export namespace ProductsListQueryData {
   export interface Variables {
-    first?: number | undefined;
-    before?: string | undefined;
-    after?: string | undefined;
+    first?: number | null;
+    before?: string | null;
+    after?: string | null;
   }
   export interface ProductsEdgesNode {
     __typename: 'Product';
@@ -46,7 +46,7 @@ export interface ProductsListQueryData {
   /**
    * List of products.
    */
-  products: ProductsListQueryData.Products
+  products: ProductsListQueryData.Products;
 }
 
 const document: SyrupOperation<ProductsListQueryData, ProductsListQueryData.Variables> = {

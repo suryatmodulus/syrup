@@ -9,7 +9,7 @@ import {
 
 export namespace TestQuery7QueryData {
   export interface Variables {
-    first?: number | undefined;
+    first?: number | null;
   }
   export interface ShopBillingAddress {
     __typename: 'MailingAddress';
@@ -157,7 +157,7 @@ export interface TestQuery7QueryData {
   /**
    * Returns a Shop resource corresponding to access token used in request.
    */
-  shop: TestQuery7QueryData.Shop
+  shop: TestQuery7QueryData.Shop;
 }
 
 const document: SyrupOperation<TestQuery7QueryData, TestQuery7QueryData.Variables> = {

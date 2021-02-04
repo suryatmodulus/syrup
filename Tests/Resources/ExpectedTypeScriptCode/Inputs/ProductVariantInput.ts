@@ -19,11 +19,11 @@ export interface ProductVariantInput {
   imageSrc?: string | null;
   inventoryManagement?: ProductVariantInventoryManagement | null;
   inventoryPolicy?: ProductVariantInventoryPolicy | null;
-  inventoryQuantities?: (InventoryLevelInput)[] | null;
+  inventoryQuantities?: InventoryLevelInput[];
   inventoryItem?: InventoryItemInput | null;
-  metafields?: (MetafieldInput)[] | null;
-  privateMetafields?: (PrivateMetafieldInput)[] | null;
-  options?: (string)[] | null;
+  metafields?: MetafieldInput[];
+  privateMetafields?: PrivateMetafieldInput[];
+  options?: string[];
   position?: number | null;
   price?: number | null;
   productId?: ID | null;

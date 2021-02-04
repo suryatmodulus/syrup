@@ -7,7 +7,7 @@ import {
 
 export namespace TestQuery6QueryData {
   export interface Variables {
-    first?: number | undefined;
+    first?: number | null;
   }
   export interface ShopBillingAddress {
     __typename: 'MailingAddress';
@@ -103,7 +103,7 @@ export interface TestQuery6QueryData {
   /**
    * Returns a Shop resource corresponding to access token used in request.
    */
-  shop: TestQuery6QueryData.Shop
+  shop: TestQuery6QueryData.Shop;
 }
 
 const document: SyrupOperation<TestQuery6QueryData, TestQuery6QueryData.Variables> = {

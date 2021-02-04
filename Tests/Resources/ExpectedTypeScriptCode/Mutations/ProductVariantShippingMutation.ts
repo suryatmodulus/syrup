@@ -66,7 +66,7 @@ export interface ProductVariantShippingMutationData {
   /**
    * Updates a product variant.
    */
-  productVariantUpdate?: ProductVariantShippingMutationData.ProductVariantUpdate | null
+  productVariantUpdate?: ProductVariantShippingMutationData.ProductVariantUpdate | null;
 }
 
 const document: SyrupOperation<ProductVariantShippingMutationData, ProductVariantShippingMutationData.Variables> = {

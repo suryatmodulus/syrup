@@ -64,7 +64,7 @@ export interface TestQuery10QueryData {
   /**
    * Lookup a price rule by ID.
    */
-  priceRule?: TestQuery10QueryData.PriceRule | null
+  priceRule?: TestQuery10QueryData.PriceRule | null;
 }
 
 const document: SyrupOperation<TestQuery10QueryData, TestQuery10QueryData.Variables> = {

@@ -27,7 +27,7 @@ export interface NodeInterfacesQueryData {
   /**
    * Returns a specific node by ID.
    */
-  node?: NodeInterfacesQueryData.Node | null
+  node?: NodeInterfacesQueryData.Node | null;
 }
 
 const document: SyrupOperation<NodeInterfacesQueryData, NodeInterfacesQueryData.Variables> = {

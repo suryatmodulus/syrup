@@ -58,7 +58,7 @@ export interface TestQuery11QueryData {
   /**
    * Returns a specific node by ID.
    */
-  node?: TestQuery11QueryData.Node | null
+  node?: TestQuery11QueryData.Node | null;
 }
 
 const document: SyrupOperation<TestQuery11QueryData, TestQuery11QueryData.Variables> = {

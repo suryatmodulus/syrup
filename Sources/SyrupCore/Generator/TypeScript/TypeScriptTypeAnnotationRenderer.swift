@@ -27,10 +27,10 @@ import Foundation
 enum TypeScriptTypeAnnotationRenderer {
 	
 	static func render(scalarField: IntermediateRepresentation.CollectedScalarField, outsideOfModule moduleName: String? = nil) -> String {
-		render(scalarType: scalarField.type, nonNull: false, moduleName: moduleName)
+		render(scalarType: scalarField.type, parentType: nil, moduleName: moduleName)
 	}
 	
-	private static func render(scalarType: FieldTypeProtocol, nonNull: Bool, moduleName: String?) -> String {
+    private static func render(scalarType: FieldTypeProtocol, parentType: FieldTypeProtocol?, moduleName: String?) -> String {
 		let rendered: String
 		switch scalarType {
 		case let enumType as IntermediateRepresentation.EnumFieldType:
@@ -39,16 +39,22 @@ enum TypeScriptTypeAnnotationRenderer {
 		case let scalarType as IntermediateRepresentation.ScalarFieldType:
 			rendered = scalarType.scalar.nativeType
 		case let listType as IntermediateRepresentation.ListFieldType:
-			rendered = "\(render(scalarType: listType.elementType, nonNull: false, moduleName: moduleName))[]"
+            rendered = "\(render(scalarType: listType.elementType, parentType: listType, moduleName: moduleName))[]"
 		case let nonNullType as IntermediateRepresentation.NonNullFieldType:
-			return render(scalarType: nonNullType.nestedType, nonNull: true, moduleName: moduleName)
+            return render(scalarType: nonNullType.nestedType, parentType: nonNullType, moduleName: moduleName)
 		default:
 			fatalError("Encountered unexpected type \(scalarType)")
 		}
-		if nonNull {
+		if parentType is IntermediateRepresentation.NonNullFieldType {
 			return rendered
 		} else {
-			return "\(rendered) | null"
+            let nullableRender = "\(rendered) | null"
+            
+            if parentType is IntermediateRepresentation.ListFieldType {
+                return "(\(nullableRender))"
+            } else {
+                return nullableRender
+            }
 		}
 	}
 	
@@ -57,7 +63,7 @@ enum TypeScriptTypeAnnotationRenderer {
 		if let prefix = prefix {
 			name = "\(prefix)\(name)"
 		}
-		return render(objectType: interfaceWrapper.type, nonNull: false, name: name)
+		return render(objectType: interfaceWrapper.type, parentType: nil, name: name)
 	}
 	
 	static func render(unionWrapper: IntermediateRepresentation.CollectedUnionField, prefix: String? = nil) -> String {
@@ -65,7 +71,7 @@ enum TypeScriptTypeAnnotationRenderer {
 		if let prefix = prefix {
 			name = "\(prefix)\(name)"
 		}
-		return render(objectType: unionWrapper.type, nonNull: false, name: name)
+		return render(objectType: unionWrapper.type, parentType: nil, name: name)
 	}
 	
 	static func render(objectField: IntermediateRepresentation.CollectedObjectField, prefix: String? = nil) -> String {
@@ -73,25 +79,31 @@ enum TypeScriptTypeAnnotationRenderer {
 		if let prefix = prefix {
 			name = "\(prefix)\(name)"
 		}
-		return render(objectType: objectField.type, nonNull: false, name: name)
+        return render(objectType: objectField.type, parentType: nil, name: name)
 	}
 	
-	private static func render(objectType: FieldTypeProtocol, nonNull: Bool, name: String) -> String {
+    private static func render(objectType: FieldTypeProtocol, parentType: FieldTypeProtocol?, name: String) -> String {
 		let rendered: String
 		switch objectType {
 		case is IntermediateRepresentation.ObjectFieldType, is IntermediateRepresentation.InterfaceFieldType, is IntermediateRepresentation.UnionFieldType:
 			rendered = name.capitalizedFirstLetter
 		case let listType as IntermediateRepresentation.ListFieldType:
-			rendered = "\(render(objectType: listType.elementType, nonNull: false, name: name.capitalizedFirstLetter))[]"
+			rendered = "\(render(objectType: listType.elementType, parentType: listType, name: name.capitalizedFirstLetter))[]"
 		case let nonNullType as IntermediateRepresentation.NonNullFieldType:
-			return render(objectType: nonNullType.nestedType, nonNull: true, name: name)
+            return render(objectType: nonNullType.nestedType, parentType: nonNullType, name: name)
 		default:
 			fatalError("Encountered unexpected type \(objectType)")
 		}
-		if nonNull {
+        if parentType is IntermediateRepresentation.NonNullFieldType {
 			return rendered
 		} else {
-			return "\(rendered) | null"
+            let nullableRender = "\(rendered) | null"
+            
+            if parentType is IntermediateRepresentation.ListFieldType {
+                return "(\(nullableRender))"
+            } else {
+                return nullableRender
+            }
 		}
 	}
 }

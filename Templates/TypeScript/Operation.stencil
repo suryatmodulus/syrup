@@ -29,10 +29,10 @@ export namespace {{ name }} {
 export interface {{ name }} {
   {% for field in fields %}
   {% with field.attributes as attributes %}{% include "Helpers/Attributes.stencil" %}{% endwith %}
-  {{ field|renderPropertyDeclaration:fieldPrefix }}{% if fragmentNames or not forloop.last %},{% endif %}
+  {{ field|renderPropertyDeclaration:fieldPrefix }};
   {% endfor %}
   {% for fragmentName in topLevelFragmentNames %}
-  {{ fragmentName|lowercasedFirstLetter }}: {{ fragmentName }}{% if not forloop.last %},{% endif %}
+  {{ fragmentName|lowercasedFirstLetter }}: {{ fragmentName }}FragmentData;
   {% endfor %}
 }
 

@@ -44,7 +44,7 @@ export interface TestQuery4QueryData {
   /**
    * Returns a Shop resource corresponding to access token used in request.
    */
-  shop: TestQuery4QueryData.Shop
+  shop: TestQuery4QueryData.Shop;
 }
 
 const document: SyrupOperation<TestQuery4QueryData, {}> = {

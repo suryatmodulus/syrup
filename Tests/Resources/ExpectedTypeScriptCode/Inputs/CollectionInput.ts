@@ -14,14 +14,14 @@ export interface CollectionInput {
   handle?: string | null;
   id?: ID | null;
   image?: ImageInput | null;
-  products?: (ID)[] | null;
-  publications?: (CollectionPublicationInput)[] | null;
-  privateMetafields?: (PrivateMetafieldInput)[] | null;
+  products?: ID[];
+  publications?: CollectionPublicationInput[];
+  privateMetafields?: PrivateMetafieldInput[];
   ruleSet?: CollectionRuleSetInput | null;
   templateSuffix?: string | null;
   sortOrder?: CollectionSortOrder | null;
   title?: string | null;
-  metafields?: (MetafieldInput)[] | null;
+  metafields?: MetafieldInput[];
   seo?: SEOInput | null;
   redirectNewHandle?: boolean | null;
 }

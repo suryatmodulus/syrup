@@ -28,7 +28,7 @@ export interface TestMutation0MutationData {
   /**
    * Updates a customer's attributes.
    */
-  customerUpdate?: TestMutation0MutationData.CustomerUpdate | null
+  customerUpdate?: TestMutation0MutationData.CustomerUpdate | null;
 }
 
 const document: SyrupOperation<TestMutation0MutationData, TestMutation0MutationData.Variables> = {

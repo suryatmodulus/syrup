@@ -11,7 +11,7 @@ export namespace ShopQueryQueryData {
 }
 
 export interface ShopQueryQueryData {
-  shop: Shop
+  shop: ShopFragmentData;
 }
 
 const document: SyrupOperation<ShopQueryQueryData, ShopQueryQueryData.Variables> = {

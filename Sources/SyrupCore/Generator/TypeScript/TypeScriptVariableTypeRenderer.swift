@@ -26,42 +26,41 @@ import Foundation
 
 enum TypeScriptVariableTypeRenderer: VariableTypeRenderer {
 	static func render(variableType: IntermediateRepresentation.Variable.VariableType) -> String {
-		render(variableType: variableType, nonNull: false)
+		render(variableType: variableType, parentType: nil)
 	}
 	
 	static func render(inputVariableType: IntermediateRepresentation.Variable.VariableType) -> String {
-		render(variableType: inputVariableType, nonNull: false)
+		render(variableType: inputVariableType, parentType: nil)
 	}
 	
-	private static func render(variableType: IntermediateRepresentation.Variable.VariableType, nonNull: Bool) -> String {
+    private static func render(variableType: IntermediateRepresentation.Variable.VariableType, parentType: IntermediateRepresentation.Variable.VariableType?) -> String {
 		switch variableType {
 		case .nonNull(let wrappedType):
-			return render(variableType: wrappedType, nonNull: true)
+			return render(variableType: wrappedType, parentType: variableType)
 		case .list(let wrappedType):
-            let rendered = "(" + render(variableType: wrappedType, nonNull: false) + ")[]"
-			if nonNull {
-				return rendered
-			} else {
-				return "\(rendered) | undefined"
-			}
+            let rendered: String = render(variableType: wrappedType, parentType: variableType)
+            
+            switch wrappedType {
+            case .nonNull(_):
+                return "\(rendered)[]"
+            default:
+                return "(\(rendered))[]"
+            }
 		case .enum(let name):
-			if nonNull {
-				return name
-			} else {
-				return "\(name) | undefined"
-			}
+            return buildVariableType(rendered: name, variableType: parentType)
 		case .input(let name):
-			if nonNull {
-				return name
-			} else {
-				return "\(name) | undefined"
-			}
+            return buildVariableType(rendered: name, variableType: parentType)
 		case .scalar(let scalarType):
-			if nonNull {
-				return scalarType.nativeType
-			} else {
-				return scalarType.nativeType + " | undefined"
-			}
+            return buildVariableType(rendered: scalarType.nativeType, variableType: parentType)
 		}
 	}
+    
+    private static func buildVariableType(rendered: String, variableType: IntermediateRepresentation.Variable.VariableType?) -> String {
+        switch variableType {
+        case .nonNull(_):
+            return rendered
+        default:
+            return "\(rendered) | null"
+        }
+    }
 }

@@ -41,7 +41,7 @@ export interface TestQuery3QueryData {
   /**
    * Returns a Customer resource by ID.
    */
-  customer?: TestQuery3QueryData.Customer | null
+  customer?: TestQuery3QueryData.Customer | null;
 }
 
 const document: SyrupOperation<TestQuery3QueryData, {}> = {
