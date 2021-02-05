@@ -44,6 +44,15 @@ export interface ShopFragmentData {
 
 export const shopFragmentDataSelections: GraphSelection[] = ([
   {
+    name: "__typename",
+    type: { name: "String", definedType: "Scalar" },
+    arguments: {},
+    passedGID: null,
+    typeCondition: { name: "QueryRoot", definedType: "Object" },
+    directive: null,
+    selections: ([] as GraphSelection[])
+  }, 
+  {
     name: "shop",
     type: { name: "Shop", definedType: "Object" },
     arguments: {},
@@ -51,6 +60,15 @@ export const shopFragmentDataSelections: GraphSelection[] = ([
     typeCondition: { name: "QueryRoot", definedType: "Object" },
     directive: null,
     selections: ([
+      {
+        name: "__typename",
+        type: { name: "String", definedType: "Scalar" },
+        arguments: {},
+        passedGID: null,
+        typeCondition: { name: "Shop", definedType: "Object" },
+        directive: null,
+        selections: ([] as GraphSelection[])
+      }, 
       {
         name: "availableChannelApps",
         type: { name: "AppConnection", definedType: "Object" },
@@ -60,6 +78,15 @@ export const shopFragmentDataSelections: GraphSelection[] = ([
         directive: null,
         selections: ([
           {
+            name: "__typename",
+            type: { name: "String", definedType: "Scalar" },
+            arguments: {},
+            passedGID: null,
+            typeCondition: { name: "AppConnection", definedType: "Object" },
+            directive: null,
+            selections: ([] as GraphSelection[])
+          }, 
+          {
             name: "edges",
             type: { name: "AppEdge", definedType: "Object" },
             arguments: {},
@@ -68,6 +95,15 @@ export const shopFragmentDataSelections: GraphSelection[] = ([
             directive: null,
             selections: ([
               {
+                name: "__typename",
+                type: { name: "String", definedType: "Scalar" },
+                arguments: {},
+                passedGID: null,
+                typeCondition: { name: "AppEdge", definedType: "Object" },
+                directive: null,
+                selections: ([] as GraphSelection[])
+              }, 
+              {
                 name: "node",
                 type: { name: "App", definedType: "Object" },
                 arguments: {},
@@ -75,6 +111,15 @@ export const shopFragmentDataSelections: GraphSelection[] = ([
                 typeCondition: { name: "AppEdge", definedType: "Object" },
                 directive: null,
                 selections: ([
+                  {
+                    name: "__typename",
+                    type: { name: "String", definedType: "Scalar" },
+                    arguments: {},
+                    passedGID: null,
+                    typeCondition: { name: "App", definedType: "Object" },
+                    directive: null,
+                    selections: ([] as GraphSelection[])
+                  }, 
                   {
                     name: "id",
                     type: { name: "ID", definedType: "Scalar" },

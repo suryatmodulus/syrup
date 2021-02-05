@@ -92,6 +92,15 @@ const document: SyrupOperation<ShopDetailsQueryData, {}> = {
   operationType: 'query',
   selections: ([
     {
+      name: "__typename",
+      type: { name: "String", definedType: "Scalar" },
+      arguments: {},
+      passedGID: null,
+      typeCondition: { name: "QueryRoot", definedType: "Object" },
+      directive: null,
+      selections: ([] as GraphSelection[])
+    }, 
+    {
       name: "shop",
       type: { name: "Shop", definedType: "Object" },
       arguments: {},
@@ -99,6 +108,15 @@ const document: SyrupOperation<ShopDetailsQueryData, {}> = {
       typeCondition: { name: "QueryRoot", definedType: "Object" },
       directive: null,
       selections: ([
+        {
+          name: "__typename",
+          type: { name: "String", definedType: "Scalar" },
+          arguments: {},
+          passedGID: null,
+          typeCondition: { name: "Shop", definedType: "Object" },
+          directive: null,
+          selections: ([] as GraphSelection[])
+        }, 
         {
           name: "id",
           type: { name: "ID", definedType: "Scalar" },
@@ -143,6 +161,15 @@ const document: SyrupOperation<ShopDetailsQueryData, {}> = {
           typeCondition: { name: "Shop", definedType: "Object" },
           directive: null,
           selections: ([
+            {
+              name: "__typename",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "MailingAddress", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
             {
               name: "city",
               type: { name: "String", definedType: "Scalar" },
@@ -190,6 +217,15 @@ const document: SyrupOperation<ShopDetailsQueryData, {}> = {
           directive: null,
           selections: ([
             {
+              name: "__typename",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "ShopAlert", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
+            {
               name: "description",
               type: { name: "String", definedType: "Scalar" },
               arguments: {},
@@ -217,6 +253,15 @@ const document: SyrupOperation<ShopDetailsQueryData, {}> = {
           typeCondition: { name: "Shop", definedType: "Object" },
           directive: null,
           selections: ([
+            {
+              name: "__typename",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "PaymentSettings", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
             {
               name: "supportedDigitalWallets",
               type: { name: "DigitalWallet", definedType: "Scalar" },

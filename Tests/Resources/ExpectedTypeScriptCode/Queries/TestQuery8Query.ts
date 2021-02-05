@@ -87,6 +87,15 @@ const document: SyrupOperation<TestQuery8QueryData, {}> = {
   operationType: 'query',
   selections: ([
     {
+      name: "__typename",
+      type: { name: "String", definedType: "Scalar" },
+      arguments: {},
+      passedGID: null,
+      typeCondition: { name: "QueryRoot", definedType: "Object" },
+      directive: null,
+      selections: ([] as GraphSelection[])
+    }, 
+    {
       name: "shop",
       type: { name: "Shop", definedType: "Object" },
       arguments: {},
@@ -94,6 +103,15 @@ const document: SyrupOperation<TestQuery8QueryData, {}> = {
       typeCondition: { name: "QueryRoot", definedType: "Object" },
       directive: null,
       selections: ([
+        {
+          name: "__typename",
+          type: { name: "String", definedType: "Scalar" },
+          arguments: {},
+          passedGID: null,
+          typeCondition: { name: "Shop", definedType: "Object" },
+          directive: null,
+          selections: ([] as GraphSelection[])
+        }, 
         {
           name: "id",
           type: { name: "ID", definedType: "Scalar" },
@@ -112,6 +130,15 @@ const document: SyrupOperation<TestQuery8QueryData, {}> = {
           directive: null,
           selections: ([
             {
+              name: "__typename",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "ProductConnection", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
+            {
               name: "edges",
               type: { name: "ProductEdge", definedType: "Object" },
               arguments: {},
@@ -119,6 +146,15 @@ const document: SyrupOperation<TestQuery8QueryData, {}> = {
               typeCondition: { name: "ProductConnection", definedType: "Object" },
               directive: null,
               selections: ([
+                {
+                  name: "__typename",
+                  type: { name: "String", definedType: "Scalar" },
+                  arguments: {},
+                  passedGID: null,
+                  typeCondition: { name: "ProductEdge", definedType: "Object" },
+                  directive: null,
+                  selections: ([] as GraphSelection[])
+                }, 
                 {
                   name: "cursor",
                   type: { name: "String", definedType: "Scalar" },
@@ -136,6 +172,15 @@ const document: SyrupOperation<TestQuery8QueryData, {}> = {
                   typeCondition: { name: "ProductEdge", definedType: "Object" },
                   directive: null,
                   selections: ([
+                    {
+                      name: "__typename",
+                      type: { name: "String", definedType: "Scalar" },
+                      arguments: {},
+                      passedGID: null,
+                      typeCondition: { name: "Product", definedType: "Object" },
+                      directive: null,
+                      selections: ([] as GraphSelection[])
+                    }, 
                     {
                       name: "title",
                       type: { name: "String", definedType: "Scalar" },
@@ -160,6 +205,15 @@ const document: SyrupOperation<TestQuery8QueryData, {}> = {
           directive: null,
           selections: ([
             {
+              name: "__typename",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "ProductConnection", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
+            {
               name: "edges",
               type: { name: "ProductEdge", definedType: "Object" },
               arguments: {},
@@ -167,6 +221,15 @@ const document: SyrupOperation<TestQuery8QueryData, {}> = {
               typeCondition: { name: "ProductConnection", definedType: "Object" },
               directive: null,
               selections: ([
+                {
+                  name: "__typename",
+                  type: { name: "String", definedType: "Scalar" },
+                  arguments: {},
+                  passedGID: null,
+                  typeCondition: { name: "ProductEdge", definedType: "Object" },
+                  directive: null,
+                  selections: ([] as GraphSelection[])
+                }, 
                 {
                   name: "cursor",
                   type: { name: "String", definedType: "Scalar" },
@@ -184,6 +247,15 @@ const document: SyrupOperation<TestQuery8QueryData, {}> = {
                   typeCondition: { name: "ProductEdge", definedType: "Object" },
                   directive: null,
                   selections: ([
+                    {
+                      name: "__typename",
+                      type: { name: "String", definedType: "Scalar" },
+                      arguments: {},
+                      passedGID: null,
+                      typeCondition: { name: "Product", definedType: "Object" },
+                      directive: null,
+                      selections: ([] as GraphSelection[])
+                    }, 
                     {
                       name: "title",
                       type: { name: "String", definedType: "Scalar" },

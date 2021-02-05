@@ -19,6 +19,16 @@ const document: SyrupOperation<ShopQueryQueryData, ShopQueryQueryData.Variables>
   name: "ShopQuery",
   source: "fragment Shop on QueryRoot { __typename shop { __typename availableChannelApps(first: \$first) { __typename edges { __typename node { __typename id } } } } } query ShopQuery(\$first: Int!) { __typename ... Shop }",
   operationType: 'query',
-  selections: ([] as GraphSelection[]).concat(shopFragmentDataSelections)
+  selections: ([
+    {
+      name: "__typename",
+      type: { name: "String", definedType: "Scalar" },
+      arguments: {},
+      passedGID: null,
+      typeCondition: { name: "QueryRoot", definedType: "Object" },
+      directive: null,
+      selections: ([] as GraphSelection[])
+    }
+  ] as GraphSelection[]).concat(shopFragmentDataSelections)
 }
 export default document

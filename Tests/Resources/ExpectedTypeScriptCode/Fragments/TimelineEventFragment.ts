@@ -121,6 +121,15 @@ export interface TimelineEventFragmentFragmentData {
 
 export const timelineEventFragmentFragmentDataSelections: GraphSelection[] = ([
   {
+    name: "__typename",
+    type: { name: "String", definedType: "Scalar" },
+    arguments: {},
+    passedGID: null,
+    typeCondition: { name: "Event", definedType: "Interface" },
+    directive: null,
+    selections: ([] as GraphSelection[])
+  }, 
+  {
     name: "id",
     type: { name: "ID", definedType: "Scalar" },
     arguments: {},
@@ -175,6 +184,15 @@ export const timelineEventFragmentFragmentDataSelections: GraphSelection[] = ([
     selections: ([] as GraphSelection[])
   }, 
   {
+    name: "__typename",
+    type: { name: "String", definedType: "Scalar" },
+    arguments: {},
+    passedGID: null,
+    typeCondition: { name: "CommentEvent", definedType: "Object" },
+    directive: null,
+    selections: ([] as GraphSelection[])
+  }, 
+  {
     name: "edited",
     type: { name: "Boolean", definedType: "Scalar" },
     arguments: {},
@@ -209,6 +227,15 @@ export const timelineEventFragmentFragmentDataSelections: GraphSelection[] = ([
     typeCondition: { name: "CommentEvent", definedType: "Object" },
     directive: null,
     selections: ([
+      {
+        name: "__typename",
+        type: { name: "String", definedType: "Scalar" },
+        arguments: {},
+        passedGID: null,
+        typeCondition: { name: "CommentEventAttachment", definedType: "Object" },
+        directive: null,
+        selections: ([] as GraphSelection[])
+      }, 
       {
         name: "id",
         type: { name: "ID", definedType: "Scalar" },
@@ -262,6 +289,15 @@ export const timelineEventFragmentFragmentDataSelections: GraphSelection[] = ([
         typeCondition: { name: "CommentEventAttachment", definedType: "Object" },
         directive: null,
         selections: ([
+          {
+            name: "__typename",
+            type: { name: "String", definedType: "Scalar" },
+            arguments: {},
+            passedGID: null,
+            typeCondition: { name: "Image", definedType: "Object" },
+            directive: null,
+            selections: ([] as GraphSelection[])
+          }, 
           {
             name: "transformedSrc",
             type: { name: "URL", definedType: "Scalar" },

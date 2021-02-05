@@ -60,6 +60,15 @@ const document: SyrupOperation<TestQuery2QueryData, {}> = {
   operationType: 'query',
   selections: ([
     {
+      name: "__typename",
+      type: { name: "String", definedType: "Scalar" },
+      arguments: {},
+      passedGID: null,
+      typeCondition: { name: "QueryRoot", definedType: "Object" },
+      directive: null,
+      selections: ([] as GraphSelection[])
+    }, 
+    {
       name: "shop",
       type: { name: "Shop", definedType: "Object" },
       arguments: {},
@@ -67,6 +76,15 @@ const document: SyrupOperation<TestQuery2QueryData, {}> = {
       typeCondition: { name: "QueryRoot", definedType: "Object" },
       directive: null,
       selections: ([
+        {
+          name: "__typename",
+          type: { name: "String", definedType: "Scalar" },
+          arguments: {},
+          passedGID: null,
+          typeCondition: { name: "Shop", definedType: "Object" },
+          directive: null,
+          selections: ([] as GraphSelection[])
+        }, 
         {
           name: "name",
           type: { name: "String", definedType: "Scalar" },
@@ -103,6 +121,15 @@ const document: SyrupOperation<TestQuery2QueryData, {}> = {
           directive: null,
           selections: ([
             {
+              name: "__typename",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "ShopAlert", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
+            {
               name: "action",
               type: { name: "ShopAlertAction", definedType: "Object" },
               arguments: {},
@@ -110,6 +137,15 @@ const document: SyrupOperation<TestQuery2QueryData, {}> = {
               typeCondition: { name: "ShopAlert", definedType: "Object" },
               directive: null,
               selections: ([
+                {
+                  name: "__typename",
+                  type: { name: "String", definedType: "Scalar" },
+                  arguments: {},
+                  passedGID: null,
+                  typeCondition: { name: "ShopAlertAction", definedType: "Object" },
+                  directive: null,
+                  selections: ([] as GraphSelection[])
+                }, 
                 {
                   name: "title",
                   type: { name: "String", definedType: "Scalar" },

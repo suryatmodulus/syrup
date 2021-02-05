@@ -76,6 +76,15 @@ const document: SyrupOperation<ProductVariantShippingMutationData, ProductVarian
   operationType: 'mutation',
   selections: ([
     {
+      name: "__typename",
+      type: { name: "String", definedType: "Scalar" },
+      arguments: {},
+      passedGID: null,
+      typeCondition: { name: "Mutation", definedType: "Object" },
+      directive: null,
+      selections: ([] as GraphSelection[])
+    }, 
+    {
       name: "productVariantUpdate",
       type: { name: "ProductVariantUpdatePayload", definedType: "Object" },
       arguments: { input: { type: "OperationVariableKey", value: "variantInput" } },
@@ -84,6 +93,15 @@ const document: SyrupOperation<ProductVariantShippingMutationData, ProductVarian
       directive: null,
       selections: ([
         {
+          name: "__typename",
+          type: { name: "String", definedType: "Scalar" },
+          arguments: {},
+          passedGID: null,
+          typeCondition: { name: "ProductVariantUpdatePayload", definedType: "Object" },
+          directive: null,
+          selections: ([] as GraphSelection[])
+        }, 
+        {
           name: "productVariant",
           type: { name: "ProductVariant", definedType: "Object" },
           arguments: {},
@@ -91,6 +109,15 @@ const document: SyrupOperation<ProductVariantShippingMutationData, ProductVarian
           typeCondition: { name: "ProductVariantUpdatePayload", definedType: "Object" },
           directive: null,
           selections: ([
+            {
+              name: "__typename",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "ProductVariant", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
             {
               name: "id",
               type: { name: "ID", definedType: "Scalar" },
@@ -146,6 +173,15 @@ const document: SyrupOperation<ProductVariantShippingMutationData, ProductVarian
           typeCondition: { name: "ProductVariantUpdatePayload", definedType: "Object" },
           directive: null,
           selections: ([
+            {
+              name: "__typename",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "UserError", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
             {
               name: "message",
               type: { name: "String", definedType: "Scalar" },

@@ -348,27 +348,25 @@ class SelectionSetExtension: Extension {
 		
 		for selection in combinedSelections {
 			if let field = selection.field {
-				if field.name != "__typename" {
-					let name = field.alias ?? field.name
-					var render = "\n\(spacing)  {"
-					render.append("\n\(spacing)    name: \"\(name)\",")
-					render.append("\n\(spacing)    type: \(renderTypeScriptTypeCondition(field.type)),")
-					render.append("\n\(spacing)    arguments: \(renderTypeScriptArguments(field.arguments)),")
-					render.append("\n\(spacing)    passedGID: \(renderTypeScriptGIDPassed(field)),")
-					render.append("\n\(spacing)    typeCondition: \(renderTypeScriptTypeCondition(field.parentType)),")
-					render.append("\n\(spacing)    directive: \(renderTypeScriptConditionalDirective(field)),")
+                let name = field.alias ?? field.name
+                var render = "\n\(spacing)  {"
+                render.append("\n\(spacing)    name: \"\(name)\",")
+                render.append("\n\(spacing)    type: \(renderTypeScriptTypeCondition(field.type)),")
+                render.append("\n\(spacing)    arguments: \(renderTypeScriptArguments(field.arguments)),")
+                render.append("\n\(spacing)    passedGID: \(renderTypeScriptGIDPassed(field)),")
+                render.append("\n\(spacing)    typeCondition: \(renderTypeScriptTypeCondition(field.parentType)),")
+                render.append("\n\(spacing)    directive: \(renderTypeScriptConditionalDirective(field)),")
 
-                    let nextSpacingAmount = spacingAmount+4
-					var typeConditionArgs: [Any?] = []
-					if shouldPassTypeCondition(field.type) {
-						typeConditionArgs = [renderTypeScriptTypeCondition(field.type), nextSpacingAmount]
-                    } else {
-                        typeConditionArgs = [nil, nextSpacingAmount]
-                    }
-					render.append("\n\(spacing)    selections: \(renderTypeScriptSelections(field.selectionSet, args: typeConditionArgs))")
-					render.append("\n\(spacing)  }")
-					fieldRenders.append(render)
-				}
+                let nextSpacingAmount = spacingAmount+4
+                var typeConditionArgs: [Any?] = []
+                if shouldPassTypeCondition(field.type) {
+                    typeConditionArgs = [renderTypeScriptTypeCondition(field.type), nextSpacingAmount]
+                } else {
+                    typeConditionArgs = [nil, nextSpacingAmount]
+                }
+                render.append("\n\(spacing)    selections: \(renderTypeScriptSelections(field.selectionSet, args: typeConditionArgs))")
+                render.append("\n\(spacing)  }")
+                fieldRenders.append(render)
 			}
 			if let fragmentSpread = selection.fragmentSpread {
 				fragmentSpreadRenders.append(fragmentSpread.name)

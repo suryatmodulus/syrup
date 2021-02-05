@@ -18,6 +18,15 @@ export interface BasicFragmentFragmentData {
 
 export const basicFragmentFragmentDataSelections: GraphSelection[] = ([
   {
+    name: "__typename",
+    type: { name: "String", definedType: "Scalar" },
+    arguments: {},
+    passedGID: null,
+    typeCondition: { name: "Customer", definedType: "Object" },
+    directive: null,
+    selections: ([] as GraphSelection[])
+  }, 
+  {
     name: "id",
     type: { name: "ID", definedType: "Scalar" },
     arguments: {},

@@ -98,6 +98,15 @@ const document: SyrupOperation<TestDeprecatedFieldsQueryData, TestDeprecatedFiel
   operationType: 'query',
   selections: ([
     {
+      name: "__typename",
+      type: { name: "String", definedType: "Scalar" },
+      arguments: {},
+      passedGID: null,
+      typeCondition: { name: "QueryRoot", definedType: "Object" },
+      directive: null,
+      selections: ([] as GraphSelection[])
+    }, 
+    {
       name: "channels",
       type: { name: "ChannelConnection", definedType: "Object" },
       arguments: { first: { type: "OperationVariableKey", value: "first" } },
@@ -105,6 +114,15 @@ const document: SyrupOperation<TestDeprecatedFieldsQueryData, TestDeprecatedFiel
       typeCondition: { name: "QueryRoot", definedType: "Object" },
       directive: null,
       selections: ([
+        {
+          name: "__typename",
+          type: { name: "String", definedType: "Scalar" },
+          arguments: {},
+          passedGID: null,
+          typeCondition: { name: "ChannelConnection", definedType: "Object" },
+          directive: null,
+          selections: ([] as GraphSelection[])
+        }, 
         {
           name: "edges",
           type: { name: "ChannelEdge", definedType: "Object" },
@@ -114,6 +132,15 @@ const document: SyrupOperation<TestDeprecatedFieldsQueryData, TestDeprecatedFiel
           directive: null,
           selections: ([
             {
+              name: "__typename",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "ChannelEdge", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
+            {
               name: "node",
               type: { name: "Channel", definedType: "Object" },
               arguments: {},
@@ -122,6 +149,15 @@ const document: SyrupOperation<TestDeprecatedFieldsQueryData, TestDeprecatedFiel
               directive: null,
               selections: ([
                 {
+                  name: "__typename",
+                  type: { name: "String", definedType: "Scalar" },
+                  arguments: {},
+                  passedGID: null,
+                  typeCondition: { name: "Channel", definedType: "Object" },
+                  directive: null,
+                  selections: ([] as GraphSelection[])
+                }, 
+                {
                   name: "app",
                   type: { name: "App", definedType: "Object" },
                   arguments: {},
@@ -129,6 +165,15 @@ const document: SyrupOperation<TestDeprecatedFieldsQueryData, TestDeprecatedFiel
                   typeCondition: { name: "Channel", definedType: "Object" },
                   directive: null,
                   selections: ([
+                    {
+                      name: "__typename",
+                      type: { name: "String", definedType: "Scalar" },
+                      arguments: {},
+                      passedGID: null,
+                      typeCondition: { name: "App", definedType: "Object" },
+                      directive: null,
+                      selections: ([] as GraphSelection[])
+                    }, 
                     {
                       name: "id",
                       type: { name: "ID", definedType: "Scalar" },
@@ -146,6 +191,15 @@ const document: SyrupOperation<TestDeprecatedFieldsQueryData, TestDeprecatedFiel
                       typeCondition: { name: "App", definedType: "Object" },
                       directive: null,
                       selections: ([
+                        {
+                          name: "__typename",
+                          type: { name: "String", definedType: "Scalar" },
+                          arguments: {},
+                          passedGID: null,
+                          typeCondition: { name: "Image", definedType: "Object" },
+                          directive: null,
+                          selections: ([] as GraphSelection[])
+                        }, 
                         {
                           name: "src",
                           type: { name: "URL", definedType: "Scalar" },

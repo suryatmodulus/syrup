@@ -56,6 +56,15 @@ const document: SyrupOperation<ProductsListQueryData, ProductsListQueryData.Vari
   operationType: 'query',
   selections: ([
     {
+      name: "__typename",
+      type: { name: "String", definedType: "Scalar" },
+      arguments: {},
+      passedGID: null,
+      typeCondition: { name: "QueryRoot", definedType: "Object" },
+      directive: null,
+      selections: ([] as GraphSelection[])
+    }, 
+    {
       name: "products",
       type: { name: "ProductConnection", definedType: "Object" },
       arguments: { first: { type: "OperationVariableKey", value: "first" }, reverse: { type: "BooleanValue", value: true }, before: { type: "OperationVariableKey", value: "before" }, after: { type: "OperationVariableKey", value: "after" }, sortKey: { type: "EnumValue", value: "CREATED_AT" } },
@@ -63,6 +72,15 @@ const document: SyrupOperation<ProductsListQueryData, ProductsListQueryData.Vari
       typeCondition: { name: "QueryRoot", definedType: "Object" },
       directive: null,
       selections: ([
+        {
+          name: "__typename",
+          type: { name: "String", definedType: "Scalar" },
+          arguments: {},
+          passedGID: null,
+          typeCondition: { name: "ProductConnection", definedType: "Object" },
+          directive: null,
+          selections: ([] as GraphSelection[])
+        }, 
         {
           name: "edges",
           type: { name: "ProductEdge", definedType: "Object" },
@@ -72,6 +90,15 @@ const document: SyrupOperation<ProductsListQueryData, ProductsListQueryData.Vari
           directive: null,
           selections: ([
             {
+              name: "__typename",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "ProductEdge", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
+            {
               name: "node",
               type: { name: "Product", definedType: "Object" },
               arguments: {},
@@ -79,6 +106,15 @@ const document: SyrupOperation<ProductsListQueryData, ProductsListQueryData.Vari
               typeCondition: { name: "ProductEdge", definedType: "Object" },
               directive: null,
               selections: ([
+                {
+                  name: "__typename",
+                  type: { name: "String", definedType: "Scalar" },
+                  arguments: {},
+                  passedGID: null,
+                  typeCondition: { name: "Product", definedType: "Object" },
+                  directive: null,
+                  selections: ([] as GraphSelection[])
+                }, 
                 {
                   name: "id",
                   type: { name: "ID", definedType: "Scalar" },

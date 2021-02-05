@@ -68,6 +68,15 @@ const document: SyrupOperation<CreateCollectionMutationData, CreateCollectionMut
   operationType: 'mutation',
   selections: ([
     {
+      name: "__typename",
+      type: { name: "String", definedType: "Scalar" },
+      arguments: {},
+      passedGID: null,
+      typeCondition: { name: "Mutation", definedType: "Object" },
+      directive: null,
+      selections: ([] as GraphSelection[])
+    }, 
+    {
       name: "collectionCreate",
       type: { name: "CollectionCreatePayload", definedType: "Object" },
       arguments: { input: { type: "OperationVariableKey", value: "input" } },
@@ -76,6 +85,15 @@ const document: SyrupOperation<CreateCollectionMutationData, CreateCollectionMut
       directive: null,
       selections: ([
         {
+          name: "__typename",
+          type: { name: "String", definedType: "Scalar" },
+          arguments: {},
+          passedGID: null,
+          typeCondition: { name: "CollectionCreatePayload", definedType: "Object" },
+          directive: null,
+          selections: ([] as GraphSelection[])
+        }, 
+        {
           name: "userErrors",
           type: { name: "UserError", definedType: "Object" },
           arguments: {},
@@ -83,6 +101,15 @@ const document: SyrupOperation<CreateCollectionMutationData, CreateCollectionMut
           typeCondition: { name: "CollectionCreatePayload", definedType: "Object" },
           directive: null,
           selections: ([
+            {
+              name: "__typename",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "UserError", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
             {
               name: "field",
               type: { name: "String", definedType: "Scalar" },
@@ -112,6 +139,15 @@ const document: SyrupOperation<CreateCollectionMutationData, CreateCollectionMut
           directive: null,
           selections: ([
             {
+              name: "__typename",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "Collection", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
+            {
               name: "title",
               type: { name: "String", definedType: "Scalar" },
               arguments: {},
@@ -137,6 +173,15 @@ const document: SyrupOperation<CreateCollectionMutationData, CreateCollectionMut
               typeCondition: { name: "Collection", definedType: "Object" },
               directive: null,
               selections: ([
+                {
+                  name: "__typename",
+                  type: { name: "String", definedType: "Scalar" },
+                  arguments: {},
+                  passedGID: null,
+                  typeCondition: { name: "ResourceFeedback", definedType: "Object" },
+                  directive: null,
+                  selections: ([] as GraphSelection[])
+                }, 
                 {
                   name: "summary",
                   type: { name: "String", definedType: "Scalar" },

@@ -51,6 +51,15 @@ const document: SyrupOperation<TestQuery3QueryData, {}> = {
   operationType: 'query',
   selections: ([
     {
+      name: "__typename",
+      type: { name: "String", definedType: "Scalar" },
+      arguments: {},
+      passedGID: null,
+      typeCondition: { name: "QueryRoot", definedType: "Object" },
+      directive: null,
+      selections: ([] as GraphSelection[])
+    }, 
+    {
       name: "customer",
       type: { name: "Customer", definedType: "Object" },
       arguments: { id: { type: "StringValue", value: "" } },
@@ -59,6 +68,15 @@ const document: SyrupOperation<TestQuery3QueryData, {}> = {
       directive: null,
       selections: ([
         {
+          name: "__typename",
+          type: { name: "String", definedType: "Scalar" },
+          arguments: {},
+          passedGID: null,
+          typeCondition: { name: "Customer", definedType: "Object" },
+          directive: null,
+          selections: ([] as GraphSelection[])
+        }, 
+        {
           name: "addresses",
           type: { name: "MailingAddress", definedType: "Object" },
           arguments: {},
@@ -66,6 +84,15 @@ const document: SyrupOperation<TestQuery3QueryData, {}> = {
           typeCondition: { name: "Customer", definedType: "Object" },
           directive: null,
           selections: ([
+            {
+              name: "__typename",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "MailingAddress", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
             {
               name: "country",
               type: { name: "String", definedType: "Scalar" },
@@ -85,6 +112,15 @@ const document: SyrupOperation<TestQuery3QueryData, {}> = {
           typeCondition: { name: "Customer", definedType: "Object" },
           directive: null,
           selections: ([
+            {
+              name: "__typename",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "MailingAddress", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
             {
               name: "city",
               type: { name: "String", definedType: "Scalar" },

@@ -38,6 +38,15 @@ const document: SyrupOperation<TestMutation0MutationData, TestMutation0MutationD
   operationType: 'mutation',
   selections: ([
     {
+      name: "__typename",
+      type: { name: "String", definedType: "Scalar" },
+      arguments: {},
+      passedGID: null,
+      typeCondition: { name: "Mutation", definedType: "Object" },
+      directive: null,
+      selections: ([] as GraphSelection[])
+    }, 
+    {
       name: "customerUpdate",
       type: { name: "CustomerUpdatePayload", definedType: "Object" },
       arguments: { input: { type: "OperationVariableKey", value: "input" } },
@@ -46,6 +55,15 @@ const document: SyrupOperation<TestMutation0MutationData, TestMutation0MutationD
       directive: null,
       selections: ([
         {
+          name: "__typename",
+          type: { name: "String", definedType: "Scalar" },
+          arguments: {},
+          passedGID: null,
+          typeCondition: { name: "CustomerUpdatePayload", definedType: "Object" },
+          directive: null,
+          selections: ([] as GraphSelection[])
+        }, 
+        {
           name: "customer",
           type: { name: "Customer", definedType: "Object" },
           arguments: {},
@@ -53,6 +71,15 @@ const document: SyrupOperation<TestMutation0MutationData, TestMutation0MutationD
           typeCondition: { name: "CustomerUpdatePayload", definedType: "Object" },
           directive: null,
           selections: ([
+            {
+              name: "__typename",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "Customer", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
             {
               name: "id",
               type: { name: "ID", definedType: "Scalar" },

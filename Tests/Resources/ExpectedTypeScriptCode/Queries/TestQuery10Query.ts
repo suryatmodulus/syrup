@@ -74,6 +74,15 @@ const document: SyrupOperation<TestQuery10QueryData, TestQuery10QueryData.Variab
   operationType: 'query',
   selections: ([
     {
+      name: "__typename",
+      type: { name: "String", definedType: "Scalar" },
+      arguments: {},
+      passedGID: null,
+      typeCondition: { name: "QueryRoot", definedType: "Object" },
+      directive: null,
+      selections: ([] as GraphSelection[])
+    }, 
+    {
       name: "priceRule",
       type: { name: "PriceRule", definedType: "Object" },
       arguments: { id: { type: "OperationVariableKey", value: "priceRuleId" } },
@@ -81,6 +90,15 @@ const document: SyrupOperation<TestQuery10QueryData, TestQuery10QueryData.Variab
       typeCondition: { name: "QueryRoot", definedType: "Object" },
       directive: null,
       selections: ([
+        {
+          name: "__typename",
+          type: { name: "String", definedType: "Scalar" },
+          arguments: {},
+          passedGID: null,
+          typeCondition: { name: "PriceRule", definedType: "Object" },
+          directive: null,
+          selections: ([] as GraphSelection[])
+        }, 
         {
           name: "id",
           type: { name: "ID", definedType: "Scalar" },
@@ -99,11 +117,38 @@ const document: SyrupOperation<TestQuery10QueryData, TestQuery10QueryData.Variab
           directive: null,
           selections: ([
             {
+              name: "__typename",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "PriceRuleValue", definedType: "Union" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
+            {
+              name: "__typename",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "PriceRulePercentValue", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
+            {
               name: "percentage",
               type: { name: "Float", definedType: "Scalar" },
               arguments: {},
               passedGID: null,
               typeCondition: { name: "PriceRulePercentValue", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
+            {
+              name: "__typename",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "PriceRuleFixedAmountValue", definedType: "Object" },
               directive: null,
               selections: ([] as GraphSelection[])
             }, 
@@ -127,11 +172,38 @@ const document: SyrupOperation<TestQuery10QueryData, TestQuery10QueryData.Variab
           directive: null,
           selections: ([
             {
+              name: "__typename",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "PricingValue", definedType: "Union" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
+            {
+              name: "__typename",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "MoneyV2", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
+            {
               name: "amount",
               type: { name: "Decimal", definedType: "Scalar" },
               arguments: {},
               passedGID: null,
               typeCondition: { name: "MoneyV2", definedType: "Object" },
+              directive: null,
+              selections: ([] as GraphSelection[])
+            }, 
+            {
+              name: "__typename",
+              type: { name: "String", definedType: "Scalar" },
+              arguments: {},
+              passedGID: null,
+              typeCondition: { name: "PricingPercentageValue", definedType: "Object" },
               directive: null,
               selections: ([] as GraphSelection[])
             }, 
