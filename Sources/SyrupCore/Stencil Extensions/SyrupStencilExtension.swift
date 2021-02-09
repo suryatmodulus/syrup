@@ -24,6 +24,7 @@
 
 import Foundation
 import Stencil
+import CommonCrypto
 
 final class SyrupStencilExtension: Extension {
 	override init() {
@@ -46,6 +47,7 @@ final class SyrupStencilExtension: Extension {
 		registerFilter("replace", filter: SyrupStencilExtension.replace)
 		registerFilter("replaceQuotes", filter: SyrupStencilExtension.replaceQuotes)
 		registerFilter("capitalizeFirstLetter", filter: SyrupStencilExtension.capitalizeFirstLetter)
+        registerFilter("encryptData", filter: SyrupStencilExtension.encryptData)
 		registerFilter("renderClassName", filter: SyrupStencilExtension.renderClassName)
 		registerFilter("renderPackage", filter: SyrupStencilExtension.renderPackage)
 		registerFilter("renderOperationTypeName", filter: SyrupStencilExtension.renderOperationTypeName)
@@ -123,4 +125,9 @@ final class SyrupStencilExtension: Extension {
 		guard let value = value as? IntermediateRepresentation.OperationDefinition else { return nil }
 		return "\(value.type)".capitalized
 	}
+    
+    static func encryptData(_ value: Any?) throws -> Any? {
+        guard let value = value as? String else { return nil }
+        return value.sha256()
+    }
 }

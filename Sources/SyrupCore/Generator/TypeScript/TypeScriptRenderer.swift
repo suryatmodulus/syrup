@@ -25,7 +25,6 @@
 import Foundation
 import Stencil
 import PathKit
-import CommonCrypto
 
 final class TypeScriptRenderer: Renderer {
 	override class func customExtensions(config: Config) -> [Extension] {
@@ -46,7 +45,6 @@ final class TypeScriptRenderer: Renderer {
 		operationSelections: SelectionSetVisitor.Operation
 	) throws -> String {
 		let queryString = intermediateRepresentation.fullQueryString(for: operation).removingLeadingSpaces.removingNewLines
-
         let referencedImportsForOperation = referencedImports(
             selections: operation.selections,
             intermediateRepresentation: intermediateRepresentation,
@@ -60,9 +58,7 @@ final class TypeScriptRenderer: Renderer {
 
 		let context: [String: Any] = [
 			"operation": operation,
-			"encryptedId": queryString.sha256(),
 			"name": name,
-			"fieldPrefix": name + ".",
 			"queryString": queryString,
 			"fields": fields,
 			"topLevelFragmentNames": topLevelFragmentSpreads.map { $0.name },
@@ -74,6 +70,49 @@ final class TypeScriptRenderer: Renderer {
 
 		return try render(template: "Operation", asFile: true, context: context)
 	}
+    
+    func renderObjectFragment(
+        fragment: SelectionSetVisitor.FragmentDefinition,
+        typeName: String,
+        fields: [CollectedField],
+        fragmentSpreads: [IntermediateRepresentation.SelectionPath.PathComponent.Fragment],
+        referencedImports: (fragments: [String], enums: [String])
+    ) throws -> String {
+        return try render(template: "ObjectFragment", asFile: true, context: buildObjectContext(
+            name: fragment.name,
+            typeName: typeName,
+            fields: fields,
+            fragmentSpreads: fragmentSpreads,
+            extras: [
+                "allReferencedFragments": referencedImports.fragments,
+                "allReferencedEnums": referencedImports.enums,
+                "selections": fragment.selectionSet
+            ]
+        ))
+    }
+    
+    func renderUnionFragment(
+        fragment: SelectionSetVisitor.FragmentDefinition,
+        typeName: String,
+        commonFields: [CollectedField],
+        collectedFields: [CollectedField],
+        groupedFragmentSpreads: [String: [IntermediateRepresentation.SelectionPath.PathComponent.Fragment]],
+        referencedImports: (fragments: [String], enums: [String])
+    ) throws -> String {
+        return try render(template: "UnionFragment", asFile: false, context: buildUnionContext(
+            name: fragment.name,
+            typeName: typeName,
+            parentFragment: fragment.name,
+            commonFields: commonFields,
+            collectedFields: collectedFields,
+            groupedFragmentSpreads: groupedFragmentSpreads,
+            extras: [
+                "allReferencedFragments": referencedImports.fragments,
+                "allReferencedEnums": referencedImports.enums,
+                "selections": fragment.selectionSet
+            ]
+        ))
+    }
     
     override func renderInputTypes(intermediateRepresentation: IntermediateRepresentation) throws -> [String] {
         var rendered: [String] = []
@@ -89,190 +128,179 @@ final class TypeScriptRenderer: Renderer {
             let context: [String: Any] = [
                 "inputType": inputType,
                 "inputImports": inputImports,
-                "enumImports": enumImports,
-                "moduleName": config.project.moduleName,
-                "importEnums": true
+                "enumImports": enumImports
             ]
             rendered.append(try render(template: "InputType", asFile: true, context: context))
         }
         return rendered
     }
 
-	func renderGraphApi() throws -> String {
-		try render(template: "GraphApi", context: [:])
-	}
-
-	func renderEnumEntryPoint(intermediateRepresentation: IntermediateRepresentation) throws -> String {
-		let context: [String: Any] = ["enumNames": intermediateRepresentation.referencedEnums.map { $0.name }.sorted()]
-		return try render(template: "EnumTypeIndex", asFile: true, context: context)
-	}
-	
-	func renderInputTypeEntryPoint(intermediateRepresentation: IntermediateRepresentation) throws -> String {
-		let context: [String: Any] = ["inputNames": intermediateRepresentation.referencedInputTypes.map { $0.name }.sorted()]
-		return try render(template: "InputTypeIndex", asFile: true, context: context)
-	}
-	
-	func renderFragmentEntryPoint(intermediateRepresentation: IntermediateRepresentation) throws -> String {
-		let context: [String: Any] = ["fragmentNames": intermediateRepresentation.fragmentDefinitions.map { $0.name }.sorted()]
-		return try render(template: "FragmentIndex", asFile: true, context: context)
-	}
-
-	func renderResponseType(
+	func renderObjectField(
 		name: String,
         typeName: String,
 		fields: [CollectedField],
-		fragmentNames: [String],
-		fragmentSelections: SelectionSetVisitor.FragmentDefinition? = nil,
-		asFile: Bool = false,
-        referencedResponseImports: (fragments: [String], enums: [String]) = (fragments: [], enums: [])
+		fragmentSpreads: [IntermediateRepresentation.SelectionPath.PathComponent.Fragment]
 	) throws -> String {
-        var context: [String: Any] = [
-			"name": name,
-            "fieldPrefix": "\(name).",
-            "hasInternalDefinitions": hasInternalDefinitions(fields: fields),
-            "typeName": typeName,
-			"fields": fields,
-			"fragmentNames": fragmentNames,
-            "fileReferencedFragments": referencedResponseImports.fragments,
-            "fileReferencedEnums": referencedResponseImports.enums,
-			"fragmentSelections": fragmentSelections?.selectionSet ?? []
-		]
-		if asFile {
-			let containsFragment = !fragmentNames.isEmpty || checkContainsFragment(fields: fields)
-			context["containsFragment"] = containsFragment
-		}
-		return try render(template: "ResponseType", asFile: asFile, context: context)
+        return try render(template: "ObjectField", asFile: false, context: buildObjectContext(
+            name: name,
+            typeName: typeName,
+            fields: fields,
+            fragmentSpreads: fragmentSpreads,
+            extras: [:]
+        ))
 	}
+    
+    func renderUnionableField(
+        fieldName: String,
+        typeName: String,
+        parentFragment: String?,
+        commonFields: [CollectedField],
+        collectedFields: [CollectedField],
+        groupedFragmentSpreads: [String: [IntermediateRepresentation.SelectionPath.PathComponent.Fragment]]
+    ) throws -> String {
+        return try render(template: "UnionField", asFile: false, context: buildUnionContext(
+            name: fieldName,
+            typeName: typeName,
+            parentFragment: parentFragment,
+            commonFields: commonFields,
+            collectedFields: collectedFields,
+            groupedFragmentSpreads: groupedFragmentSpreads,
+            extras: [:]
+        ))
+    }
 
 	func renderFragmentDefinitions(intermediateRepresentation: IntermediateRepresentation, selectionSets: SelectionSetVisitor.Results) throws -> [String] {
 		var rendered: [String] = []
 		for fragment in intermediateRepresentation.fragmentDefinitions {
-            let referencedImportsForFragment = referencedImports(selections: fragment.selections, intermediateRepresentation: intermediateRepresentation)
 			let collectionResults = try intermediateRepresentation.collectFields(for: fragment)
 			let fields = collectionResults.fields.scopedTo(parentFragment: fragment.name)
-            let fragmentName = "\(fragment.name)FragmentData"
+            let referencedImportsForFragment = referencedImports(selections: fragment.selections, intermediateRepresentation: intermediateRepresentation)
+            
 			let definition: String
 			switch fragment.typeCondition {
 			case .interface(let interfaceType):
-				let fragmentSelections = selectionSets.fragmentDefinition(named: fragment.name)
-				let groupedFragmentSpreads = IntermediateRepresentation.groupedFragmentSpreads(fragmentSpreads: collectionResults.fragmentSpreads, inheritedType: interfaceType)
-				definition = try renderInterfaceWrapper(name: fragmentName, scopedFields: fields, collectedFields: collectionResults.fields, interfaceTypeName: interfaceType, groupedFragmentSpreads: groupedFragmentSpreads, fragmentSelections: fragmentSelections, asFile: true, referencedResponseImports: (fragments: referencedImportsForFragment.fragments, enums: referencedImportsForFragment.enums))
+				let fragmentDefinition = selectionSets.fragmentDefinition(named: fragment.name)
+				let groupedFragmentSpreads = IntermediateRepresentation.groupedFragmentSpreads(
+                    fragmentSpreads: collectionResults.fragmentSpreads,
+                    inheritedType: interfaceType
+                )
+                
+				definition = try renderUnionFragment(
+                    fragment: fragmentDefinition,
+                    typeName: interfaceType,
+                    commonFields: fields,
+                    collectedFields: collectionResults.fields,
+                    groupedFragmentSpreads: groupedFragmentSpreads,
+                    referencedImports: (referencedImportsForFragment.fragments, enums: referencedImportsForFragment.enums)
+                )
 			case .union(let unionType):
-				let fragmentSelections = selectionSets.fragmentDefinition(named: fragment.name)
-				let groupedFragmentSpreads = IntermediateRepresentation.groupedFragmentSpreads(fragmentSpreads: collectionResults.fragmentSpreads, inheritedType: unionType)
-				definition = try renderUnionWrapper(name: fragmentName, unionTypeName: unionType, collectedFields: fields, groupedFragmentSpreads: groupedFragmentSpreads, fragmentSelections: fragmentSelections, asFile: true, referencedResponseImports: (fragments: referencedImportsForFragment.fragments, enums: referencedImportsForFragment.enums))
+                let fragmentDefinition = selectionSets.fragmentDefinition(named: fragment.name)
+                let groupedFragmentSpreads = IntermediateRepresentation.groupedFragmentSpreads(
+                    fragmentSpreads: collectionResults.fragmentSpreads,
+                    inheritedType: unionType
+                )
+                
+                definition = try renderUnionFragment(
+                    fragment: fragmentDefinition,
+                    typeName: unionType,
+                    commonFields: [],
+                    collectedFields: fields,
+                    groupedFragmentSpreads: groupedFragmentSpreads,
+                    referencedImports: (referencedImportsForFragment.fragments, enums: referencedImportsForFragment.enums)
+                )
 			case .object:
-				let fragmentSelections = selectionSets.fragmentDefinition(named: fragment.name)
-				let fragmentSpreads = IntermediateRepresentation.fragments(from: collectionResults.fragmentSpreads, onConcreteType: fragment.typeCondition.name)
-                definition = try renderResponseType(name: fragmentName, typeName: fragment.typeCondition.name, fields: fields, fragmentNames: fragmentSpreads.map {
-					$0.name
-                }, fragmentSelections: fragmentSelections, asFile: true, referencedResponseImports: (fragments: referencedImportsForFragment.fragments, enums: referencedImportsForFragment.enums))
+				let fragmentDefinition = selectionSets.fragmentDefinition(named: fragment.name)
+				let fragmentSpreads = IntermediateRepresentation.fragments(
+                    from: collectionResults.fragmentSpreads,
+                    onConcreteType: fragment.typeCondition.name
+                )
+                
+                definition = try renderObjectFragment(
+                    fragment: fragmentDefinition,
+                    typeName: fragment.typeCondition.name,
+                    fields: fields,
+                    fragmentSpreads: fragmentSpreads,
+                    referencedImports: (referencedImportsForFragment.fragments, enums: referencedImportsForFragment.enums)
+                )
 			}
 			rendered.append(definition)
 		}
 		return rendered
 	}
-
-	//check if any of the fields or nested fields contains a fragment path
-	func checkContainsFragment(fields: [CollectedField]) -> Bool {
-		for field in fields {
-			if field.parentFragment != nil {
-				return true
-			}
-			if let nestedField = field as? IntermediateRepresentation.CollectedObjectField {
-				if checkContainsFragment(fields: nestedField.collectedFields) {
-					return true
-				}
-			} else if let nestedField = field as? IntermediateRepresentation.CollectedUnionField {
-				if checkContainsFragment(fields: nestedField.collectedFields) {
-					return true
-				}
-			} else if let nestedField = field as? IntermediateRepresentation.CollectedInterfaceField {
-				if checkContainsFragment(fields: nestedField.collectedFields) {
-					return true
-				}
-			}
-		}
-		return false
-	}
-
-	func renderUnionWrapper(
-		name: String,
-		unionTypeName: String,
-		collectedFields: [CollectedField],
-		groupedFragmentSpreads: [String: [IntermediateRepresentation.SelectionPath.PathComponent.Fragment]],
-		fragmentSelections: SelectionSetVisitor.FragmentDefinition? = nil,
-		asFile: Bool = false,
-        referencedResponseImports: (fragments: [String], enums: [String]) = (fragments: [], enums: [])
-	) throws -> String {
-		let groupedFields = collectedFields.groupedFields(fromUnionType: unionTypeName)
-		var concreteTypeNames = groupedFields.map {
-			$0.key
-		}
-		concreteTypeNames.append(contentsOf: groupedFragmentSpreads.keys.filter {
-			$0 != unionTypeName
-		})
-		concreteTypeNames = concreteTypeNames.unique.sorted()
-		let fragmentSpreads = groupedFragmentSpreads[unionTypeName] ?? []
-
-		let context: [String: Any] = [
-			"name": name,
-            "fieldPrefix": "\(name).",
-			"unionTypeName": unionTypeName,
-			"concreteTypeNames": concreteTypeNames,
-			"fragmentSpreads": fragmentSpreads,
-			"groupedFragmentSpreads": groupedFragmentSpreads,
-			"collectedFields": collectedFields,
-			"package": "fragments",
-            "fileReferencedFragments": referencedResponseImports.fragments,
-            "fileReferencedEnums": referencedResponseImports.enums,
-			"fragmentSelections": fragmentSelections?.selectionSet ?? []
-		]
-		return try render(template: "UnionWrapper", asFile: asFile, context: context)
-	}
-
-	func renderInterfaceWrapper(
-		name: String,
-		scopedFields: [CollectedField],
-		collectedFields: [CollectedField],
-		interfaceTypeName: String,
-		groupedFragmentSpreads: [String: [IntermediateRepresentation.SelectionPath.PathComponent.Fragment]],
-		fragmentSelections: SelectionSetVisitor.FragmentDefinition? = nil,
-		asFile: Bool = false,
-        referencedResponseImports: (fragments: [String], enums: [String]) = (fragments: [], enums: [])
-	) throws -> String {
-		let groupedFields = try scopedFields.groupedFields(fromInterfaceType: interfaceTypeName)
-		let baseFields = scopedFields.baseFields(fromInterfaceType: interfaceTypeName)
-		var concreteTypeNames = groupedFields.map {
-			$0.key
-		}
-		concreteTypeNames.append(contentsOf: groupedFragmentSpreads.keys.filter {
-			$0 != interfaceTypeName
-		})
-		concreteTypeNames = concreteTypeNames.unique.sorted()
-		let fragmentSpreads = groupedFragmentSpreads[interfaceTypeName] ?? []
-		let context: [String: Any] = [
-			"name": name,
-            "fieldPrefix": "\(name).",
-            "hasInternalDefinitions": hasInternalDefinitions(fields: scopedFields),
-			"baseFields": baseFields,
-			"collectedFields": scopedFields,
-			"concreteTypeNames": concreteTypeNames,
-			"fragmentSpreads": fragmentSpreads,
-			"groupedFragmentSpreads": groupedFragmentSpreads,
-			"fragmentSelections": fragmentSelections?.selectionSet ?? [],
-            "fileReferencedFragments": referencedResponseImports.fragments,
-            "fileReferencedEnums": referencedResponseImports.enums
-		]
-		return try render(template: "InterfaceWrapper", asFile: asFile, context: context)
-	}
     
-    private func hasInternalDefinitions(fields: [CollectedField]) -> Bool {
-        return fields.contains { field in
-            return field is IntermediateRepresentation.CollectedObjectField
-                || field is IntermediateRepresentation.CollectedUnionField
-                || field is IntermediateRepresentation.CollectedInterfaceField
+    func renderGraphApi() throws -> String {
+        try render(template: "GraphApi", context: [:])
+    }
+
+    func renderEnumEntryPoint(intermediateRepresentation: IntermediateRepresentation) throws -> String {
+        let context: [String: Any] = ["enumNames": intermediateRepresentation.referencedEnums.map { $0.name }.sorted()]
+        return try render(template: "EnumTypeIndex", asFile: true, context: context)
+    }
+    
+    func renderInputTypeEntryPoint(intermediateRepresentation: IntermediateRepresentation) throws -> String {
+        let context: [String: Any] = ["inputNames": intermediateRepresentation.referencedInputTypes.map { $0.name }.sorted()]
+        return try render(template: "InputTypeIndex", asFile: true, context: context)
+    }
+    
+    func renderFragmentEntryPoint(intermediateRepresentation: IntermediateRepresentation) throws -> String {
+        let context: [String: Any] = ["fragmentNames": intermediateRepresentation.fragmentDefinitions.map { $0.name }.sorted()]
+        return try render(template: "FragmentIndex", asFile: true, context: context)
+    }
+    
+    private func buildObjectContext(
+        name: String,
+        typeName: String,
+        fields: [CollectedField],
+        fragmentSpreads: [IntermediateRepresentation.SelectionPath.PathComponent.Fragment],
+        extras: [String: Any]
+    ) -> [String: Any] {
+        var context: [String: Any] = [
+            "name": name,
+            "typeName": typeName,
+            "fields": fields,
+            "fragmentSpreads": fragmentSpreads
+        ]
+        
+        context.merge(extras) { (current, _) in current }
+        
+        return context
+    }
+    
+    private func buildUnionContext(
+        name: String,
+        typeName: String,
+        parentFragment: String?,
+        commonFields: [CollectedField],
+        collectedFields: [CollectedField],
+        groupedFragmentSpreads: [String: [IntermediateRepresentation.SelectionPath.PathComponent.Fragment]],
+        extras: [String: Any]
+    ) throws -> [String: Any] {
+        let fragmentSpreads = groupedFragmentSpreads[typeName] ?? []
+        let filteredCollectedFields = collectedFields.filter {
+            return $0.parentFragment?.name == parentFragment
         }
+        let groupedFields = filteredCollectedFields.groupedFields(fromUnionType: typeName)
+        let concreteTypeNames = (groupedFields.map {
+            $0.key
+        }).unique.sorted()
+        
+        var context: [String: Any] = [
+            "name": name,
+            "typeName": typeName,
+            "commonFields": commonFields.isEmpty ? [] : commonFields.baseFields(fromInterfaceType: typeName),
+            "fragmentSpreads": fragmentSpreads,
+            "collectedFields": collectedFields,
+            "concreteTypeNames": concreteTypeNames,
+            "groupedFragmentSpreads": groupedFragmentSpreads
+        ]
+        
+        if let fragment = parentFragment {
+            context["parentFragment"] = fragment
+        }
+        
+        context.merge(extras) { (current, _) in current }
+        
+        return context
     }
     
     private func referencedImports(
@@ -364,16 +392,18 @@ final class TypeScriptRenderer: Renderer {
                 }
             }
             
-            let prefix = args.first as? String
+            let prefix = args.first as? String ?? ""
+            let seperator = args.dropFirst().first as? String ?? ""
+            let combined = "\(prefix)\(seperator)"
 
 			if let field = value as? IntermediateRepresentation.CollectedObjectField {
-                return "\(produceFieldName(field: field)): \(TypeScriptTypeAnnotationRenderer.render(objectField: field, prefix: prefix))"
+                return "\(produceFieldName(field: field)): \(TypeScriptTypeAnnotationRenderer.render(objectField: field, prefix: combined))"
 			} else if let field = value as? IntermediateRepresentation.CollectedScalarField {
 				return "\(produceFieldName(field: field)): \(TypeScriptTypeAnnotationRenderer.render(scalarField: field))"
 			} else if let field = value as? IntermediateRepresentation.CollectedUnionField {
-				return "\(produceFieldName(field: field)): \(TypeScriptTypeAnnotationRenderer.render(unionWrapper: field, prefix: prefix))"
+				return "\(produceFieldName(field: field)): \(TypeScriptTypeAnnotationRenderer.render(unionWrapper: field, prefix: combined))"
 			} else if let field = value as? IntermediateRepresentation.CollectedInterfaceField {
-				return "\(produceFieldName(field: field)): \(TypeScriptTypeAnnotationRenderer.render(interfaceWrapper: field, prefix: prefix))"
+				return "\(produceFieldName(field: field)): \(TypeScriptTypeAnnotationRenderer.render(interfaceWrapper: field, prefix: combined))"
 			}
 			return nil
 		}

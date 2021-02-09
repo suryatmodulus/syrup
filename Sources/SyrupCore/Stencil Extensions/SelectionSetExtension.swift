@@ -378,7 +378,7 @@ class SelectionSetExtension: Extension {
 			renderPassedTypeCondition = ".map(x => copyWithTypeCondition(x, \(typeCondition)))"
 		}
 		for fragmentSpread in fragmentSpreadRenders {
-			addFragmentSpreadRenders += ".concat(\(fragmentSpread.lowercasedFirstLetter)FragmentDataSelections)" + renderPassedTypeCondition
+			addFragmentSpreadRenders += ".concat(\(fragmentSpread.lowercasedFirstLetter)Selections)" + renderPassedTypeCondition
 		}
         
         if (fieldRenders.isEmpty) {

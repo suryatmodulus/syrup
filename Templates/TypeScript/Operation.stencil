@@ -1,18 +1,4 @@
-import { ID, GraphSelection, SyrupOperation, copyWithTypeCondition } from "../GraphApi"
-{{ header }}
-{% if allReferencedFragments.count > 0 %}import {
-  {% for name in allReferencedFragments %}{{ name }}FragmentData,
-  {{ name|lowercasedFirstLetter }}FragmentDataSelections,
-  {% endfor %}
-} from "../Fragments"{% endif %}
-{% if allReferencedInputTypes.count > 0 %}import {
-  {% for name in allReferencedInputTypes %}{{ name }},
-  {% endfor %}
-} from "../Inputs"{% endif %}
-{% if allReferencedEnums.count > 0 %}import {
-  {% for name in allReferencedEnums %}{{ name }},
-  {% endfor %}
-} from "../Enums"{% endif %}
+{% include "Helpers/Imports.stencil" %}
 
 export namespace {{ name }} {
   {% if operation.variables.count > 0 %}export interface Variables {
@@ -20,16 +6,14 @@ export namespace {{ name }} {
   }{% endif %}
   
   {% for field in fields %}
-  {{ field|internalTypeDefinition:null,true }}
-  {{ field|internalInterfaceWrapper:null,true }}
-  {{ field|internalUnionWrapper:null,true }}
+  {{ field|internalFieldType }}
   {% endfor %}
 }
 
 export interface {{ name }} {
   {% for field in fields %}
   {% with field.attributes as attributes %}{% include "Helpers/Attributes.stencil" %}{% endwith %}
-  {{ field|renderPropertyDeclaration:fieldPrefix }};
+  {{ field|renderPropertyDeclaration:name,"." }};
   {% endfor %}
   {% for fragmentName in topLevelFragmentNames %}
   {{ fragmentName|lowercasedFirstLetter }}: {{ fragmentName }}FragmentData;
@@ -37,7 +21,7 @@ export interface {{ name }} {
 }
 
 const document: SyrupOperation<{{ name }}, {% if operation.variables.count > 0 %}{{ name }}.Variables{% else %}{}{% endif %}> = {
-  id: "{{ encryptedId }}",
+  id: "{{ queryString|encryptData }}",
   name: "{{ operation.name }}",
   source: "{{ queryString|replace:"$","\$"|replaceQuotes }}",
   operationType: '{{ operation|renderOperationTypeName|lowercase } }}',

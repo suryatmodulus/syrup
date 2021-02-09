@@ -59,27 +59,15 @@ enum TypeScriptTypeAnnotationRenderer {
 	}
 	
 	static func render(interfaceWrapper: IntermediateRepresentation.CollectedInterfaceField, prefix: String? = nil) -> String {
-		var name = interfaceWrapper.name.capitalizedFirstLetter
-		if let prefix = prefix {
-			name = "\(prefix)\(name)"
-		}
-		return render(objectType: interfaceWrapper.type, parentType: nil, name: name)
+        return render(objectType: interfaceWrapper.type, parentType: nil, name: buildPrefixedString(name: interfaceWrapper.name, prefix: prefix))
 	}
 	
 	static func render(unionWrapper: IntermediateRepresentation.CollectedUnionField, prefix: String? = nil) -> String {
-		var name = unionWrapper.name.capitalizedFirstLetter
-		if let prefix = prefix {
-			name = "\(prefix)\(name)"
-		}
-		return render(objectType: unionWrapper.type, parentType: nil, name: name)
+		return render(objectType: unionWrapper.type, parentType: nil, name: buildPrefixedString(name: unionWrapper.name, prefix: prefix))
 	}
 	
 	static func render(objectField: IntermediateRepresentation.CollectedObjectField, prefix: String? = nil) -> String {
-		var name = objectField.name.capitalizedFirstLetter
-		if let prefix = prefix {
-			name = "\(prefix)\(name)"
-		}
-        return render(objectType: objectField.type, parentType: nil, name: name)
+        return render(objectType: objectField.type, parentType: nil, name: buildPrefixedString(name: objectField.name, prefix: prefix))
 	}
 	
     private static func render(objectType: FieldTypeProtocol, parentType: FieldTypeProtocol?, name: String) -> String {
@@ -106,4 +94,12 @@ enum TypeScriptTypeAnnotationRenderer {
             }
 		}
 	}
+    
+    private static func buildPrefixedString(name: String, prefix: String?) -> String {
+        if let prefix = prefix {
+            return "\(prefix.capitalizedFirstLetter)\(name.capitalizedFirstLetter)"
+        } else {
+            return name.capitalizedFirstLetter
+        }
+    }
 }
